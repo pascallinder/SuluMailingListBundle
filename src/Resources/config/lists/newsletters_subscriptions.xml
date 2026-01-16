@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<list xmlns="http://schemas.sulu.io/list-builder/list">
+    <key>newsletters_subscriptions</key>
+    <joins name="contact">
+        <join>
+            <entity-name>Sulu\Bundle\ContactBundle\Entity\Contact</entity-name>
+            <field-name>Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription.contact</field-name>
+        </join>
+    </joins>
+    <properties>
+        <property name="id" visibility="no" translation="sulu_admin.id">
+            <field-name>id</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription</entity-name>
+        </property>
+        <property name="firstName" visibility="yes" searchability="yes" translation="app.contact.props.firstName">
+            <field-name>firstName</field-name>
+            <entity-name>Sulu\Bundle\ContactBundle\Entity\Contact</entity-name>
+            <joins ref="contact"/>
+        </property>
+        <property name="lastName" visibility="yes" searchability="yes" translation="app.contact.props.lastName">
+            <field-name>lastName</field-name>
+            <entity-name>Sulu\Bundle\ContactBundle\Entity\Contact</entity-name>
+            <joins ref="contact"/>
+        </property>
+        <property name="mainEmail" visibility="yes" searchability="yes" translation="app.contact.props.mainEmail">
+            <field-name>mainEmail</field-name>
+            <entity-name>Sulu\Bundle\ContactBundle\Entity\Contact</entity-name>
+            <joins ref="contact"/>
+        </property>
+        <property name="subscribedAt" visibility="yes" translation="mailingListSubscription.props.subscribedAt" type="datetime">
+            <field-name>subscribedAt</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription</entity-name>
+        </property>
+        <property name="isConfirmed" visibility="yes" translation="mailingListSubscription.props.isConfirmed" type="bool">
+            <field-name>isConfirmed</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription</entity-name>
+        </property>
+        <property name="isUnsubscribed" visibility="yes" translation="mailingListSubscription.props.isUnsubscribed" type="bool">
+            <field-name>isUnsubscribed</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription</entity-name>
+        </property>
+        <property name="unsubscribedAt" visibility="yes" translation="mailingListSubscription.props.unsubscribedAt" type="datetime">
+            <field-name>unsubscribedAt</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription</entity-name>
+        </property>
+    </properties>
+</list>

@@ -1,0 +1,50 @@
+
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    # Binding arguments by name or type
+    # https://symfony.com/doc/current/service_container.html#binding-arguments-by-name-or-type
+    #bind:
+    #    'bool $isDebug': '%kernel.debug%'
+
+
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  Linderp\SuluMailingListBundle\:
+    resource: '../../'
+    exclude:
+      - '../../Entity/'
+  Linderp\SuluMailingListBundle\Form\Dynamic\Types\NewsletterFieldType:
+    tags:
+      - { name: 'sulu_form.dynamic.type', alias: 'newsletter' }
+  Linderp\SuluMailingListBundle\Subscriber\ContactSavedSubscriber:
+    tags:
+      - { name: 'kernel.event_subscriber' }
+  Linderp\SuluMailingListBundle\Service\Mail\MailTemplateSelect:
+    public: true
+    arguments:
+      $projectDir: '%kernel.project_dir%'
+  Linderp\SuluMailingListBundle\Preview\Newsletter\Mail\NewsletterMailPreviewObjectProvider:
+    tags:
+      - { name: 'sulu_preview.object_provider', provider-key: 'newsletters_mails' }
+
+  Linderp\SuluMailingListBundle\Preview\Newsletter\Mail\NewsletterMailRouteDefaultsProvider:
+    tags:
+      - { name: 'sulu_route.defaults_provider' }
+
+  Linderp\SuluMailingListBundle\Preview\Newsletter\DoubleOpt\NewsletterDoubleOptPreviewObjectProvider:
+    tags:
+      - { name: 'sulu_preview.object_provider', provider-key: 'newsletters' }
+  Linderp\SuluMailingListBundle\Preview\Newsletter\DoubleOpt\NewsletterDoubleOptRouteDefaultsProvider:
+    tags:
+      - { name: 'sulu_route.defaults_provider' }
+  Linderp\SuluMailingListBundle\Service\Subscription\SubscriptionDocumentUrlProvider:
+    arguments:
+      - '@sulu_document_manager.document_manager'
+  Linderp\SuluMailingListBundle\Service\FormBundle\Handler:
+    decorates: 'sulu_form.handler'
+    arguments:
+      - '@Linderp\SuluMailingListBundle\Service\FormBundle\Handler.inner'
+      - '%kernel.project_dir%'

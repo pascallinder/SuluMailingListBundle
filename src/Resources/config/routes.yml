@@ -1,0 +1,4 @@
+# Define your website routes here
+controllers:
+    resource: ../../../src/Controller/Website/
+    type: attribute

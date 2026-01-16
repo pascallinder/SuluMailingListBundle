@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<form xmlns="http://schemas.sulu.io/template/template"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/form-1.0.xsd"
+>
+    <key>newsletter_double_opt_details</key>
+
+    <properties>
+
+        <property name="doubleOpt_mailTemplate" type="single_select" mandatory="true" colspan="6"
+                  disabledCondition="sent">
+            <meta>
+                <title>mailingListMail.props.mailTemplate</title>
+            </meta>
+            <params>
+                <param name="values" type="expression"
+                       value="service('sulu_mailing_list.mail_template_select').getValues('mails/double-opt')"/>
+            </params>
+        </property>
+        <property name="doubleOpt_senderMail" type="email" mandatory="false" colspan="6">
+            <meta>
+                <title>mailingListMail.props.senderMail</title>
+                <info_text lang="en">Default: no-reply@refashion.ch</info_text>
+                <info_text lang="de">Standard: no-reply@refashion.ch</info_text>
+            </meta>
+        </property>
+        <property name="doubleOpt_subject" type="text_line" mandatory="true">
+            <meta>
+                <title>mailingListMail.props.subject</title>
+            </meta>
+        </property>
+        <property name="doubleOpt_headerImage" type="single_media_selection">
+            <meta>
+                <title>mailingListMail.props.headerImage</title>
+            </meta>
+        </property>
+        <property name="doubleOpt_title" type="text_line">
+            <meta>
+                <title>mailingListMail.props.title</title>
+            </meta>
+            <params>
+                <param name="headline" value="true"/>
+            </params>
+        </property>
+
+        <property name="doubleOpt_body" type="text_editor" mandatory="true">
+            <meta>
+                <title>mailingListMail.props.body</title>
+            </meta>
+        </property>
+
+    </properties>
+</form>

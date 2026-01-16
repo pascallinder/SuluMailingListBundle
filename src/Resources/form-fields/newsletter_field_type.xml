@@ -1,0 +1,21 @@
+
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:xi="http://www.w3.org/2001/XInclude"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/properties-1.0.xsd">
+    <xi:include href="../../../../../vendor/sulu/form-bundle/Resources/config/form-fields/default_field.xml" xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(//sulu:property)"/>
+    <property name="options/newsletterId" type="single_select" mandatory="true" colspan="12">
+        <meta>
+            <title lang="de">Newsletter</title>
+            <title lang="en">Newsletter</title>
+        </meta>
+        <params>
+            <param
+                    name="values"
+                    type="expression"
+                    value="service('sulu_mailing_list.newsletter_service').getValues()"
+            />
+        </params>
+    </property>
+</properties>

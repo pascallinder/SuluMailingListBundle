@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<form xmlns="http://schemas.sulu.io/template/template"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/form-1.0.xsd"
+>
+    <key>newsletter_subscription_details</key>
+
+    <properties>
+        <property name="newsletters" type="newsletter_selection" mandatory="true" >
+            <meta>
+                <title lang="de">Newsletter</title>
+                <title lang="en">Newsletter</title>
+            </meta>
+        </property>
+        <property name="contact" type="single_contact_selection" mandatory="true" colspan="6">
+            <meta>
+                <title lang="de">Kontakt</title>
+                <title lang="en">Contact</title>
+            </meta>
+        </property>
+        <property name="locale" type="single_select" mandatory="true"  colspan="6">
+            <meta>
+                <title lang="en">Language</title>
+                <title lang="de">Sprache</title>
+            </meta>
+
+            <params>
+                <param name="default_value" value="de"/>
+
+                <param name="values" type="collection">
+                    <param name="de">
+                        <meta>
+                            <title lang="en">German</title>
+                            <title lang="de">Deutsch</title>
+                        </meta>
+                    </param>
+
+                    <param name="en">
+                        <meta>
+                            <title lang="en">English</title>
+                            <title lang="de">Englisch</title>
+                        </meta>
+                    </param>
+                </param>
+            </params>
+        </property>
+    </properties>
+</form>

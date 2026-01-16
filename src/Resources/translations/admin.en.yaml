@@ -1,0 +1,48 @@
+mailingList:
+    label: Mailing List
+    list:
+        title: Mailing Lists
+    nav:
+        title: Mailing Lists
+    tabs:
+        subscriptions: Subscribers
+        doubleOptMail: Double Opt-In Email
+    props:
+        unsubscribePage: Unsubscribe Confirmation Page
+        doubleOptConfirmPage: Double Opt-In Confirmation Page
+
+mailingListSubscription:
+    props:
+        subscribedAt: Subscribed At
+        isConfirmed: Double opt-in confirmed
+        unsubscribedAt: Unsubscribed At
+        isUnsubscribed: Unsubscribed
+    action:
+        subscribe: Subscribe
+        unsubscribe: Unsubscribe
+        send: Send
+
+mailingListMail:
+    nav:
+        title: Emails
+    props:
+        senderMail: Sender Email
+        mailTemplate: Email Template
+        subject: Subject
+        headerImage: Header Image
+        title: Title
+        body: Content
+        sent: Sent
+        sentAt: Sent At
+        mailingLists: Affected Mailing Lists
+
+sulu_activity:
+    resource:
+        newsletters_subscriptions: Subscriptions
+    description:
+        newsletters_subscriptions:
+            subscribed: "New subscription: {resourceTitle}"
+            unsubscribed: "Ended subscription: {resourceTitle}"
+sulu_form:
+    fields:
+        type_newsletter_field: Mailing List

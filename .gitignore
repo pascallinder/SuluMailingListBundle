@@ -11,3 +11,4 @@
 /.idea
 /src/Resources/js/node_modules
 src/Resources/js/package-lock.json
+composer.local.json

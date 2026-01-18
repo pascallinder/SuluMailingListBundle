@@ -2,7 +2,6 @@
     "name": "linderp/sulu-mailing-list-bundle",
     "description": "Mailing List Bundle for Sulu CMS",
     "type": "symfony-bundle",
-    "version": "0.1",
     "require": {
         "php": "^8.2",
         "sulu/sulu": "^2.6",

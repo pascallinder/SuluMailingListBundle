@@ -19,6 +19,9 @@ services:
   Linderp\SuluMailingListBundle\Form\Dynamic\Types\NewsletterFieldType:
     tags:
       - { name: 'sulu_form.dynamic.type', alias: 'newsletter' }
+  Linderp\SuluMailingListBundle\Form\Dynamic\Types\HiddenNewsletterFieldType:
+    tags:
+      - { name: 'sulu_form.dynamic.type', alias: 'hidden_newsletter' }
   Linderp\SuluMailingListBundle\Subscriber\ContactSavedSubscriber:
     tags:
       - { name: 'kernel.event_subscriber' }
@@ -48,3 +51,7 @@ services:
     arguments:
       - '@Linderp\SuluMailingListBundle\Service\FormBundle\Handler.inner'
       - '%kernel.project_dir%'
+  Linderp\SuluMailingListBundle\Service\Subscription\FieldHandler\:
+    resource: '../../Service/Subscription/FieldHandler/'
+    tags:
+      - { name: 'subscriber.handler' }

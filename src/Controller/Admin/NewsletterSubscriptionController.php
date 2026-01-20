@@ -1,7 +1,6 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
-use Symfony\Component\Routing\Attribute\Route;
 use Linderp\SuluBaseBundle\Common\DoctrineListRepresentationFactory;
 use Linderp\SuluBaseBundle\Controller\Admin\BaseController;
 use Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription;
@@ -14,6 +13,7 @@ use Sulu\Bundle\ActivityBundle\Application\Collector\DomainEventCollectorInterfa
 use Sulu\Bundle\ContactBundle\Entity\ContactRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class NewsletterSubscriptionController extends BaseController
 {
@@ -31,19 +31,20 @@ class NewsletterSubscriptionController extends BaseController
     #[Route(path: '/admin/api/newsletters-subscriptions/{id}', name: 'app.get_newsletter_subscription', methods: ['GET'])]
     public function getAction(int $id, Request $request): Response
     {
+        if($request->query->has('newsletter_id')){
+            return $this->json(['newsletter' => $request->query->get('newsletter_id')]);
+        }
         return $this->handleGetByIdRequest($id,$request);
     }
-    #[Route(path: '/admin/api/newsletters-subscriptions', name: 'app.post_newsletter_subscription', methods: ['POST'])]
-    public function postAction(Request $request): Response
+    #[Route(path: '/admin/api/newsletters-subscriptions/{id}', name: 'app.post_newsletter_subscription', methods: ['PUT'])]
+    public function postAction(int $id,Request $request): Response
     {
         $data = $request->toArray();
-        foreach ( $data['newsletters'] as $newsletterId){
-            $this->subscriptionService->handleNewsletter(  $this->newsletterRepository->find($newsletterId),
-                $this->contactRepository->find($data['contact']),
-                $data['locale']
-            );
-
-        }
+        $this->subscriptionService->handleNewsletters(  [$this->newsletterRepository->find($id)],
+            $this->contactRepository->findByIds($data['contacts']),
+            $data['locale'],
+            $data['doubleOpt']
+        );
         return new Response(json_encode(['success' => true]));
     }
 
@@ -61,9 +62,10 @@ class NewsletterSubscriptionController extends BaseController
     #[Route(path: '/admin/api/newsletters-subscriptions', name: 'app.get_newsletter_subscriptions_list', methods: ['GET'])]
     public function getSubscriptionListAction(Request $request): Response
     {
+
         $listRepresentation = $this->doctrineListRepresentationFactory->createDoctrineListRepresentation(
             NewsletterSubscription::RESOURCE_KEY,
-            [],
+            ['newsletter'=> $request->query->get('newsletter_id')],
             [],
         );
 

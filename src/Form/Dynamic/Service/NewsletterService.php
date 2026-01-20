@@ -15,7 +15,7 @@ readonly class NewsletterService
     public function getValues(): array
     {
         $request = $this->requestStack->getCurrentRequest();
-        return array_map(fn(Newsletter $category)=> ['name'=> $category->getId(), 'title'=>$category->getTitle()],
+        return array_map(fn(Newsletter $newsletter)=> ['name'=> $newsletter->getId(), 'title'=>$newsletter->getTitle()],
             $this->newsletterRepository->findAllLocalized($request->getLocale()));
     }
 }

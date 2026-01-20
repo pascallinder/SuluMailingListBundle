@@ -6,16 +6,10 @@
     <key>newsletter_subscription_details</key>
 
     <properties>
-        <property name="newsletters" type="newsletter_selection" mandatory="true" >
+        <property name="contacts" type="contact_selection" mandatory="true" colspan="6">
             <meta>
-                <title lang="de">Newsletter</title>
-                <title lang="en">Newsletter</title>
-            </meta>
-        </property>
-        <property name="contact" type="single_contact_selection" mandatory="true" colspan="6">
-            <meta>
-                <title lang="de">Kontakt</title>
-                <title lang="en">Contact</title>
+                <title lang="de">Kontakte</title>
+                <title lang="en">Contacts</title>
             </meta>
         </property>
         <property name="locale" type="single_select" mandatory="true"  colspan="6">
@@ -42,6 +36,15 @@
                         </meta>
                     </param>
                 </param>
+            </params>
+        </property>
+        <property name="doubleOpt" type="checkbox" colspan="12">
+            <meta>
+                <title lang="de">Double Opt Prozess durchführen</title>
+                <title lang="en">Execute double opt process</title>
+            </meta>
+            <params>
+                <param name="default_value" value="true"/>
             </params>
         </property>
     </properties>

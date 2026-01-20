@@ -7,10 +7,21 @@
             <field-name>Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription.contact</field-name>
         </join>
     </joins>
+    <joins name="newsletter">
+        <join>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter</entity-name>
+            <field-name>Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription.newsletter</field-name>
+        </join>
+    </joins>
     <properties>
         <property name="id" visibility="no" translation="sulu_admin.id">
             <field-name>id</field-name>
             <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription</entity-name>
+        </property>
+        <property name="newsletter" visibility="no" translation="mailingListSubscription.props.newsletter">
+            <field-name>newsletter</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription</entity-name>
+            <joins ref="newsletter"/>
         </property>
         <property name="firstName" visibility="yes" searchability="yes" translation="app.contact.props.firstName">
             <field-name>firstName</field-name>

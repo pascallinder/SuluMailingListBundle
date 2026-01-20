@@ -17,11 +17,9 @@
                        value="service('sulu_mailing_list.mail_template_select').getValues('mails/double-opt')"/>
             </params>
         </property>
-        <property name="doubleOpt_senderMail" type="email" mandatory="false" colspan="6">
+        <property name="doubleOpt_senderMail" type="email" mandatory="true" colspan="6">
             <meta>
                 <title>mailingListMail.props.senderMail</title>
-                <info_text lang="en">Default: no-reply@refashion.ch</info_text>
-                <info_text lang="de">Standard: no-reply@refashion.ch</info_text>
             </meta>
         </property>
         <property name="doubleOpt_subject" type="text_line" mandatory="true">

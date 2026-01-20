@@ -19,36 +19,48 @@ readonly class SubscriptionService
     }
     public function handleSavedContact(ContactInterface $contact, array $contactData,string $locale): void
     {
-        if(!array_key_exists('newsletter',$contactData)){
+        if(!isset($contactData['newsletters'])){
             return;
         }
-        $this->handleNewsletter($contactData['newsletter'],$contact,$locale);
+        $this->handleNewsletters($contactData['newsletters'],[$contact],$locale);
     }
 
-    public function handleNewsletter(Newsletter $newsletter, ContactInterface $contact, string $locale): void
+    /**
+     * @param Newsletter[] $newsletters
+     */
+    public function handleNewsletters(array $newsletters, array $contacts, string $locale, bool $doubleOptEnabled = true): void
     {
-        $existingSubscriptions = $this->newsletterSubscriptionRepository->findBy(['newsletter'=>$newsletter->getId(),
-            'contact'=>$contact->getId()]);
-        if(empty($existingSubscriptions)){
-            $this->saveSubscription(new NewsletterSubscription($newsletter,$contact,$locale));
-        }
-        else{
-            /** @var NewsletterSubscription $existingSubscription */
-            $existingSubscription = $existingSubscriptions[0];
-            if($existingSubscription->isUnsubscribed()){
-                try {
+        foreach ($contacts as $contact) {
+            foreach ($newsletters as $newsletter){
+                $existingSubscriptions = $this->newsletterSubscriptionRepository->findBy(['newsletter'=>$newsletter->getId(),
+                    'contact'=>$contact->getId()]);
+                if(empty($existingSubscriptions)){
+                    $this->saveSubscription(new NewsletterSubscription($newsletter,$contact,$locale), $doubleOptEnabled);
+                }
+                else{
+                    /** @var NewsletterSubscription $existingSubscription */
+                    $existingSubscription = $existingSubscriptions[0];
+                    $existingSubscription->getNewsletter()->setLocale($locale);
                     $existingSubscription->setSubscribed();
-                    $this->saveSubscription($existingSubscription);
-                } catch (\Exception $e) {
+                    $this->saveSubscription($existingSubscription,$doubleOptEnabled);
                 }
             }
         }
+
     }
 
-    private function saveSubscription(NewsletterSubscription $newsletterSubscription): void
+    private function saveSubscription(NewsletterSubscription $newsletterSubscription , bool $doubleOptEnabled): void
     {
-        $this->domainEventCollector->collect(new NewsletterSubscribedEvent($newsletterSubscription));
+        if($doubleOptEnabled){
+            $this->domainEventCollector->collect(new NewsletterSubscribedEvent($newsletterSubscription));
+        }else{
+            $this->newsletterSubscriptionRepository->save($newsletterSubscription);
+            $newsletterSubscription->setIsConfirmed();
+            $this->domainEventCollector->collect(new NewsletterConfirmedEvent($newsletterSubscription));
+        }
+
         $this->newsletterSubscriptionRepository->save($newsletterSubscription);
+        $this->newsletterSubscriptionRepository->flush();
     }
 
     public function unsubscribe(string $newsletterId, string $token): bool

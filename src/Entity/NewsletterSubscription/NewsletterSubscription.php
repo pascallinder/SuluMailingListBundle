@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Linderp\SuluBaseBundle\Entity\IdTrait;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Repository\NewsletterSubscription\NewsletterSubscriptionRepository;
+use Random\RandomException;
 use Sulu\Bundle\ContactBundle\Entity\Contact;
 use Sulu\Bundle\ContactBundle\Entity\ContactInterface;
 
@@ -36,15 +37,16 @@ class NewsletterSubscription
     #[ORM\Column(type: 'string', length: 255)]
     private string $unsubscribeToken;
 
-    /**
-     * @throws \Exception
-     */
     #[ORM\PrePersist]
     public function setSubscribed(): void
     {
         $this->subscribedAt = new \DateTimeImmutable();
-        $this->confirmationToken = bin2hex(random_bytes(32));
-        $this->unsubscribeToken = bin2hex(random_bytes(32));
+        try {
+            $this->confirmationToken = bin2hex(random_bytes(32));
+            $this->unsubscribeToken = bin2hex(random_bytes(32));
+        } catch (RandomException $e) {
+
+        }
         $this->isConfirmed = false;
         $this->confirmedAt = null;
         $this->unsubscribedAt = null;
@@ -60,6 +62,7 @@ class NewsletterSubscription
         #[ORM\Column(type: Types::STRING, length: 5, nullable: false)]
         private readonly string $locale,
     ) {
+        $this->newsletter->setLocale($this->locale);
     }
     /**
      * @return \DateTimeInterface
@@ -113,10 +116,7 @@ class NewsletterSubscription
         return $this->newsletter;
     }
 
-    /**
-     * @return Contact
-     */
-    public function getContact(): Contact
+    public function getContact(): ContactInterface
     {
         return $this->contact;
     }

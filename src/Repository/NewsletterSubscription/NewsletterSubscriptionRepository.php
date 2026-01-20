@@ -1,15 +1,14 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Repository\NewsletterSubscription;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Linderp\SuluBaseBundle\Repository\LocaleRepositoryUtil;
 use Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription;
-
 /**
- * @extends LocaleRepositoryUtil<NewsletterSubscription>
+ * @extends ServiceEntityRepository<NewsletterSubscription>
  */
-class NewsletterSubscriptionRepository extends LocaleRepositoryUtil
+class NewsletterSubscriptionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -19,8 +18,15 @@ class NewsletterSubscriptionRepository extends LocaleRepositoryUtil
     {
         return [];
     }
-
     protected function appendSortByJoins(QueryBuilder $queryBuilder, string $alias, string $locale): void
     {
+    }
+    public function save(NewsletterSubscription $subscription): void
+    {
+        $this->getEntityManager()->persist($subscription);
+    }
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
     }
 }

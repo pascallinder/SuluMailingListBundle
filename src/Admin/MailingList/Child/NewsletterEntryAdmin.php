@@ -68,30 +68,36 @@ class NewsletterEntryAdmin extends AdminCrud implements AdminChild
             'app.newsletter-subscription.subscribe'
         ),new ToolbarAction(
             'app.newsletter-subscription.unsubscribe'
-        ),
-            new ToolbarAction('sulu_admin.add')];
+        )];
         $subscriptionList = $this->viewBuilderFactory->createListViewBuilder($this->getDefinition()->list->view . '.subscriptions', '/subscriptions')
             ->setResourceKey(NewsletterSubscription::RESOURCE_KEY)
             ->addListAdapters(['table'])
             ->setListKey("newsletters_subscriptions")
+            ->addRouterAttributesToListRequest(['id'=>'newsletter_id'])
             ->setUserSettingsKey('newsletter_subscriptions')
             ->setTabTitle('mailingList.tabs.subscriptions')
             ->addToolbarActions($subscriptionListToolbarActions)
             ->setAddView($addSubscriptionFormView)
+            ->disableColumnOptions()
+            ->addRouterAttributesToListMetadata(['id'=>'newsletter_id'])
             ->setParent($this->getDefinition()->form->editView);
         $viewCollection->add($subscriptionList);
 
 
         $addFormViewSubscription = $this->viewBuilderFactory->createResourceTabViewBuilder($addSubscriptionFormView,
-            '/subscriptions/:locale/add')
-            ->setResourceKey(NewsletterSubscription::RESOURCE_KEY)
+            '/subscriptions/add')
+            ->setResourceKey(Newsletter::RESOURCE_KEY)
             ->setBackView($this->getDefinition()->list->view. '.subscriptions')
-            ->addLocales($locales);
+            ->setTabTitle('mailingList.tabs.addSubscriptions')
+            ->setParent($this->getDefinition()->form->editView);
         $viewCollection->add($addFormViewSubscription);
 
-        $addDetailsFormView = $this->viewBuilderFactory->createFormViewBuilder($addSubscriptionFormView . '.details', '/details')
+        $addDetailsFormView = $this->viewBuilderFactory->createFormViewBuilder($addSubscriptionFormView . '.details',
+            '/details')
             ->setResourceKey(NewsletterSubscription::RESOURCE_KEY)
             ->setFormKey($subscriptionFormKey)
+            ->addRouterAttributesToFormRequest(['id'=>'newsletter_id'])
+            ->addRouterAttributesToFormMetadata(['id'=>'newsletter_id'])
             ->setTabTitle('sulu_admin.details')
             ->addToolbarActions([new ToolbarAction('sulu_admin.save')])
             ->setParent($addSubscriptionFormView);

@@ -16,7 +16,7 @@ class NewsletterFieldType implements FormFieldTypeInterface
     {
         return new FormFieldTypeConfiguration(
             'sulu_form.fields.type_newsletter_field',
-            __DIR__ . '/../../../Resources/form-fields/newsletter_field_type.xml',
+            __DIR__ . '/../../../Resources/config/form-fields/newsletter_field_type.xml',
             'special'
         );
     }

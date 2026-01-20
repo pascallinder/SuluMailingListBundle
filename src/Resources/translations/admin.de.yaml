@@ -6,12 +6,14 @@ mailingList:
         title: Mailverteiler
     tabs:
         subscriptions: Abonnent:innen
+        addSubscriptions: Abonnent:innen hinzufügen
         doubleOptMail: Double-Opt E-Mail
     props:
         unsubscribePage: Abmeldebestätigungsseite
         doubleOptConfirmPage: Double-Opt Bestätigungsseite
 mailingListSubscription:
     props:
+        newsletter: Abonnierter Mailverteiler
         subscribedAt: Abonniert seit
         isConfirmed: Double-opt bestätigt
         unsubscribedAt: Deabonniert seit
@@ -44,3 +46,4 @@ sulu_activity:
 sulu_form:
     fields:
         type_newsletter_field: Mailverteiler
+        type_hidden_newsletter_field: Mailverteiler (versteckt)

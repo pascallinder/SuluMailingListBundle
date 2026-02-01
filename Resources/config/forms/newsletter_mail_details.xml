@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<form xmlns="http://schemas.sulu.io/template/template"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/form-1.0.xsd"
+>
+    <key>newsletter_mail_details</key>
+
+    <properties>
+        <property name="newsletters" type="newsletter_selection" mandatory="true" disabledCondition="sent" >
+            <meta>
+                <title>mailingListMail.props.mailingLists</title>
+            </meta>
+        </property>
+        <property name="contacts" type="filtered_contact_selection" mandatory="false" disabledCondition="sent || !newsletters">
+            <meta>
+                <title>mailingListMail.props.contacts</title>
+                <info_text>mailingListMail.props.contactsInfo</info_text>
+            </meta>
+            <params>
+                <param name="resource_store_properties_to_request" type="collection">
+                    <param name="newsletterIds" value="newsletters"/>
+                </param>
+            </params>
+        </property>
+        <property name="senderMail" type="email" mandatory="false" colspan="6" disabledCondition="sent">
+            <meta>
+                <title>mailingListMail.props.senderMail</title>
+                <info_text>mailingListMail.props.senderMailInfo</info_text>
+            </meta>
+        </property>
+        <property name="subject" type="text_line" mandatory="true" colspan="6" disabledCondition="sent">
+            <meta>
+                <title>mailingListMail.props.subject</title>
+            </meta>
+        </property>
+    </properties>
+</form>

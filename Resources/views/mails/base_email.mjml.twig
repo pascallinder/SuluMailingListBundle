@@ -1,0 +1,37 @@
+<mjml>
+    <mj-head>
+        <mj-title>
+            {% block title %}
+            {% endblock %}
+        </mj-title>
+        {% block fonts %}
+            {% if fonts is defined and fonts is not null %}
+                {% for font in fonts %}
+                    <mj-font href="{{ font.cssUrl }}" name="{{ font.name }}" />
+                    {% if font.defaultFont %}
+                        <mj-attributes>
+                            <mj-all font-family="{{ font.fontFamily }}" />
+                        </mj-attributes>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
+        {% block additional_head %}
+        {% endblock %}
+    </mj-head>
+    <mj-body background-color="{{ bodyBackgroundColor|default }}">
+        {% block header %}
+        {% endblock %}
+        {% block content %}
+            {% if content is defined and content is not null %}
+                {% for wrapper in content %}
+                    {% include '@SuluMailingList/mails/wrappers/' ~ wrapper.type ~ '.mjml.twig' with {
+                        wrapper: wrapper
+                    } %}
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
+        {% block footer %}
+        {% endblock %}
+    </mj-body>
+</mjml>

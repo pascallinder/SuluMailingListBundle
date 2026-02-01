@@ -1,0 +1,11 @@
+{% block mail_content %}
+    <mj-section padding="0" background-color="{{ wrapper.backgroundColor|default }}">
+        {% for item in wrapper.components %}
+        <mj-column>
+            {% include '@SuluMailingList/mails/components/'~  item.type ~ '/' ~ item.type ~ '.mjml.twig' with {
+                item: item
+            } %}
+        </mj-column>
+        {% endfor %}
+    </mj-section>
+{% endblock %}

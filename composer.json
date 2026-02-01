@@ -6,7 +6,7 @@
         "php": "^8.2",
         "sulu/sulu": "^2.6",
         "linderp/sulu-form-save-contact-bundle": "^0.1",
-        "linderp/sulu-base-bundle": "^0.1",
+        "linderp/sulu-base-bundle": "^0.1 || dev-main",
         "symfony/config": "^6.2 | ^7.0",
         "symfony/dependency-injection": "^6.2 | ^7.0",
         "symfony/framework-bundle": "^6.2 | ^7.0",
@@ -20,7 +20,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Linderp\\SuluMailingListBundle\\": "src/"
+            "Linderp\\SuluMailingListBundle\\": ""
         }
     },
     "authors": [

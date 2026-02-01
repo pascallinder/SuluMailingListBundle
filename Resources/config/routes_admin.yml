@@ -1,0 +1,4 @@
+# Define your admin routes here
+controllers:
+    resource: ../../Controller/Admin/
+    type: attribute

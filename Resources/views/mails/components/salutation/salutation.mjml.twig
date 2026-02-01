@@ -1,0 +1,12 @@
+{% block salutation %}
+    <mj-text font-size="{{ item.fontSize|default('16') }}px"
+             font-family="{{ item.fontFamily |default}}"
+             align="{{ item.align|default }}"
+             container-background-color="{{ item.backgroundColor|default }}"
+            color="{{ item.color|default }}">
+        {{ item.prefix }} {{ firstName }}
+        {% if item.withLastName is defined and item.withLastName %}
+            {{ lastName }}
+        {% endif %}
+    </mj-text>
+{% endblock %}

@@ -1,0 +1,10 @@
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:xi="http://www.w3.org/2001/XInclude"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <property name="backgroundColor" type="color_picker_custom" multilingual="false">
+        <meta>
+            <title>mailingListMail.props.content.global.backgroundColor.label</title>
+        </meta>
+    </property>
+</properties>

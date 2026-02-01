@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:xi="http://www.w3.org/2001/XInclude"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/properties-1.0.xsd">
+    <property name="color" type="color_picker_custom" multilingual="false" mandatory="true">
+        <meta>
+            <title>mailingListMail.props.content.divider.color</title>
+        </meta>
+    </property>
+    <property name="borderStyle" type="single_select" multilingual="false" mandatory="true">
+        <meta>
+            <title>mailingListMail.props.content.divider.borderStyle.label</title>
+        </meta>
+
+        <params>
+            <param name="default_value" value="solid"/>
+
+            <param name="values" type="collection">
+                <param name="solid">
+                    <meta>
+                        <title>mailingListMail.props.content.divider.borderStyle.solid</title>
+                    </meta>
+                </param>
+                <param name="dashed">
+                    <meta>
+                        <title>mailingListMail.props.content.divider.borderStyle.dashed</title>
+                    </meta>
+                </param>
+                <param name="dotted">
+                    <meta>
+                        <title>mailingListMail.props.content.divider.borderStyle.dotted</title>
+                    </meta>
+                </param>
+
+            </param>
+        </params>
+    </property>
+    <property name="borderWidth" type="range_picker" mandatory="true" >
+        <meta>
+            <title>mailingListMail.props.content.divider.borderWidth</title>
+        </meta>
+        <params>
+            <param name="min" value="0"/>
+            <param name="max" value="10"/>
+            <param name="step" value="1"/>
+            <param name="default" value="2" />
+        </params>
+    </property>
+</properties>

@@ -1,0 +1,123 @@
+mailingList:
+    label: Mailing lists
+    list:
+        title: Mailing lists
+    nav:
+        title: Mailing lists
+    tabs:
+        subscriptions: Subscribers
+        addSubscriptions: Add subscribers
+        doubleOptMail: Double opt-in email
+    props:
+        unsubscribePage: Unsubscribe confirmation page
+        doubleOptConfirmPage: Double opt-in confirmation page
+
+mailingListSubscription:
+    props:
+        newsletter: Subscribed mailing list
+        subscribedAt: Subscribed since
+        isConfirmed: Double opt-in confirmed
+        unsubscribedAt: Unsubscribed since
+        isUnsubscribed: Unsubscribed
+    action:
+        subscribe: Subscribe
+        unsubscribe: Unsubscribe
+        send: Send
+
+mailingListMail:
+    action:
+        copySuffix: (Copy)
+    nav:
+        title: Emails
+    props:
+        senderMail: Sender email
+        senderMailInfo: By default this is set to the no-reply email
+        subject: Subject
+        sent: Sent
+        sentAt: Sent at
+        mailingLists: Affected mailing lists
+        contacts: Affected subscribers
+        contactsInfo: If no subscribers are selected, the email will be sent to all subscribers in the mailing list
+        content:
+            singleColumnSection:
+                label: Single-column section
+            multiColumnSection:
+                label: Multi-column section
+            hero:
+                label: Hero
+                backgroundImage: Background image
+                fixedHeight: Fixed height
+                backgroundImageHeight: Background image height
+            global:
+                verticalAlign:
+                    label: Vertical alignment
+                    middle: Center
+                    top: Top
+                    bottom: Bottom
+                align:
+                    label: Horizontal alignment
+                    center: Center
+                    left: Left
+                    right: Right
+                color:
+                    label: Text color
+                backgroundColor:
+                    label: Background color
+                fontFamily:
+                    label: Font family
+                fontSize:
+                    label: Font size
+            spacer:
+                label: Spacing
+                height: Height
+            divider:
+                label: Divider
+                borderStyle:
+                    label: Style
+                    solid: Solid
+                    dotted: Dotted
+                    dashed: Dashed
+                borderWidth: Width
+
+            image:
+                label: Image
+                alt: Alternative text
+                value: Image
+                width: Width
+            text:
+                label: Text
+                value: Text
+            salutation:
+                label: Salutation
+                prefix:
+                    label: Salutation
+                    option1: Hello
+                    option2: Good day
+                    option3: Hi
+                withLastName: With last name
+            button:
+                label: Button
+                buttonLabel: Button text
+                url: URL
+                backgroundColor: Button background color
+            confirmSubscriptionButton:
+                label: Subscription confirmation button
+                buttonLabel: Button text
+                backgroundColor: Button background color
+
+sulu_activity:
+    resource:
+        newsletters_subscriptions: Subscriptions
+        newsletters_mails: Emails
+    description:
+        newsletters_mails:
+            sent: "New email sent: {resourceTitle}"
+        newsletters_subscriptions:
+            confirmed: "Confirmed subscription: {resourceTitle}"
+            subscribed: "New subscription: {resourceTitle}"
+            unsubscribed: "Ended subscription: {resourceTitle}"
+
+sulu_form:
+    fields:
+        type_newsletter_field: Mailing list
+        type_hidden_newsletter_field: Mailing list (hidden)

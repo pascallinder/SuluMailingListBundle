@@ -1,0 +1,120 @@
+mailingList:
+    label: Mailverteiler
+    list:
+        title: Mailverteiler
+    nav:
+        title: Mailverteiler
+    tabs:
+        subscriptions: Abonnent:innen
+        addSubscriptions: Abonnent:innen hinzufügen
+        doubleOptMail: Double-Opt E-Mail
+    props:
+        unsubscribePage: Abmeldebestätigungsseite
+        doubleOptConfirmPage: Double-Opt Bestätigungsseite
+mailingListSubscription:
+    props:
+        newsletter: Abonnierter Mailverteiler
+        subscribedAt: Abonniert seit
+        isConfirmed: Double-opt bestätigt
+        unsubscribedAt: Deabonniert seit
+        isUnsubscribed: Deabonniert
+    action:
+        subscribe: Abonnieren
+        unsubscribe: Deabonnieren
+        send: Senden
+mailingListMail:
+    action:
+        copySuffix: (Kopie)
+    nav:
+        title: Mails
+    props:
+        senderMail: Sender E-Mail
+        senderMailInfo: Standardmässig wird es auf die no-reply E-Mail gesetzt
+        subject: Betreff
+        sent: Gesendet
+        sentAt: Gesendet am
+        mailingLists: Betroffene Verteiler
+        contacts: Betroffene Abonnent:innen
+        contactsInfo: Wenn keine Abonnent:innen ausgewählt werden, wird das Mail an alle Abonnent:innen im Verteiler geschickt
+        content:
+            singleColumnSection:
+                label: Einspaltige Sektion
+            multiColumnSection:
+                label: Mehrspaltige Sektion
+            hero:
+                label: Hero
+                backgroundImage: Hintergrundbild
+                fixedHeight: Fixe Höhe
+                backgroundImageHeight: Hintergrundbildhöhe
+            global:
+                verticalAlign:
+                    label: Vertikale Ausrichtung
+                    middle: Mittig
+                    top: Oben
+                    bottom: Unten
+                align:
+                    label: Horizontale Ausrichtung
+                    center: Mittig
+                    left: Links
+                    right: Rechts
+                color:
+                    label: Textfarbe
+                backgroundColor:
+                    label: Hintergrundfarbe
+                fontFamily:
+                    label: Schriftart
+                fontSize:
+                    label: Schriftgrösse
+            spacer:
+                label: Abstand
+                height: Höhe
+            divider:
+                label: Trenner
+                borderStyle:
+                    label: Stil
+                    solid: Solid
+                    dotted: Gepunktet
+                    dashed: Gestrichelt
+                borderWidth: Breite
+
+            image:
+                label: Bild
+                alt: Alternativtext
+                value: Bild
+                width: Breite
+            text:
+                label: Text
+                value: text
+            salutation:
+                label: Anrede
+                prefix:
+                    label: Anrede
+                    option1: Hallo
+                    option2: Guten Tag
+                    option3: Hi
+                withLastName: Mit Nachname
+            button:
+                label: Knopf
+                buttonLabel: Knopftext
+                url: URL
+                backgroundColor: Hintergrundfarbe des Buttons
+            confirmSubscriptionButton:
+                label: Subscription Bestätigungsknopf
+                buttonLabel: Knopftext
+                backgroundColor: Hintergrundfarbe des Buttons
+
+sulu_activity:
+    resource:
+        newsletters_subscriptions: Abos
+        newsletters_mails: Mails
+    description:
+        newsletters_mails:
+            sent: "Neue Mail gesendet: {resourceTitle}"
+        newsletters_subscriptions:
+            confirmed: "Bestätigtes Abonnement: {resourceTitle}"
+            subscribed: "Neues Abonnement: {resourceTitle}"
+            unsubscribed: "Beendetes Abonnement: {resourceTitle}"
+sulu_form:
+    fields:
+        type_newsletter_field: Mailverteiler
+        type_hidden_newsletter_field: Mailverteiler (versteckt)

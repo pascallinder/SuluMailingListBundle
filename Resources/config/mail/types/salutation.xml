@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:xi="http://www.w3.org/2001/XInclude"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/properties-1.0.xsd">
+    <property name="prefix" type="single_select" multilingual="false" colspan="6">
+        <meta>
+            <title>mailingListMail.props.content.salutation.prefix.label</title>
+        </meta>
+
+        <params>
+            <param name="default_value" type="expression" value="service('sulu_mailing_list.salutation_prefix_select').getDefaultValue()"/>
+            <param name="values" type="expression" value="service('sulu_mailing_list.salutation_prefix_select').getValues(locale)"/>
+        </params>
+    </property>
+    <property name="withLastName" type="checkbox" multilingual="false" colspan="6">
+        <meta>
+            <title>mailingListMail.props.content.salutation.withLastName</title>
+        </meta>
+
+        <params>
+            <param name="default_value" value="false">
+            </param>
+        </params>
+    </property>
+    <xi:include href="../props/font.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+    <xi:include href="../props/align.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+    <xi:include href="../props/background-color.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+    <xi:include href="../props/color.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+</properties>

@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:xi="http://www.w3.org/2001/XInclude"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/properties-1.0.xsd">
+    <property name="value" type="text_editor" mandatory="true" disabledCondition="sent">
+        <meta>
+            <title>mailingListMail.props.content.text.value</title>
+        </meta>
+    </property>
+    <xi:include href="../props/font.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+    <xi:include href="../props/background-color.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+    <xi:include href="../props/color.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+</properties>

@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+<list xmlns="http://schemas.sulu.io/list-builder/list">
+    <key>newsletters_mails</key>
+    <joins name="translation">
+        <join>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation</entity-name>
+            <field-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail.translations</field-name>
+            <condition>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation.locale = :locale</condition>
+        </join>
+    </joins>
+
+    <joins name="changer" ref="translation">
+        <join>
+            <entity-name>%sulu.model.user.class%_changer</entity-name>
+            <field-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation.changer</field-name>
+        </join>
+        <join>
+            <entity-name>%sulu.model.contact.class%_changer</entity-name>
+            <field-name>%sulu.model.user.class%_changer.contact</field-name>
+        </join>
+    </joins>
+
+    <joins name="creator" ref="translation">
+        <join>
+            <entity-name>%sulu.model.user.class%_creator</entity-name>
+            <field-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation.creator</field-name>
+        </join>
+        <join>
+            <entity-name>%sulu.model.contact.class%_creator</entity-name>
+            <field-name>%sulu.model.user.class%_creator.contact</field-name>
+        </join>
+    </joins>
+    <properties>
+        <property name="id" visibility="no" translation="sulu_admin.id" >
+            <field-name>id</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail</entity-name>
+        </property>
+        <property name="subject" visibility="yes" translation="app.newsletterMail.props.subject">
+            <field-name>subject</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation</entity-name>
+            <joins ref="translation"/>
+        </property>
+        <property name="sent" visibility="yes" translation="app.newsletterMail.props.sent" type="bool">
+            <field-name>sent</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail</entity-name>
+            <joins ref="translation"/>
+        </property>
+        <property name="sentAt" visibility="yes" translation="app.newsletterMail.props.sentAt" type="datetime">
+            <field-name>sentAt</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail</entity-name>
+        </property>
+
+        <property name="created" translation="sulu_admin.created" type="datetime" visibility="yes">
+            <field-name>created</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation</entity-name>
+
+            <joins ref="translation"/>
+        </property>
+
+        <concatenation-property name="creator" translation="sulu_admin.creator" visibility="yes" searchability="yes">
+            <field>
+                <field-name>firstName</field-name>
+                <entity-name>%sulu.model.contact.class%_creator</entity-name>
+
+                <joins ref="creator"/>
+            </field>
+            <field>
+                <field-name>lastName</field-name>
+                <entity-name>%sulu.model.contact.class%_creator</entity-name>
+
+                <joins ref="creator"/>
+            </field>
+        </concatenation-property>
+
+        <property name="changed" translation="sulu_admin.changed" type="datetime" visibility="yes">
+            <field-name>changed</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation</entity-name>
+
+            <joins ref="translation"/>
+        </property>
+
+        <concatenation-property name="changer" translation="sulu_admin.changer" visibility="yes" searchability="yes">
+            <field>
+                <field-name>firstName</field-name>
+                <entity-name>%sulu.model.contact.class%_changer</entity-name>
+
+                <joins ref="changer"/>
+            </field>
+            <field>
+                <field-name>lastName</field-name>
+                <entity-name>%sulu.model.contact.class%_changer</entity-name>
+
+                <joins ref="changer"/>
+            </field>
+        </concatenation-property>
+    </properties>
+</list>

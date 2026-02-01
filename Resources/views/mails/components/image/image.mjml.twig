@@ -1,0 +1,10 @@
+{% block mail_image %}
+    {% if item.value is not null %}
+        <mj-image alt="{{ item.alt|default('') }}"
+                  width="{{ item.width }}px"
+                  src="{{ item.value }}"
+                  align="{{ item.align|default('center') }}"
+                  container-background-color="{{ item.backgroundColor|default }}"
+        />
+    {% endif %}
+{% endblock %}

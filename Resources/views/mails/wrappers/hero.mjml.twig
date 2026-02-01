@@ -1,0 +1,20 @@
+{% block mail_content %}
+    {% if wrapper.backgroundImage is not null %}
+        <mj-hero padding="0" background-url="{{ wrapper.backgroundImage}}"
+                 background-color="{{ wrapper.backgroundColor|default }}"
+                 vertical-align="{{ wrapper.verticalAlign|default }}"
+                 {% if wrapper.fixedHeight %}
+                     background-height="{{ wrapper.backgroundImageHeight|default('400') }}px"
+                     height="{{ wrapper.backgroundImageHeight|default('400') }}px"
+                 {% else %}
+                     background-height="100%"
+                 {% endif %}
+                >
+            {% for item in wrapper.components %}
+                {% include '@SuluMailingList/mails/components/'~  item.type ~ '/' ~ item.type ~ '.mjml.twig' with {
+                    item: item
+                } %}
+            {% endfor %}
+        </mj-hero>
+    {% endif %}
+{% endblock %}

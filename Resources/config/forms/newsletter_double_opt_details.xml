@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<form xmlns="http://schemas.sulu.io/template/template"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/form-1.0.xsd"
+>
+    <key>newsletter_double_opt_details</key>
+
+    <properties>
+        <property name="doubleOpt_senderMail" type="email">
+            <meta>
+                <title>mailingListMail.props.senderMail</title>
+                <info_text>mailingListMail.props.senderMailInfo</info_text>
+            </meta>
+        </property>
+        <property name="doubleOpt_subject" type="text_line" mandatory="true">
+            <meta>
+                <title>mailingListMail.props.subject</title>
+            </meta>
+        </property>
+    </properties>
+</form>

@@ -1,0 +1,33 @@
+
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:xi="http://www.w3.org/2001/XInclude"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <property name="align" type="single_select" multilingual="false">
+        <meta>
+            <title>mailingListMail.props.content.global.align.label</title>
+        </meta>
+
+        <params>
+            <param name="default_value" value="center"/>
+
+            <param name="values" type="collection">
+                <param name="center">
+                    <meta>
+                        <title>mailingListMail.props.content.global.align.center</title>
+                    </meta>
+                </param>
+                <param name="left">
+                    <meta>
+                        <title>mailingListMail.props.content.global.align.left</title>
+                    </meta>
+                </param>
+                <param name="right">
+                    <meta>
+                        <title>mailingListMail.props.content.global.align.right</title>
+                    </meta>
+                </param>
+            </param>
+        </params>
+    </property>
+</properties>

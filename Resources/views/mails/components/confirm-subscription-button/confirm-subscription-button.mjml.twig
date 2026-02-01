@@ -1,0 +1,11 @@
+{% block button %}
+    <mj-button background-color="{{ item.buttonBackgroundColor|default }}"
+               container-background-color="{{ item.backgroundColor|default }}"
+               color="{{ item.color|default }}"
+               font-size="{{ item.fontSize|default('16') }}px"
+               font-family="{{ item.fontFamily |default}}"
+               href="{{ doubleOptUrl }}"
+               align="{{ item.align|default('center') }}">
+        {{ item.label }}
+    </mj-button>
+{% endblock %}

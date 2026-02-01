@@ -1,0 +1,25 @@
+
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <property name="fontFamily" type="single_select" colspan="6">
+        <meta>
+            <title>mailingListMail.props.content.global.fontFamily.label</title>
+        </meta>
+        <params>
+            <param name="default_value" type="expression" value="service('mailing.font-pool').getDefaultValue()"/>
+            <param name="values" type="expression" value="service('mailing.font-pool').getFontSelection()"/>
+        </params>
+    </property>
+    <property name="fontSize" type="range_picker" colspan="6">
+        <meta>
+            <title>mailingListMail.props.content.global.fontSize.label</title>
+        </meta>
+        <params>
+            <param name="min" value="0"/>
+            <param name="max" value="100"/>
+            <param name="step" value="1"/>
+            <param name="default" value="16" />
+        </params>
+    </property>
+</properties>

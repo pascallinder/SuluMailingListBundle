@@ -1,0 +1,10 @@
+{% block salutation %}
+    {% if item.value is defined %}
+        <mj-text font-size="{{ item.fontSize|default('16') }}px"
+                 font-family="{{ item.fontFamily |default}}"
+                 container-background-color="{{ item.backgroundColor|default }}"
+                 color="{{ item.color|default }}">
+                {{ item.value | raw}}
+        </mj-text>
+    {% endif %}
+{% endblock %}

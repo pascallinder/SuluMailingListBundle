@@ -1,0 +1,33 @@
+
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:xi="http://www.w3.org/2001/XInclude"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <property name="verticalAlign" type="single_select" multilingual="false">
+        <meta>
+            <title>mailingListMail.props.content.global.veritcalAlign.label</title>
+        </meta>
+
+        <params>
+            <param name="default_value" value="middle"/>
+
+            <param name="values" type="collection">
+                <param name="middle">
+                    <meta>
+                        <title>mailingListMail.props.content.global.verticalAlign.middle</title>
+                    </meta>
+                </param>
+                <param name="top">
+                    <meta>
+                        <title>mailingListMail.props.content.global.verticalAlign.top</title>
+                    </meta>
+                </param>
+                <param name="bottom">
+                    <meta>
+                        <title>mailingListMail.props.content.global.verticalAlign.bottom</title>
+                    </meta>
+                </param>
+            </param>
+        </params>
+    </property>
+</properties>

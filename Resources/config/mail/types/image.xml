@@ -8,7 +8,7 @@
             <title>mailingListMail.props.content.image.alt</title>
         </meta>
     </property>
-    <property name="value" type="single_media_selection" mandatory="true">
+    <property name="image" type="single_media_selection" mandatory="true">
         <meta>
             <title>mailingListMail.props.content.image.value</title>
         </meta>

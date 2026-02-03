@@ -1,7 +1,7 @@
 {% block mail_content %}
     {% if wrapper.backgroundImage is not null %}
         <mj-hero padding="0" background-url="{{ wrapper.backgroundImage}}"
-                 background-color="{{ wrapper.backgroundColor|default }}"
+                 background-color="{{ wrapper.backgroundColor|default('#FFF') }}"
                  vertical-align="{{ wrapper.verticalAlign|default }}"
                  {% if wrapper.fixedHeight %}
                      background-height="{{ wrapper.backgroundImageHeight|default('400') }}px"

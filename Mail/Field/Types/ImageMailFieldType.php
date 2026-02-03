@@ -22,9 +22,9 @@ readonly class ImageMailFieldType implements MailFieldTypeInterface
 
     public function build(array $item, string $locale): array
     {
-        if(!array_key_exists('value',$item) || !$item['value']['id']){
-            return [ ...$item, "value" => null];
+        if(!array_key_exists('image',$item) || !$item['image']['id']){
+            return [ ...$item, "image" => null];
         }
-        return [ ...$item, "value" => $this->imageUrlProvider->getUrl($item['value']["id"], $locale)];
+        return [ ...$item, "image" => $this->imageUrlProvider->getUrl($item['image']["id"], $locale)];
     }
 }

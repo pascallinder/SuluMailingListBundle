@@ -30,13 +30,11 @@ class NewsletterMailController extends LocaleController
         private readonly NewsletterMailRepository          $newsletterMailRepository,
         private readonly ContactRepositoryInterface $contactRepository,
         private readonly NewsletterMailTranslationRepository $newsletterMailTranslationRepository,
-        private readonly EntityManagerInterface $entityManager,
         private readonly NewsletterRepository              $newsletterRepository,
         private readonly DoctrineListRepresentationFactory $doctrineListRepresentationFactory,
         private readonly MailContentProvider               $subscriptionMailProvider,
         private readonly SubscriptionMailService           $subscriptionMailService,
         protected readonly WebspaceManagerInterface        $webspaceManager,
-        private readonly TranslatorInterface $translator,
         #[Autowire('%sulu_mailing_list.no_reply_email%')]
         private readonly string                            $noReplyEmail,
     )
@@ -132,49 +130,13 @@ class NewsletterMailController extends LocaleController
                 break;
             }
             case 'copy-locale':{
-                $srcLocale = $request->query->get('locale');
-                $destLocale = $request->query->get('dest');
-
-                $source = $this->newsletterMailTranslationRepository->findOneBy([
-                    'locale' => $srcLocale,
-                    'newsletterMail' => $entity,
-                ]);
-                if (!$source) {
-                    throw new \RuntimeException('Source translation not found');
-                }
-                $dest = $this->newsletterMailTranslationRepository->findOneBy([
-                    'locale' => $destLocale,
-                    'newsletterMail' => $entity,
-                ]);
-
-                if (!$dest) {
-                    $dest = new NewsletterMailTranslation($entity, $destLocale);
-                }
-                $dest->setSubject($source->getSubject());
-                $dest->setContent($source->getContent());
-                $this->entityManager->persist($dest);
-                $this->entityManager->flush();
+                $this->newsletterMailTranslationRepository->copyLocale($entity,
+                    $request->query->get('locale'),
+                    $request->query->get('dest'));
                 break;
             }
             case 'copy':{
-                $copy = new NewsletterMail();
-                $copy->setSent(false);
-                $copy->setNewsletters($entity->getNewsletters());
-                $copy->setContacts($entity->getContacts());
-                $copy->setSenderMail($entity->getSenderMail());
-                $copy->setLocale($this->getLocale($request));
-                $translations = [];
-                /** @var NewsletterMailTranslation $translation */
-                foreach ($entity->getTranslations()->getValues() as $translation) {
-                    $new=new NewsletterMailTranslation($copy, $translation->getLocale());
-                    $new->setSubject($translation->getSubject() . ' '
-                        . $this->translator->trans('mailingListMail.action.copySuffix', [], 'admin', $translation->getLocale()) );
-                    $new->setContent($translation->getContent());
-                    $translations[] = $new;
-                }
-                $copy->setTranslations(new ArrayCollection($translations));
-                $this->entityManager->persist($copy);
-                $this->entityManager->flush();
+                $this->newsletterMailRepository->copy($entity);
             }
         }
     }

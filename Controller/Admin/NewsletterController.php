@@ -5,6 +5,8 @@ use Linderp\SuluBaseBundle\Common\DoctrineListRepresentationFactory;
 use Linderp\SuluBaseBundle\Controller\Admin\LocaleController;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Repository\Newsletter\NewsletterRepository;
+use Linderp\SuluMailingListBundle\Repository\NewsletterDoubleOpt\NewsletterDoubleOptRepository;
+use Linderp\SuluMailingListBundle\Repository\NewsletterDoubleOpt\NewsletterDoubleOptTranslationRepository;
 use Linderp\SuluMailingListBundle\Service\Mail\MailContentProvider;
 use Psr\Cache\InvalidArgumentException;
 use Sulu\Bundle\MediaBundle\Media\Manager\MediaManagerInterface;
@@ -26,6 +28,7 @@ class NewsletterController extends LocaleController
 {
     public function __construct(
         private readonly NewsletterRepository $newsletterRepository,
+        private readonly NewsletterDoubleOptTranslationRepository $newsletterDoubleOptTranslationRepository,
         private readonly DoctrineListRepresentationFactory $doctrineListRepresentationFactory,
         private readonly MailContentProvider $mailContentProvider,
         #[Autowire('%sulu_mailing_list.no_reply_email%')]
@@ -125,6 +128,13 @@ class NewsletterController extends LocaleController
 
     protected function triggerSwitch(Request $request, string $action, $entity): void
     {
-        return;
+        switch ($action) {
+            case 'copy-locale':{
+                $this->newsletterDoubleOptTranslationRepository->copyLocale($entity->getNewsletterDoubleOpt(),
+                    $request->query->get('locale'),
+                    $request->query->get('dest'));
+                break;
+            }
+        }
     }
 }

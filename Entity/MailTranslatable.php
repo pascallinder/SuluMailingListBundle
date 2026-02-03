@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Entity;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,8 +16,11 @@ abstract class MailTranslatable
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     protected string $senderMail;
-    
-    public abstract function getTranslations():Collection;
+
+    /**
+     * @return Collection<MailTranslation>
+     */
+
     public function hasTranslation(string $locale):bool{
         return $this->getTranslations()->containsKey($locale);
     }
@@ -68,9 +72,14 @@ abstract class MailTranslatable
         return $this;
     }
     /**
-     * @param Collection $translations
+     * @param Collection<MailTranslation> $translations
      */
     public abstract function setTranslations(Collection $translations): void;
+
+    /**
+     * @return Collection<MailTranslation>
+     */
+    public abstract function getTranslations():Collection;
 
 
     /**
@@ -88,4 +97,14 @@ abstract class MailTranslatable
     {
         $this->senderMail = $senderMail;
     }
+    public function applyFrom(self $source): void
+    {
+        $this->setSenderMail($source->getSenderMail());
+        foreach ($source->getTranslations() as $translation) {
+            $copy= $this->createTranslation($translation->getLocale());
+            $copy->applyFrom($translation);
+        }
+    }
+    protected abstract function getTranslationClass(): string;
+    public abstract function copy(): static;
 }

@@ -35,17 +35,17 @@
             <field-name>id</field-name>
             <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail</entity-name>
         </property>
-        <property name="subject" visibility="yes" translation="app.newsletterMail.props.subject">
+        <property name="subject" visibility="yes" translation="mailingListMail.props.subject">
             <field-name>subject</field-name>
             <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation</entity-name>
             <joins ref="translation"/>
         </property>
-        <property name="sent" visibility="yes" translation="app.newsletterMail.props.sent" type="bool">
+        <property name="sent" visibility="yes" translation="mailingListMail.props.sent" type="bool">
             <field-name>sent</field-name>
             <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail</entity-name>
             <joins ref="translation"/>
         </property>
-        <property name="sentAt" visibility="yes" translation="app.newsletterMail.props.sentAt" type="datetime">
+        <property name="sentAt" visibility="yes" translation="mailingListMail.props.sentAt" type="datetime">
             <field-name>sentAt</field-name>
             <entity-name>Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail</entity-name>
         </property>

@@ -6,11 +6,12 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluBaseBundle\Repository\LocaleRepositoryUtil;
 use Linderp\SuluMailingListBundle\Entity\NewsletterDoubleOpt\NewsletterDoubleOpt;
+use Linderp\SuluMailingListBundle\Repository\MailTranslatableRepository;
 
 /**
  * @extends LocaleRepositoryUtil<NewsletterDoubleOpt>
  */
-class NewsletterDoubleOptRepository extends LocaleRepositoryUtil
+class NewsletterDoubleOptRepository extends MailTranslatableRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

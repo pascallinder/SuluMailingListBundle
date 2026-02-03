@@ -4,7 +4,10 @@
                  font-family="{{ item.fontFamily |default}}"
                  container-background-color="{{ item.backgroundColor|default }}"
                  color="{{ item.color|default }}">
-                {{ item.value | raw}}
+                <div class="mjml-text-container">
+                    {{ item.value |raw }}
+                </div>
+
         </mj-text>
     {% endif %}
 {% endblock %}

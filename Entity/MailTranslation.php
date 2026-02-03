@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Linderp\SuluBaseBundle\Entity\IdTrait;
 use Sulu\Bundle\MediaBundle\Entity\Media;
 
-class MailTranslation
+abstract class MailTranslation
 {
     use IdTrait;
 
@@ -15,6 +15,12 @@ class MailTranslation
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
     protected ?array $content = null;
+
+    public function __construct(
+        #[ORM\Column(type: Types::STRING, length: 5, nullable: false)]
+        protected string $locale){
+
+    }
 
     /**
      * @return string|null
@@ -41,4 +47,20 @@ class MailTranslation
     {
         $this->content = $content;
     }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): void
+    {
+        $this->locale = $locale;
+    }
+    public function applyFrom(self $source): void
+    {
+        $this->subject = $source->subject;
+        $this->content = $source->content;
+    }
+    public abstract function copyTo(string $destLocale): static;
 }

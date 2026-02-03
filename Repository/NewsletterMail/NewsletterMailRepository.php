@@ -6,15 +6,17 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluBaseBundle\Repository\LocaleRepositoryUtil;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail;
+use Linderp\SuluMailingListBundle\Repository\MailTranslatableRepository;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @extends LocaleRepositoryUtil<NewsletterMail>
  */
-class NewsletterMailRepository extends LocaleRepositoryUtil
+class NewsletterMailRepository extends MailTranslatableRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, NewsletterMail::class);
+        parent::__construct( $registry, NewsletterMail::class);
     }
     /**
      * @return string[]

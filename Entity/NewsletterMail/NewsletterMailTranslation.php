@@ -16,9 +16,9 @@ class NewsletterMailTranslation extends MailTranslation implements AuditableInte
         #[ORM\ManyToOne(targetEntity: NewsletterMail::class, inversedBy: 'translations')]
         #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
         private readonly NewsletterMail $newsletterMail,
-        #[ORM\Column(type: Types::STRING, length: 5, nullable: false)]
-        private readonly string $locale,
+        string $locale,
     ) {
+        parent::__construct($locale);
     }
     /**
      * @return NewsletterMail
@@ -34,5 +34,12 @@ class NewsletterMailTranslation extends MailTranslation implements AuditableInte
     public function getLocale(): string
     {
         return $this->locale;
+    }
+
+    public function copyTo(string $destLocale): static
+    {
+        $dest = new self($this->getNewsletterMail(), $destLocale);
+        $dest->applyFrom($this);
+        return $dest;
     }
 }

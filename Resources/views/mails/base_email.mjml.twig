@@ -4,6 +4,16 @@
             {% block title %}
             {% endblock %}
         </mj-title>
+        {% block additional_css %}
+            <mj-style>
+                .mjml-text-container *:first-child{
+                    margin-top: 0;
+                }
+                .mjml-text-container *:last-child{
+                    margin-bottom: 0;
+                }
+            </mj-style>
+        {% endblock %}
         {% block fonts %}
             {% if fonts is defined and fonts is not null %}
                 {% for font in fonts %}

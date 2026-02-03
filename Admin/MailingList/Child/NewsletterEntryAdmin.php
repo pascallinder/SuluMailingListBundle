@@ -15,10 +15,13 @@ use Sulu\Bundle\AdminBundle\Admin\View\ViewBuilderFactoryInterface;
 use Sulu\Bundle\AdminBundle\Admin\View\ViewCollection;
 use Sulu\Bundle\ReferenceBundle\Infrastructure\Sulu\Admin\View\ReferenceViewBuilderFactoryInterface;
 use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class NewsletterEntryAdmin extends AdminCrud implements AdminChild
 {
-    public function __construct(protected ViewBuilderFactoryInterface $viewBuilderFactory,
+    public function __construct(
+        private readonly KernelInterface $kernel,
+        protected ViewBuilderFactoryInterface $viewBuilderFactory,
                                 protected ActivityViewBuilderFactoryInterface $activityViewBuilderFactory,
                                 protected ReferenceViewBuilderFactoryInterface $referenceViewBuilderFactory,
                                 protected WebspaceManagerInterface $webspaceManager)
@@ -57,8 +60,17 @@ class NewsletterEntryAdmin extends AdminCrud implements AdminChild
             ->setResourceKey(Newsletter::RESOURCE_KEY)
             ->setFormKey('newsletter_double_opt_details')
             ->setTabTitle('mailingList.tabs.doubleOptMail')
-            ->addToolbarActions([new ToolbarAction('sulu_admin.save')])
-            ->setParent($this->getDefinition()->form->editView);
+            ->addToolbarActions([
+                new ToolbarAction('sulu_admin.save'),
+                new ToolbarAction('sulu_admin.copy_locale'),
+            ]);
+        if (isset($this->kernel->getBundles()['SuluAITranslatorBundle'])) {
+            $doubleOptMailForm->addToolbarActions([
+                new ToolbarAction('ai_translator.toolbar',
+                    ['allow_overwrite' => true])
+            ]);
+        }
+        $doubleOptMailForm->setParent($this->getDefinition()->form->editView);
         $viewCollection->add($doubleOptMailForm);
 
         $locales = $this->webspaceManager->getAllLocales();

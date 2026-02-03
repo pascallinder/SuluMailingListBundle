@@ -55,4 +55,16 @@ class NewsletterDoubleOpt extends MailTranslatable
     {
        $this->translations = $translations;
     }
+
+    public function copy(): static
+    {
+        $dest = new self();
+        $dest->applyFrom($this);
+        return $dest;
+    }
+
+    protected function getTranslationClass(): string
+    {
+        return NewsletterDoubleOptTranslation::class;
+    }
 }

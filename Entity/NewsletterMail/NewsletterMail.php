@@ -17,9 +17,6 @@ use Sulu\Bundle\ContactBundle\Entity\Contact;
 #[ORM\Entity(repositoryClass: NewsletterMailRepository::class)]
 class NewsletterMail extends MailTranslatable
 {
-    use IdTrait;
-    use LocaleTrait;
-
     final public const RESOURCE_KEY = 'newsletters_mails';
 
     #[ORM\Column(type: Types::BOOLEAN)]
@@ -114,5 +111,18 @@ class NewsletterMail extends MailTranslatable
     public function setContacts(Collection $contacts): void
     {
         $this->contacts = $contacts;
+    }
+    public function copy(): static
+    {
+        $dest = new self();
+        $dest->applyFrom($this);
+        $dest->setNewsletters($this->getNewsletters());
+        $dest->setContacts($this->getContacts());
+        return $dest;
+    }
+
+    protected function getTranslationClass(): string
+    {
+        return NewsletterMailTranslation::class;
     }
 }

@@ -16,9 +16,9 @@ class NewsletterDoubleOptTranslation extends MailTranslation implements Auditabl
         #[ORM\ManyToOne(targetEntity: NewsletterDoubleOpt::class, inversedBy: 'translations')]
         #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
         private readonly NewsletterDoubleOpt $newsletterDoubleOpt,
-        #[ORM\Column(type: Types::STRING, length: 5, nullable: false)]
-        private readonly string $locale,
+        string $locale,
     ) {
+        parent::__construct($locale);
     }
     /**
      * @return NewsletterDoubleOpt
@@ -27,12 +27,10 @@ class NewsletterDoubleOptTranslation extends MailTranslation implements Auditabl
     {
         return $this->newsletterDoubleOpt;
     }
-
-    /**
-     * @return string
-     */
-    public function getLocale(): string
+    public function copyTo(string $destLocale): static
     {
-        return $this->locale;
+        $dest = new self($this->getNewsletterDoubleOpt(), $destLocale);
+        $dest->applyFrom($this);
+        return $dest;
     }
 }

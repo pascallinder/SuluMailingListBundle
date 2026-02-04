@@ -19,10 +19,13 @@
             </param>
         </params>
     </property>
-    <xi:include href="../props/font.xml"
+    <xi:include href="../props/veritcal-align.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>
     <xi:include href="../props/align.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+    <xi:include href="../props/font.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>
     <property name="buttonBackgroundColor" type="color_picker_custom" multilingual="false">

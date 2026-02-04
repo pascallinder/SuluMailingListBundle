@@ -2,14 +2,34 @@
 
 namespace Linderp\SuluMailingListBundle\Mail\Field;
 
-readonly class MailFieldTypeConfiguration
+use Linderp\SuluMailingListBundle\Mail\Resource\MailResourceInterface;
+use Linderp\SuluMailingListBundle\Mail\Wrapper\MailWrapperTypeInterface;
+
+class MailFieldTypeConfiguration
 {
+    /** @var string[] $acceptedResources */
+    private array $acceptedResources = [];
     /**
      * @param string[] $acceptedWrapper
      */
-    public function __construct(private string $title, private string $xmlPath, private string $key,
-                                private bool $onlyDoubleOpt = false, private array $acceptedWrapper = ['all']){
+    private array $acceptedWrapper = [];
 
+    private ?string $visibilityCondition = null;
+    public function __construct(private readonly string $title, private readonly string $xmlPath, private readonly string $key)
+    {
+
+    }
+
+    public function setAcceptedResources(string ...$acceptedResources): static
+    {
+        $this->acceptedResources = $acceptedResources;
+        return $this;
+    }
+
+    public function setAcceptedWrapper(string ...$acceptedWrapper): static
+    {
+        $this->acceptedWrapper = $acceptedWrapper;
+        return $this;
     }
     public function getXmlPath(): string
     {
@@ -26,9 +46,9 @@ readonly class MailFieldTypeConfiguration
         return $this->title;
     }
 
-    public function isOnlyDoubleOpt(): bool
+    public function getAcceptedResources(): array
     {
-        return $this->onlyDoubleOpt;
+        return $this->acceptedResources;
     }
 
     /**
@@ -38,4 +58,5 @@ readonly class MailFieldTypeConfiguration
     {
         return $this->acceptedWrapper;
     }
+
 }

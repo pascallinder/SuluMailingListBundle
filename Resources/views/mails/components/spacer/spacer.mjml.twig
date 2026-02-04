@@ -1,4 +1,5 @@
 {% block spacer %}
     <mj-spacer height="{{ item.height }}px"
+               padding="{{ item.padding|default }}"
                container-background-color="{{ item.backgroundColor|default }}"/>
 {% endblock %}

@@ -45,6 +45,7 @@ mailingListMail:
                 label: Hero
                 backgroundImage: Hintergrundbild
                 fixedHeight: Fixe Höhe
+                height: Höhe
                 backgroundImageHeight: Hintergrundbildhöhe
             global:
                 verticalAlign:

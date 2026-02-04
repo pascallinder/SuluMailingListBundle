@@ -47,4 +47,7 @@
             <param name="default" value="2" />
         </params>
     </property>
+    <xi:include href="../props/padding.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
 </properties>

@@ -1,6 +1,7 @@
 {% block mail_image %}
-    {% if item.value is not null %}
+    {% if item.image is defined and item.image is not null %}
         <mj-image alt="{{ item.alt|default('') }}"
+                  padding="{{ item.padding|default }}"
                   width="{{ item.width }}px"
                   src="{{ item.image }}"
                   align="{{ item.align|default('center') }}"

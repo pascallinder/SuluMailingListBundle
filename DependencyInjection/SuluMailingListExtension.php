@@ -29,6 +29,10 @@ class SuluMailingListExtension extends Extension implements PrependExtensionInte
             $config['mjml']['secret_key']
         );
         $container->setParameter(
+            'sulu_mailing_list.mjml.caching',
+            $config['mjml']['caching']
+        );
+        $container->setParameter(
             'sulu_mailing_list.no_reply_email',
             $config['no_reply_email']
         );

@@ -1,0 +1,12 @@
+
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:xi="http://www.w3.org/2001/XInclude"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <property name="padding" type="padding_picker">
+        <meta>
+            <title>mailingListMail.props.content.image.padding</title>
+            <info_text>mailingListMail.props.content.image.paddingInfo</info_text>
+        </meta>
+    </property>
+</properties>

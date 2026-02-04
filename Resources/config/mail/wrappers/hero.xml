@@ -3,39 +3,10 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns:xi="http://www.w3.org/2001/XInclude"
             xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/properties-1.0.xsd">
-    <property name="backgroundImage" type="single_media_selection" mandatory="true">
-        <meta>
-            <title>mailingListMail.props.content.hero.backgroundImage</title>
-        </meta>
-        <params>
-            <param name="types" value="image"/>
-            <param name="displayOptions" type="collection">
-            </param>
-        </params>
-    </property>
-    <property name="fixedHeight" type="checkbox">
-        <meta>
-            <title>mailingListMail.props.content.hero.fixedHeight</title>
-        </meta>
-        <params>
-            <param name="default_value" value="false"/>
-        </params>
-    </property>
-    <property name="backgroundImageHeight" type="range_picker" visibleCondition="__parent.fixedHeight == true">
-        <meta>
-            <title>mailingListMail.props.content.hero.height</title>
-        </meta>
-        <params>
-            <param name="min" value="0"/>
-            <param name="max" value="600"/>
-            <param name="step" value="1"/>
-            <param name="default" value="600" />
-        </params>
-    </property>
     <xi:include href="../props/background-color.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>
-    <xi:include href="../props/veritcal-align.xml"
+    <xi:include href="../props/background-image.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>
 </properties>

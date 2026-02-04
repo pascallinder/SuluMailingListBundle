@@ -4,6 +4,7 @@ namespace Linderp\SuluMailingListBundle\Metadata;
 
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeInterface;
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypesPool;
+use Linderp\SuluMailingListBundle\Mail\Resource\MailResourceInterface;
 use Linderp\SuluMailingListBundle\Mail\Resource\MailResourcePool;
 use Linderp\SuluMailingListBundle\Mail\Wrapper\MailWrapperTypeInterface;
 use Linderp\SuluMailingListBundle\Mail\Wrapper\MailWrapperTypesPool;
@@ -63,7 +64,7 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
                 $content->setType('block');
                 $wrapperTypes = $this->mailWrapperTypesPool->getAll();
                 foreach ($wrapperTypes as $wrapperType) {
-                    $content->addType($this->createWrappersMetadata($wrapperType, $locale,$resourceConfig->isDoubleOpt()));
+                    $content->addType($this->createWrappersMetadata($wrapperType, $locale, $resource));
                 }
                 $content->setDefaultType('single-column-section');
                 $content->setDisabledCondition('sent');
@@ -97,7 +98,8 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
     /**
      * @throws \Exception
      */
-    private function createWrappersMetadata(MailWrapperTypeInterface $mailWrapperType, string $locale, bool $doubleOpt): FormMetadata
+    private function createWrappersMetadata(MailWrapperTypeInterface $mailWrapperType, string $locale,
+                                            MailResourceInterface $mailResource): FormMetadata
     {
         $wrapperForm = new FormMetadata();
 
@@ -107,22 +109,23 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
 
         $wrapperForm->setItems($this->formMetadataMapper->mapChildren($properties->getProperties(), $locale));
         $wrapperForm->setName($mailWrapperType->getConfiguration()->getKey());
-        $wrapperForm->addItem($this->createComponentsMetadata($locale, $doubleOpt, $wrapperForm::class));
+        $wrapperForm->addItem($this->createComponentsMetadata($locale, $mailResource::class, $mailWrapperType::class));
         return $wrapperForm;
     }
     /**
      * @throws \Exception
      */
-    private function createComponentsMetadata(string $locale, bool $doubleOpt, string $wrapperClass): FieldMetadata{
+    private function createComponentsMetadata(string $locale, string $resourceClass, string $wrapperClass): FieldMetadata{
         $components = new FieldMetadata('components');
         $components->setType('block');
         $types = $this->mailFieldTypesPool->getAll();
         $fieldTypeMetaDataCollection = [];
         foreach ($types as $type) {
-            if($type->getConfiguration()->isOnlyDoubleOpt() && !$doubleOpt){
+            if(count($type->getConfiguration()->getAcceptedResources()) &&
+                !in_array($resourceClass,$type->getConfiguration()->getAcceptedResources(),true)){
                 continue;
             }
-            if(!in_array('all',$type->getConfiguration()->getAcceptedWrapper(), true) &&
+            if(count($type->getConfiguration()->getAcceptedWrapper()) &&
                 !in_array($wrapperClass,$type->getConfiguration()->getAcceptedWrapper(),true)){
                 continue;
             }
@@ -135,7 +138,6 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
         foreach ($fieldTypeMetaDataCollection as $fieldTypeMetaData) {
             $components->addType($fieldTypeMetaData);
         }
-
         $components->setDefaultType(\current($components->getTypes())->getName());
         $components->setMinOccurs(1);
         return $components;

@@ -5,7 +5,7 @@
             xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
     <property name="verticalAlign" type="single_select" multilingual="false">
         <meta>
-            <title>mailingListMail.props.content.global.veritcalAlign.label</title>
+            <title>mailingListMail.props.content.global.verticalAlign.label</title>
         </meta>
 
         <params>

@@ -4,7 +4,7 @@
             {% block title %}
             {% endblock %}
         </mj-title>
-        {% block additional_css %}
+        {% block css %}
             <mj-style>
                 .mjml-text-container *:first-child{
                     margin-top: 0;
@@ -14,22 +14,30 @@
                 }
             </mj-style>
         {% endblock %}
+        {% block additonal_css %}
+        {% endblock %}
         {% block fonts %}
             {% if fonts is defined and fonts is not null %}
                 {% for font in fonts %}
                     <mj-font href="{{ font.cssUrl }}" name="{{ font.name }}" />
                     {% if font.defaultFont %}
-                        <mj-attributes>
-                            <mj-all font-family="{{ font.fontFamily }}" />
-                        </mj-attributes>
+                        {% set defaultFont = font %}
                     {% endif %}
                 {% endfor %}
             {% endif %}
         {% endblock %}
+
+        <mj-attributes>
+            {% if defaultFont is defined and defaultFont is not null %}
+                <mj-all font-family="{{ font.fontFamily }}" />
+            {% endif %}
+            {% block addtional_attributes %}
+            {% endblock %}
+        </mj-attributes>
         {% block additional_head %}
         {% endblock %}
     </mj-head>
-    <mj-body background-color="{{ bodyBackgroundColor|default }}">
+    <mj-body background-color="{{ config.bodyBackgroundColor|default }}">
         {% block header %}
         {% endblock %}
         {% block content %}

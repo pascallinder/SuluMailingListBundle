@@ -9,6 +9,7 @@ use Linderp\SuluMailingListBundle\Mail\Font\MailFontPool;
 use Linderp\SuluMailingListBundle\Mail\Wrapper\MailWrapperTypesPool;
 use phpDocumentor\Reflection\PseudoTypes\IntegerRange;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Environment;
 
@@ -17,6 +18,8 @@ class MailContentProvider
     public static string $EXTENSIONS = 'mjml.twig';
 
     public function __construct(private readonly Environment $twig,
+                                #[Autowire('%sulu_mailing_list.mjml.caching%')]
+                                private readonly bool $cachingEnabled,
                                 private readonly CacheInterface $cache,
                                 private readonly MailFontPool $mailFontPool,
                                 private readonly MailFieldTypesPool $mailFieldTypesPool,
@@ -50,8 +53,7 @@ class MailContentProvider
         }
 
         $fonts = array_reduce($this->mailFontPool->getAll(),fn(array $carry,MailFontInterface $font) => [...$carry,$font->getConfiguration()],[]);
-        $templateCacheKey = 'mail_translatable_' . hash('sha256', $mailTemplate . $locale. json_encode($data['content']) . json_encode($fonts));
-        $html = $this->cache->get($templateCacheKey, function () use ($fonts, $data, $replaceableContent, $mailTemplate, $locale) {
+        $contentGenerator = function () use ($fonts, $data, $replaceableContent, $mailTemplate, $locale) {
             $mjmlContent = $this->twig->render($mailTemplate . '.'
                 . self::$EXTENSIONS, [...$replaceableContent,
                 "content" => $data['content'],
@@ -59,7 +61,13 @@ class MailContentProvider
                 'locale' => $locale
             ]);
             return $this->mjmlAPIService->render($mjmlContent);
-        });
+        };
+        if($this->cachingEnabled){
+            $templateCacheKey = 'mail_translatable_' . hash('sha256', $mailTemplate . $locale. json_encode($data['content']) . json_encode($fonts));
+            $html = $this->cache->get($templateCacheKey,$contentGenerator );
+        }else{
+            $html = $contentGenerator();
+        }
         unset($data['content']);
         $search  = array_values($replaceableContent);
         $replace = array_values($data);

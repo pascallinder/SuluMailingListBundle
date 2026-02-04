@@ -1,7 +1,8 @@
 {% block salutation %}
-    <mj-text font-size="{{ item.fontSize|default('16') }}px"
+    <mj-text font-size="{{ item.fontSize|default }}px"
              font-family="{{ item.fontFamily |default}}"
              align="{{ item.align|default }}"
+             padding="{{ item.padding|default }}"
              container-background-color="{{ item.backgroundColor|default }}"
             color="{{ item.color|default }}">
         {{ item.prefix }} {{ firstName }}

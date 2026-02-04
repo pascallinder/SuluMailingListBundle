@@ -1,5 +1,6 @@
 {% block spacer %}
     <mj-divider border-width="{{ item.borderWidth|default('2') }}px"
                 border-style="{{ item.borderStyle|default('solid') }}"
+                padding="{{ item.padding|default }}"
                 border-color="{{ item.color|default }}" />
 {% endblock %}

@@ -1,13 +1,9 @@
 {% block salutation %}
-    <mj-text font-size="{{ item.fontSize|default }}px"
-             font-family="{{ item.fontFamily |default}}"
-             align="{{ item.align|default }}"
-             padding="{{ item.padding|default }}"
-             container-background-color="{{ item.backgroundColor|default }}"
-            color="{{ item.color|default }}">
-        {{ item.prefix }} {{ firstName }}
-        {% if item.withLastName is defined and item.withLastName %}
-            {{ lastName }}
-        {% endif %}
-    </mj-text>
+    {% set text = item.prefix ~ ' ' ~ firstName %}
+    {% if item.withLastName is defined and item.withLastName %}
+        {% set text = text ~ ' ' ~ lastName %}
+    {% endif %}
+    {% include '@SuluMailingList/mails/components/text/text.mjml.twig' with {
+        item: {...item, value: text}
+    } %}
 {% endblock %}

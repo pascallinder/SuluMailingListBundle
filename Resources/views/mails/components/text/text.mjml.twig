@@ -4,6 +4,7 @@
                  font-family="{{ item.fontFamily |default}}"
                  css-class="mjml-text-container"
                  padding="{{ item.padding|default }}"
+                 line-height="{{ item.fontLineHeight|default }}"
                  container-background-color="{{ item.backgroundColor|default }}"
                  color="{{ item.color|default }}">
             {{ item.value |raw }}

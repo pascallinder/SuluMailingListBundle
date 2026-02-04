@@ -66,6 +66,8 @@ mailingListMail:
                     label: Schriftart
                 fontSize:
                     label: Schriftgrösse
+                fontLineHeight:
+                    label: Zeilenhöhe
             spacer:
                 label: Abstand
                 height: Höhe

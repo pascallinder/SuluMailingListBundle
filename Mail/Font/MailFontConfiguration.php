@@ -2,13 +2,12 @@
 
 namespace Linderp\SuluMailingListBundle\Mail\Font;
 
-readonly class MailFontConfiguration
+class MailFontConfiguration
 {
-
-    public function __construct(private string $cssUrl,
-                                private string $name,
-                                private string $fontFamily,
-                                private bool $defaultFont = false)
+    private bool $defaultFont = false;
+    public function __construct(private readonly string $cssUrl,
+                                private readonly string $name,
+                                private readonly string $fontFamily)
     {
     }
 
@@ -30,5 +29,9 @@ readonly class MailFontConfiguration
     public function isDefaultFont(): bool
     {
         return $this->defaultFont;
+    }
+    public function setDefaultFont(bool $defaultFont): static{
+        $this->defaultFont = $defaultFont;
+        return $this;
     }
 }

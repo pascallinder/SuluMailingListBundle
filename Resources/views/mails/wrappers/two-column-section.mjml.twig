@@ -1,5 +1,9 @@
 {% block mail_content %}
-    <mj-section padding="0" background-color="{{ wrapper.backgroundColor|default }}">
+    <mj-section
+            {% if wrapper.backgroundColor is defined and wrapper.backgroundColor != 'inherit' %}
+                background-color="{{ wrapper.backgroundColor}}"
+            {% endif %}
+    >
         <mj-column vertical-align="{{ wrapper.verticalAlign|default }}">
             {% for item in wrapper.columnOne %}
 

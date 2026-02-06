@@ -4,6 +4,7 @@
             {% block title %}
             {% endblock %}
         </mj-title>
+        {% set defaultFont = fonts|filter(f => f.defaultFont)|first %}
         {% block css %}
             <mj-style>
                 .mjml-text-container *:first-child{
@@ -12,30 +13,34 @@
                 .mjml-text-container *:last-child{
                     margin-bottom: 0;
                 }
+                {% if defaultFont is defined and defaultFont is not null %}
+                    a[href="url"]{
+                        font-family: {{defaultFont.fontFamily|default}};
+                    }
+                {% endif %}
             </mj-style>
         {% endblock %}
         {% block additonal_css %}
         {% endblock %}
         {% block fonts %}
+
             {% if fonts is defined and fonts is not null %}
                 {% for font in fonts %}
                     <mj-font href="{{ font.cssUrl }}" name="{{ font.name }}" />
-                    {% if font.defaultFont %}
-                        {% set defaultFont = font %}
-                    {% endif %}
                 {% endfor %}
             {% endif %}
         {% endblock %}
 
         <mj-attributes>
             {% if defaultFont is defined and defaultFont is not null %}
-                <mj-all font-family="{{ font.fontFamily }}" />
+                <mj-all font-family="{{ defaultFont.fontFamily|default }}" />
             {% endif %}
             {% block addtional_attributes %}
             {% endblock %}
         </mj-attributes>
         {% block additional_head %}
         {% endblock %}
+
     </mj-head>
     <mj-body background-color="{{ config.bodyBackgroundColor|default }}">
         {% block header %}

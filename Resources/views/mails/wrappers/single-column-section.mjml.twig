@@ -1,7 +1,11 @@
 {% block mail_content %}
-    <mj-section padding="0" background-color="{{ wrapper.backgroundColor|default }}">
+    <mj-section
+            {% if wrapper.backgroundColor is defined and wrapper.backgroundColor != 'inherit' %}
+                background-color="{{ wrapper.backgroundColor}}"
+            {% endif %}
+    >
         <mj-column>
-            {% for item in wrapper.components %}
+            {% for item in wrapper.columnOne %}
                 {% include '@SuluMailingList/mails/components/'~  item.type ~ '/' ~ item.type ~ '.mjml.twig' with {
                     item: item
                 } %}

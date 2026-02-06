@@ -1,0 +1,27 @@
+{% block mail_content %}
+    <mj-section padding="0" background-color="{{ wrapper.backgroundColor|default }}">
+        <mj-column vertical-align="{{ wrapper.verticalAlign|default }}">
+            {% for item in wrapper.columnOne %}
+
+                    {% include '@SuluMailingList/mails/components/'~  item.type ~ '/' ~ item.type ~ '.mjml.twig' with {
+                        item: item
+                    } %}
+
+            {% endfor %}
+        </mj-column>
+        <mj-column vertical-align="{{ wrapper.verticalAlign|default }}">
+            {% for item in wrapper.columnTwo %}
+                {% include '@SuluMailingList/mails/components/'~  item.type ~ '/' ~ item.type ~ '.mjml.twig' with {
+                    item: item
+                } %}
+            {% endfor %}
+        </mj-column>
+        <mj-column vertical-align="{{ wrapper.verticalAlign|default }}">
+            {% for item in wrapper.columnThree %}
+                {% include '@SuluMailingList/mails/components/'~  item.type ~ '/' ~ item.type ~ '.mjml.twig' with {
+                    item: item
+                } %}
+            {% endfor %}
+        </mj-column>
+    </mj-section>
+{% endblock %}

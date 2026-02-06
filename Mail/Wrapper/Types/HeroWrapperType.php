@@ -10,11 +10,11 @@ readonly class HeroWrapperType implements MailWrapperTypeInterface
     }
     public function getConfiguration(): MailWrapperTypeConfiguration
     {
-        return new MailWrapperTypeConfiguration(
+        return (new MailWrapperTypeConfiguration(
             'mailingListMail.props.content.hero.label',
             __DIR__ . "/../../../Resources/config/mail/wrappers/hero.xml",
             "hero"
-        );
+        ))->setPriority(10);
     }
 
     public function build(array $wrapper, string $locale): array

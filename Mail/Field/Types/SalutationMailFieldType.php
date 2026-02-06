@@ -13,11 +13,11 @@ readonly class SalutationMailFieldType implements MailFieldTypeInterface
     }
     public function getConfiguration(): MailFieldTypeConfiguration
     {
-        return new MailFieldTypeConfiguration(
+        return (new MailFieldTypeConfiguration(
             'mailingListMail.props.content.salutation.label',
             __DIR__ . "/../../../Resources/config/mail/types/salutation.xml",
             "salutation"
-        );
+        ))->setPriority(10);
     }
 
     public function build(array $item, string $locale): array

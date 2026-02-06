@@ -7,11 +7,11 @@ readonly class SingleColumnSectionWrapperType implements MailWrapperTypeInterfac
 {
     public function getConfiguration(): MailWrapperTypeConfiguration
     {
-        return new MailWrapperTypeConfiguration(
+        return (new MailWrapperTypeConfiguration(
             'mailingListMail.props.content.singleColumnSection.label',
             __DIR__ . "/../../../Resources/config/mail/wrappers/single-column-section.xml",
             "single-column-section"
-        );
+        ))->setPriority(20);
     }
 
     public function build(array $wrapper, string $locale): array

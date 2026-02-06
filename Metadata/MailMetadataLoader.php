@@ -26,11 +26,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheWarmerInterface
 {
+    /** @var MailFieldTypeInterface[] $sortedMailFieldTypes*/
+    private array $sortedMailFieldTypes;
+    /** @var MailWrapperTypeInterface[] $sortedMailWrapperTypes*/
+    private array $sortedMailWrapperTypes;
     public function __construct(
-        private MailFieldTypesPool $mailFieldTypesPool,
-        private MailWrapperTypesPool $mailWrapperTypesPool,
+        MailFieldTypesPool $mailFieldTypesPool,
+        MailWrapperTypesPool $mailWrapperTypesPool,
         private MailResourcePool $mailResourcePool,
-        private LoggerInterface $logger,
         #[Autowire('@sulu_admin.form_metadata.form_xml_loader')]
         private FormXmlLoader $formXmlLoader,
         #[Autowire('@sulu_form.metadata.properties_xml_loader')]
@@ -43,6 +46,8 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
         #[Autowire('%kernel.debug%')]
         private bool $debug
     ) {
+        $this->sortedMailFieldTypes = $mailFieldTypesPool->getAllSorted();
+        $this->sortedMailWrapperTypes = $mailWrapperTypesPool->getAllSorted();
     }
     public function isOptional(): bool
     {
@@ -62,17 +67,17 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
             foreach ($formMetadataCollection->getItems() as $locale => $formMetadata) {
                 $content = new FieldMetadata('content');
                 $content->setType('block');
-                $wrapperTypes = $this->mailWrapperTypesPool->getAll();
-                foreach ($wrapperTypes as $wrapperType) {
+
+                foreach ($this->sortedMailWrapperTypes as $wrapperType) {
                     $content->addType($this->createWrappersMetadata($wrapperType, $locale, $resource));
                 }
                 $content->setDefaultType('single-column-section');
                 $content->setDisabledCondition('sent');
                 $content->setMinOccurs(1);
+
                 $formMetadata->addItem($content);
                 $configCache = $this->getConfigCache($formMetadata->getKey(), $locale);
                 $configCache->write(\serialize($formMetadata), [new FileResource($resourceConfig->getXmlPath())]);
-                $this->logger->debug("debug",['form'=>$formMetadata]);
             }
         }
         return [];
@@ -109,18 +114,21 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
 
         $wrapperForm->setItems($this->formMetadataMapper->mapChildren($properties->getProperties(), $locale));
         $wrapperForm->setName($mailWrapperType->getConfiguration()->getKey());
-        $wrapperForm->addItem($this->createComponentsMetadata($locale, $mailResource::class, $mailWrapperType::class));
+        foreach ($mailWrapperType->getConfiguration()->getContentKeys() as $label => $key) {
+            $wrapperForm->addItem($this->createComponentsMetadata($key, $label, $locale, $mailResource::class, $mailWrapperType::class));
+        }
         return $wrapperForm;
     }
     /**
      * @throws \Exception
      */
-    private function createComponentsMetadata(string $locale, string $resourceClass, string $wrapperClass): FieldMetadata{
-        $components = new FieldMetadata('components');
+    private function createComponentsMetadata(string $contentKey, string $label, string $locale, string $resourceClass, string $wrapperClass): FieldMetadata{
+        $components = new FieldMetadata($contentKey);
         $components->setType('block');
-        $types = $this->mailFieldTypesPool->getAll();
+        $components->setLabel($this->translator->trans($label, [], 'admin', $locale));
         $fieldTypeMetaDataCollection = [];
-        foreach ($types as $type) {
+
+        foreach ($this->sortedMailFieldTypes as $type) {
             if(count($type->getConfiguration()->getAcceptedResources()) &&
                 !in_array($resourceClass,$type->getConfiguration()->getAcceptedResources(),true)){
                 continue;
@@ -131,10 +139,6 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
             }
             $fieldTypeMetaDataCollection[] = $this->loadFieldTypeMetadata($type->getConfiguration()->getKey(), $type, $locale);
         }
-
-        \usort($fieldTypeMetaDataCollection, static function(FormMetadata $a, FormMetadata $b): int {
-            return \strcmp($a->getTitle(), $b->getTitle());
-        });
         foreach ($fieldTypeMetaDataCollection as $fieldTypeMetaData) {
             $components->addType($fieldTypeMetaData);
         }

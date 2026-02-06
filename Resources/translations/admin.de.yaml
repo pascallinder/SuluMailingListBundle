@@ -37,10 +37,16 @@ mailingListMail:
         contacts: Betroffene Abonnent:innen
         contactsInfo: Wenn keine Abonnent:innen ausgewählt werden, wird das Mail an alle Abonnent:innen im Verteiler geschickt
         content:
+            components: Kompontente
+            columnOne: Erste Spalte
+            columnTwo: Zweite Spalte
+            columnThree: Dritte Spalte
             singleColumnSection:
                 label: Einspaltige Sektion
-            multiColumnSection:
-                label: Mehrspaltige Sektion
+            twoColumnSection:
+                label: Zweispaltige Sektion
+            threeColumnSection:
+                label: Dreispaltige Sektion
             hero:
                 label: Hero
                 backgroundImage: Hintergrundbild

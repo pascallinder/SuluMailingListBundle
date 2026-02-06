@@ -14,7 +14,7 @@ readonly class ConfirmSubscriptionButtonMailFieldType implements MailFieldTypeIn
             'mailingListMail.props.content.confirmSubscriptionButton.label',
             __DIR__ . "/../../../Resources/config/mail/types/confirm-subscription-button.xml",
             "confirm-subscription-button"
-        ))->setAcceptedResources(DoubleOptMailResource::class);
+        ))->setAcceptedResources(DoubleOptMailResource::class)->setPriority(20);
     }
 
     public function build(array $item, string $locale): array

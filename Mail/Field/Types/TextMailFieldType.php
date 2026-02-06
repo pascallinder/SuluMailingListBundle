@@ -12,11 +12,11 @@ readonly class TextMailFieldType implements MailFieldTypeInterface
     }
     public function getConfiguration(): MailFieldTypeConfiguration
     {
-        return new MailFieldTypeConfiguration(
+        return (new MailFieldTypeConfiguration(
             'mailingListMail.props.content.text.label',
             __DIR__ . "/../../../Resources/config/mail/types/text.xml",
             "text"
-        );
+        ))->setPriority(10);
     }
 
     public function build(array $item, string $locale): array

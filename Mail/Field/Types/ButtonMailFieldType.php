@@ -19,11 +19,11 @@ readonly class ButtonMailFieldType implements MailFieldTypeInterface
     }
     public function getConfiguration(): MailFieldTypeConfiguration
     {
-        return new MailFieldTypeConfiguration(
+        return (new MailFieldTypeConfiguration(
             'mailingListMail.props.content.button.label',
             __DIR__ . "/../../../Resources/config/mail/types/button.xml",
             "button"
-        );
+        ))->setPriority(20);
     }
 
     /**

@@ -1,5 +1,5 @@
 mailingList:
-    label: Mailing lists
+    label: Mailing list
     list:
         title: Mailing lists
     nav:
@@ -31,7 +31,7 @@ mailingListMail:
         title: Emails
     props:
         senderMail: Sender email
-        senderMailInfo: By default this is set to the no-reply email
+        senderMailInfo: By default, this is set to the no-reply email
         subject: Subject
         sent: Sent
         sentAt: Sent at
@@ -39,19 +39,26 @@ mailingListMail:
         contacts: Affected subscribers
         contactsInfo: If no subscribers are selected, the email will be sent to all subscribers in the mailing list
         content:
+            components: Components
+            columnOne: First column
+            columnTwo: Second column
+            columnThree: Third column
             singleColumnSection:
                 label: Single-column section
-            multiColumnSection:
-                label: Multi-column section
+            twoColumnSection:
+                label: Two-column section
+            threeColumnSection:
+                label: Three-column section
             hero:
                 label: Hero
                 backgroundImage: Background image
                 fixedHeight: Fixed height
+                height: Height
                 backgroundImageHeight: Background image height
             global:
                 verticalAlign:
                     label: Vertical alignment
-                    middle: Center
+                    middle: Middle
                     top: Top
                     bottom: Bottom
                 align:
@@ -67,8 +74,10 @@ mailingListMail:
                     label: Font family
                 fontSize:
                     label: Font size
+                fontLineHeight:
+                    label: Line height
             spacer:
-                label: Spacing
+                label: Spacer
                 height: Height
             divider:
                 label: Divider

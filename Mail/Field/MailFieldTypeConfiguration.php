@@ -2,10 +2,9 @@
 
 namespace Linderp\SuluMailingListBundle\Mail\Field;
 
-use Linderp\SuluMailingListBundle\Mail\Resource\MailResourceInterface;
-use Linderp\SuluMailingListBundle\Mail\Wrapper\MailWrapperTypeInterface;
+use Linderp\SuluMailingListBundle\Mail\MailMetadataXmlConfigurationInterface;
 
-class MailFieldTypeConfiguration
+class MailFieldTypeConfiguration implements MailMetadataXmlConfigurationInterface
 {
     /** @var string[] $acceptedResources */
     private array $acceptedResources = [];
@@ -14,7 +13,8 @@ class MailFieldTypeConfiguration
      */
     private array $acceptedWrapper = [];
 
-    private ?string $visibilityCondition = null;
+    private int $priority = 0;
+
     public function __construct(private readonly string $title, private readonly string $xmlPath, private readonly string $key)
     {
 
@@ -57,6 +57,17 @@ class MailFieldTypeConfiguration
     public function getAcceptedWrapper(): array
     {
         return $this->acceptedWrapper;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(int $priority): static
+    {
+        $this->priority = $priority;
+        return $this;
     }
 
 }

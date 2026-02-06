@@ -18,9 +18,6 @@
             </param>
         </params>
     </property>
-    <xi:include href="../props/veritcal-align.xml"
-                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
-                      xpointer(/sulu:properties/sulu:property)"/>
     <xi:include href="../props/align.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>

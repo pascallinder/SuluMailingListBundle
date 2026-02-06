@@ -60,6 +60,7 @@ class MailContentProvider
                 "fonts" => $fonts,
                 'locale' => $locale
             ]);
+
             return $this->mjmlAPIService->render($mjmlContent);
         };
         if($this->cachingEnabled){
@@ -79,10 +80,20 @@ class MailContentProvider
             return ['content'=>[]];
         }
         return ['content' => array_map(function($wrapper) use ($locale) {
+
+            $wrapperType = $this->mailWrapperTypesPool->get($wrapper['type']);
+            $components = array_reduce($wrapperType->getConfiguration()->getContentKeys(),
+                function ($carry,$key) use ($locale, $wrapper) {
+                    $carry[$key] = array_map(
+                        fn($component)=> $this->mailFieldTypesPool
+                            ->get($component['type'])->build($component,$locale),
+                        $wrapper[$key]
+                    );
+                    return $carry;
+            },[]);
             return [
                 ...$this->mailWrapperTypesPool->get($wrapper['type'])->build($wrapper,$locale),
-                "components" => array_map(fn($component)=> $this->mailFieldTypesPool
-                        ->get($component['type'])->build($component,$locale), $wrapper['components'])
+                ...$components
             ];
         }, $mailTranslatable->getContent())];
     }

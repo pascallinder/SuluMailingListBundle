@@ -9,11 +9,11 @@ readonly class DividerMailFieldType implements MailFieldTypeInterface
 {
     public function getConfiguration(): MailFieldTypeConfiguration
     {
-        return new MailFieldTypeConfiguration(
+        return (new MailFieldTypeConfiguration(
             'mailingListMail.props.content.divider.label',
             __DIR__ . "/../../../Resources/config/mail/types/divider.xml",
             "divider"
-        );
+        ))->setPriority(40);
     }
 
     public function build(array $item, string $locale): array

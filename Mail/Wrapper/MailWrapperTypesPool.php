@@ -3,9 +3,10 @@
 namespace Linderp\SuluMailingListBundle\Mail\Wrapper;
 
 use Linderp\SuluMailingListBundle\Mail\MailPoolInterface;
+use Linderp\SuluMailingListBundle\Mail\MailTypesPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-class MailWrapperTypesPool implements MailPoolInterface
+class MailWrapperTypesPool implements MailTypesPoolInterface
 {
     /** @var array<string,MailWrapperTypeInterface> $mailWrapperTypes */
     private array $mailWrapperTypes;
@@ -30,5 +31,14 @@ class MailWrapperTypesPool implements MailPoolInterface
     }
     public function get(string $typeKey): MailWrapperTypeInterface{
         return $this->mailWrapperTypes[$typeKey];
+    }
+
+    public function getAllSorted(): array
+    {
+        $values = $this->getAll();
+        \usort($values, static function(MailWrapperTypeInterface $a, MailWrapperTypeInterface $b): int {
+            return \strcmp($a->getConfiguration()->getPriority(), $b->getConfiguration()->getPriority());
+        });
+        return $values;
     }
 }

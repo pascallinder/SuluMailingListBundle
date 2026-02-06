@@ -13,11 +13,11 @@ readonly class ImageMailFieldType implements MailFieldTypeInterface
     }
     public function getConfiguration(): MailFieldTypeConfiguration
     {
-        return new MailFieldTypeConfiguration(
+        return (new MailFieldTypeConfiguration(
             'mailingListMail.props.content.image.label',
             __DIR__ . "/../../../Resources/config/mail/types/image.xml",
             "image"
-        );
+        ))->setPriority(30);
     }
 
     public function build(array $item, string $locale): array

@@ -7,6 +7,9 @@
         {% set defaultFont = fonts|filter(f => f.defaultFont)|first %}
         {% block css %}
             <mj-style>
+                .mjml-text-container *{
+                    text-align: left;
+                }
                 .mjml-text-container *:first-child{
                     margin-top: 0;
                 }

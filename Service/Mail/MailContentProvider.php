@@ -70,7 +70,10 @@ class MailContentProvider
             return $this->mjmlAPIService->render($mjmlContent);
         };
         if($this->cachingEnabled){
-            $templateCacheKey = 'mail_translatable_' . hash('sha256', $mailTemplate . $locale. json_encode($data['content']) . json_encode($fonts));
+            $templateCacheKey = 'mail_translatable_' . hash('sha256', $mailTemplate . $locale
+                    . json_encode($data['content']) . json_encode($fonts)
+                    . array_reduce(array_keys($mailTranslatable->getContextVars()),
+                        fn($carry,$key)=>$carry . json_encode($data[$key]),''));
             $html = $this->cache->get($templateCacheKey,$contentGenerator );
         }else{
             $html = $contentGenerator();

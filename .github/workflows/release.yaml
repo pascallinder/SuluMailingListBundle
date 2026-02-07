@@ -15,4 +15,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Publish release
-        uses: ghalactic/github-release-from-tag@v
+        uses: ghalactic/github-release-from-tag@v6

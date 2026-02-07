@@ -118,7 +118,7 @@ class NewsletterController extends MailTranslatableController
      */
     public function indexAction(Newsletter $newsletter): Response
     {
-        return $this->getIndexResponse($newsletter->getNewsletterDoubleOpt());
+        return $this->getIndexResponse($newsletter->getNewsletterDoubleOpt(),['doubleOptUrl' => 'https://google.ch']);
     }
 
     protected function triggerSwitch(Request $request, string $action, $entity): void

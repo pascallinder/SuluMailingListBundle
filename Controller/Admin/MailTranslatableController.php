@@ -48,12 +48,13 @@ abstract class MailTranslatableController extends LocaleController
     /**
      * @throws InvalidArgumentException
      */
-    protected function getIndexResponse(MailTranslatable $mail): Response
+    protected function getIndexResponse(MailTranslatable $mail, array $additionalData = []): Response
     {
         return new Response('<!-- CONTENT-REPLACER -->'.$this->mailContentProvider->getMailTranslatableMailContent($mail,$mail->getLocale(),[
                     'firstName' => 'Max',
                     'lastName' => 'Mustermann',
-                    'unsubscribeUrl' => 'https://google.ch']
+                    'unsubscribeUrl' => 'https://google.ch',
+                    ...$additionalData]
             ).'<!-- CONTENT-REPLACER -->');
     }
 }

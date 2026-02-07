@@ -3,7 +3,9 @@
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
 use Linderp\SuluBaseBundle\Common\DoctrineListRepresentationFactory;
 use Linderp\SuluBaseBundle\Controller\Admin\LocaleController;
+use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
+use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
 use Linderp\SuluMailingListBundle\Repository\Newsletter\NewsletterRepository;
 use Linderp\SuluMailingListBundle\Repository\NewsletterDoubleOpt\NewsletterDoubleOptRepository;
 use Linderp\SuluMailingListBundle\Repository\NewsletterDoubleOpt\NewsletterDoubleOptTranslationRepository;
@@ -24,18 +26,20 @@ use Symfony\Component\Routing\Attribute\Route;
  * }
  * @extends LocaleController<Newsletter>
  */
-class NewsletterController extends LocaleController
+class NewsletterController extends MailTranslatableController
 {
     public function __construct(
+
         private readonly NewsletterRepository $newsletterRepository,
         private readonly NewsletterDoubleOptTranslationRepository $newsletterDoubleOptTranslationRepository,
         private readonly DoctrineListRepresentationFactory $doctrineListRepresentationFactory,
-        private readonly MailContentProvider $mailContentProvider,
+        MailContextTypesPool $mailContextTypes,
+        MailContentProvider $mailContentProvider,
         #[Autowire('%sulu_mailing_list.no_reply_email%')]
-        private readonly string $noReplyEmail,
+        string $noReplyEmail,
     )
     {
-        parent::__construct($this->newsletterRepository);
+        parent::__construct($mailContextTypes,$noReplyEmail,$mailContentProvider,$this->newsletterRepository);
     }
     #[Route(path: '/admin/api/newsletters/{id}', name: 'app.get_newsletter', methods: ['GET'])]
     public function getAction(int $id, Request $request): Response
@@ -88,15 +92,13 @@ class NewsletterController extends LocaleController
     protected function getDataForEntity($entity, Request $request): array
     {
         $doubleOpt = $entity->getNewsletterDoubleOpt();
-        return [
+        $data = [
             'id' => $entity->getId(),
             'title' => $entity->getTitle() ?? '',
             'doubleOptConfirmPage' => $entity->getDoubleOptConfirmPage(),
             'unsubscribePage' => $entity->getUnsubscribePage(),
-            'doubleOpt_subject' => $doubleOpt->getSubject(),
-            'content' => $doubleOpt->getContent(),
-            'doubleOpt_senderMail' => $doubleOpt->getSenderMail(),
         ];
+        return $this->getDataForMailTranslatable($doubleOpt,$data);
     }
     /**
      * @param Newsletter $entity
@@ -107,9 +109,8 @@ class NewsletterController extends LocaleController
         $entity->setTitle($data['title'] );
         $entity->setDoubleOptConfirmPage($data['doubleOptConfirmPage']);
         $entity->setUnsubscribePage($data['unsubscribePage']);
-        $doubleOpt->setContent($data['content'] ?? '');
-        $doubleOpt->setSubject($data['doubleOpt_subject'] ?? '');
-        $doubleOpt->setSenderMail($data['doubleOpt_senderMail'] ?? $this->noReplyEmail);
+        $doubleOpt->setSubject($data['subject'] ?? '');
+        $this->mapDataToMailTranslatable($doubleOpt,$data);
     }
 
     /**
@@ -117,13 +118,7 @@ class NewsletterController extends LocaleController
      */
     public function indexAction(Newsletter $newsletter): Response
     {
-        return new Response('<!-- CONTENT-REPLACER -->'.$this->mailContentProvider->getMailTranslatableMailContent($newsletter->getNewsletterDoubleOpt(),$newsletter->getLocale(), [
-                'firstName' => 'Max',
-                'lastName' => 'Mustermann',
-                'unsubscribeUrl' => 'https://google.ch',
-                'doubleOptUrl'=>'https://google.ch'
-                ]
-            ).'<!-- CONTENT-REPLACER -->');
+        return $this->getIndexResponse($newsletter->getNewsletterDoubleOpt());
     }
 
     protected function triggerSwitch(Request $request, string $action, $entity): void

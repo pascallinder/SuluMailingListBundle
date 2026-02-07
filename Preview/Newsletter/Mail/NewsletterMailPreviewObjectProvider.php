@@ -4,18 +4,19 @@ namespace Linderp\SuluMailingListBundle\Preview\Newsletter\Mail;
 use Doctrine\Common\Collections\ArrayCollection;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation;
+use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
+use Linderp\SuluMailingListBundle\Preview\Newsletter\MailTranslationPreviewObjectProvider;
 use Linderp\SuluMailingListBundle\Repository\NewsletterMail\NewsletterMailRepository;
 use Linderp\SuluMailingListBundle\Repository\NewsletterMail\NewsletterMailTranslationRepository;
-use Sulu\Bundle\MediaBundle\Media\Manager\MediaManagerInterface;
-use Sulu\Bundle\PreviewBundle\Preview\Object\PreviewObjectProviderInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
-readonly class NewsletterMailPreviewObjectProvider implements PreviewObjectProviderInterface
+readonly class NewsletterMailPreviewObjectProvider extends MailTranslationPreviewObjectProvider
 {
     public function __construct(
+        MailContextTypesPool                        $contextTypesPool,
         private NewsletterMailRepository            $newsletterMailRepository,
         private NewsletterMailTranslationRepository $newsletterMailTranslationRepository
     ) {
+        parent::__construct($contextTypesPool);
     }
     public function getObject($id, $locale): NewsletterMail
     {
@@ -26,51 +27,12 @@ readonly class NewsletterMailPreviewObjectProvider implements PreviewObjectProvi
         return $newsletterMail;
     }
 
-    public function getId($object)
-    {
-        return $object->getId();
-    }
-
     /**
      * @param NewsletterMail $object
      * @param string $locale
      */
     public function setValues($object, $locale, array $data): void
     {
-        $object->setContent($data['content']);
-        $propertyAccess = PropertyAccess::createPropertyAccessorBuilder()
-            ->enableMagicCall()
-            ->getPropertyAccessor();
-
-        foreach ($data as $property => $value) {
-            if($property === 'id' || !$propertyAccess->isWritable($object,$property)){
-                continue;
-            }
-            try {
-                $propertyAccess->setValue($object, $property, $value);
-            } catch (\InvalidArgumentException $e) {
-                //ignore not existing properties
-            }
-        }
-    }
-
-    public function setContext($object, $locale, array $context)
-    {
-        // TODO: Implement setContext() method.
-    }
-
-    public function serialize($object)
-    {
-        return serialize($object);
-    }
-
-    public function deserialize($serializedObject, $objectClass)
-    {
-        return unserialize($serializedObject);
-    }
-
-    public function getSecurityContext($id, $locale): ?string
-    {
-        return null;
+        $this->setMailTranslatableValues($object, $data);
     }
 }

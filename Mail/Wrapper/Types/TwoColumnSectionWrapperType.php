@@ -14,11 +14,11 @@ readonly class TwoColumnSectionWrapperType implements MailWrapperTypeInterface
         ))->setContentKeys([
             'mailingListMail.props.content.columnOne' => 'columnOne',
             'mailingListMail.props.content.columnTwo' => 'columnTwo',
-        ])->setPriority(30);
+        ])->setPriority(20);
     }
 
-    public function build(array $wrapper, string $locale): array
+    public function build(array $item, string $locale): array
     {
-        return $wrapper;
+        return $item;
     }
 }

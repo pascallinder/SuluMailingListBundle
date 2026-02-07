@@ -15,11 +15,11 @@ readonly class ThreeColumnSectionWrapperType implements MailWrapperTypeInterface
             'mailingListMail.props.content.columnOne' => 'columnOne',
             'mailingListMail.props.content.columnTwo' => 'columnTwo',
             'mailingListMail.props.content.columnThree' => 'columnThree',
-        ])->setPriority(40);
+        ])->setPriority(30);
     }
 
-    public function build(array $wrapper, string $locale): array
+    public function build(array $item, string $locale): array
     {
-        return $wrapper;
+        return $item;
     }
 }

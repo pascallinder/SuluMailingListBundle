@@ -8,6 +8,7 @@ use Linderp\SuluBaseBundle\Controller\Admin\LocaleController;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation;
+use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
 use Linderp\SuluMailingListBundle\Repository\Newsletter\NewsletterRepository;
 use Linderp\SuluMailingListBundle\Repository\NewsletterMail\NewsletterMailRepository;
 use Linderp\SuluMailingListBundle\Repository\NewsletterMail\NewsletterMailTranslationRepository;
@@ -24,22 +25,25 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class NewsletterMailController extends LocaleController
+class NewsletterMailController extends MailTranslatableController
 {
     public function __construct(
+
         private readonly NewsletterMailRepository          $newsletterMailRepository,
         private readonly ContactRepositoryInterface $contactRepository,
         private readonly NewsletterMailTranslationRepository $newsletterMailTranslationRepository,
         private readonly NewsletterRepository              $newsletterRepository,
         private readonly DoctrineListRepresentationFactory $doctrineListRepresentationFactory,
-        private readonly MailContentProvider               $subscriptionMailProvider,
         private readonly SubscriptionMailService           $subscriptionMailService,
         protected readonly WebspaceManagerInterface        $webspaceManager,
+        MailContentProvider  $mailContentProvider,
+        MailContextTypesPool $mailContextTypes,
         #[Autowire('%sulu_mailing_list.no_reply_email%')]
-        private readonly string                            $noReplyEmail,
+        string $noReplyEmail,
     )
     {
-        parent::__construct($this->newsletterMailRepository);
+        parent::__construct($mailContextTypes,$noReplyEmail,$mailContentProvider,
+            $this->newsletterMailRepository);
     }
     #[Route(path: '/admin/api/newsletters-mails/{id}', name: 'app.get_newsletter_mail', methods: ['GET'])]
     public function getAction(int $id, Request $request): Response
@@ -87,18 +91,16 @@ class NewsletterMailController extends LocaleController
      */
     protected function getDataForEntity($entity, Request $request): array
     {
-          return [
-            'id' => $entity->getId(),
-            'content' => $entity->getContent() ?? [],
-            'subject' => $entity->getSubject(),
-            'newsletters'=>array_map(fn(Newsletter $newsletter)=> $newsletter->getId(),
+          $data = [
+              'id' => $entity->getId(),
+              'newsletters'=>array_map(fn(Newsletter $newsletter)=> $newsletter->getId(),
                 $entity->getNewsletters()->getValues()),
-            'contacts'=>array_map(fn(Contact $contact)=> $contact->getId(),
-              $entity->getContacts()->getValues()),
-            'senderMail'=>$entity->getSenderMail(),
-            'sent' => $entity->isSent(),
-            'readyForSend'=> count(array_filter($this->webspaceManager->getAllLocales(),fn($locale)=>!$entity->hasTranslation($locale))) === 0
-        ];
+              'contacts'=>array_map(fn(Contact $contact)=> $contact->getId(),
+                  $entity->getContacts()->getValues()),
+              'sent' => $entity->isSent(),
+              'readyForSend'=> count(array_filter($this->webspaceManager->getAllLocales(),fn($locale)=>!$entity->hasTranslation($locale))) === 0
+          ];
+          return $this->getDataForMailTranslatable($entity, $data);
     }
 
     /**
@@ -106,13 +108,13 @@ class NewsletterMailController extends LocaleController
      */
     protected function mapDataToEntity(array $data,$entity, Request $request): void
     {
-        $entity->setContent($data['content']);
+
         $entity->setNewsletters(new ArrayCollection(
             $this->newsletterRepository->findBy(['id'=>$data['newsletters']])));
         $entity->setSubject($data['subject']);
         $entity->setContacts(new ArrayCollection(
             $this->contactRepository->findBy(['id'=>$data['contacts']])));
-        $entity->setSenderMail($data['senderMail'] ?? $this->noReplyEmail);
+        $this->mapDataToMailTranslatable($entity,$data);
     }
 
     /**
@@ -146,10 +148,6 @@ class NewsletterMailController extends LocaleController
      */
     public function indexAction(NewsletterMail $mail): Response
     {
-        return new Response('<!-- CONTENT-REPLACER -->'.$this->subscriptionMailProvider->getMailTranslatableMailContent($mail,$mail->getLocale(),[
-            'firstName' => 'Max',
-            'lastName' => 'Mustermann',
-            'unsubscribeUrl' => 'https://google.ch']
-        ).'<!-- CONTENT-REPLACER -->');
+        return $this->getIndexResponse($mail);
     }
 }

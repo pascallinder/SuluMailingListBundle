@@ -2,33 +2,15 @@
 
 namespace Linderp\SuluMailingListBundle\Mail\Wrapper;
 
-use Linderp\SuluMailingListBundle\Mail\MailMetadataXmlConfigurationInterface;
+use Linderp\SuluMailingListBundle\Mail\MailMetadataXmlConfiguration;
 
-class MailWrapperTypeConfiguration implements MailMetadataXmlConfigurationInterface
+class MailWrapperTypeConfiguration extends MailMetadataXmlConfiguration
 {
-    private int $priority = 0;
     /**
      * @var array<string,string>
      */
     private array $contentKeys = ['mailingListMail.props.content.components'=>'components'];
-    public function __construct(private readonly string $title, private readonly string $xmlPath,
-                                private readonly string $key){
 
-    }
-    public function getXmlPath(): string
-    {
-        return $this->xmlPath;
-    }
-
-    public function getKey(): string
-    {
-        return $this->key;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
     /**
      * @return array<string,string>
      */
@@ -44,16 +26,4 @@ class MailWrapperTypeConfiguration implements MailMetadataXmlConfigurationInterf
         $this->contentKeys = $contentKeys;
         return $this;
     }
-
-    public function getPriority(): int
-    {
-        return $this->priority;
-    }
-
-    public function setPriority(int $priority): static
-    {
-        $this->priority = $priority;
-        return $this;
-    }
-
 }

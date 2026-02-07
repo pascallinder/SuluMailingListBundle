@@ -36,7 +36,12 @@ mailingListMail:
         mailingLists: Betroffene Verteiler
         contacts: Betroffene Abonnent:innen
         contactsInfo: Wenn keine Abonnent:innen ausgewählt werden, wird das Mail an alle Abonnent:innen im Verteiler geschickt
+        contextSelection: Mailtyp
+        contexts:
+            default:
+                label: Standard
         content:
+            label: Inhalt
             components: Kompontente
             columnOne: Erste Spalte
             columnTwo: Zweite Spalte

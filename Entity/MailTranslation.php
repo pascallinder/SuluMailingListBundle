@@ -57,6 +57,9 @@ abstract class MailTranslation
     {
         $this->locale = $locale;
     }
+
+
+
     public function applyFrom(self $source): void
     {
         $this->subject = $source->subject;

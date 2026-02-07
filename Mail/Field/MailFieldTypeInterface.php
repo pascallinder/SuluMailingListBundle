@@ -1,11 +1,11 @@
 <?php
 namespace Linderp\SuluMailingListBundle\Mail\Field;
+use Linderp\SuluMailingListBundle\Mail\MailTypeInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+/**
+ * @extends MailTypeInterface<MailFieldTypeConfiguration>
+ */
 #[AutoconfigureTag('mailing.field-type')]
-interface MailFieldTypeInterface
-{
-    public function getConfiguration(): MailFieldTypeConfiguration;
-
-    public function build(array $item, string $locale):array;
-}
+interface MailFieldTypeInterface extends MailTypeInterface
+{}

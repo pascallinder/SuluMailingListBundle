@@ -2,23 +2,20 @@
 
 namespace Linderp\SuluMailingListBundle\Mail\Field;
 
-use Linderp\SuluMailingListBundle\Mail\MailMetadataXmlConfigurationInterface;
+use Linderp\SuluMailingListBundle\Mail\MailMetadataXmlConfiguration;
 
-class MailFieldTypeConfiguration implements MailMetadataXmlConfigurationInterface
+class MailFieldTypeConfiguration extends MailMetadataXmlConfiguration
 {
     /** @var string[] $acceptedResources */
     private array $acceptedResources = [];
     /**
+     * @param string[] $acceptedContext;
+     */
+    private array $acceptedContext = [];
+    /**
      * @param string[] $acceptedWrapper
      */
     private array $acceptedWrapper = [];
-
-    private int $priority = 0;
-
-    public function __construct(private readonly string $title, private readonly string $xmlPath, private readonly string $key)
-    {
-
-    }
 
     public function setAcceptedResources(string ...$acceptedResources): static
     {
@@ -31,26 +28,10 @@ class MailFieldTypeConfiguration implements MailMetadataXmlConfigurationInterfac
         $this->acceptedWrapper = $acceptedWrapper;
         return $this;
     }
-    public function getXmlPath(): string
-    {
-        return $this->xmlPath;
-    }
-
-    public function getKey(): string
-    {
-        return $this->key;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
     public function getAcceptedResources(): array
     {
         return $this->acceptedResources;
     }
-
     /**
      * @return string[]
      */
@@ -59,14 +40,14 @@ class MailFieldTypeConfiguration implements MailMetadataXmlConfigurationInterfac
         return $this->acceptedWrapper;
     }
 
-    public function getPriority(): int
+    public function getAcceptedContext(): array
     {
-        return $this->priority;
+        return $this->acceptedContext;
     }
 
-    public function setPriority(int $priority): static
+    public function setAcceptedContext(string ...$acceptedContext): static
     {
-        $this->priority = $priority;
+        $this->acceptedContext = $acceptedContext;
         return $this;
     }
 

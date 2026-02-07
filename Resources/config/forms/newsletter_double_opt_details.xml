@@ -6,13 +6,13 @@
     <key>newsletter_double_opt_details</key>
 
     <properties>
-        <property name="doubleOpt_senderMail" type="email">
+        <property name="senderMail" type="email">
             <meta>
                 <title>mailingListMail.props.senderMail</title>
                 <info_text>mailingListMail.props.senderMailInfo</info_text>
             </meta>
         </property>
-        <property name="doubleOpt_subject" type="text_line" mandatory="true">
+        <property name="subject" type="text_line" mandatory="true">
             <meta>
                 <title>mailingListMail.props.subject</title>
             </meta>

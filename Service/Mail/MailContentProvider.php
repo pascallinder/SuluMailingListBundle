@@ -3,6 +3,7 @@
 namespace Linderp\SuluMailingListBundle\Service\Mail;
 
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
+use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypesPool;
 use Linderp\SuluMailingListBundle\Mail\Font\MailFontInterface;
 use Linderp\SuluMailingListBundle\Mail\Font\MailFontPool;
@@ -17,14 +18,15 @@ class MailContentProvider
 {
     public static string $EXTENSIONS = 'mjml.twig';
 
-    public function __construct(private readonly Environment $twig,
+    public function __construct(private readonly Environment          $twig,
                                 #[Autowire('%sulu_mailing_list.mjml.caching%')]
-                                private readonly bool $cachingEnabled,
-                                private readonly CacheInterface $cache,
-                                private readonly MailFontPool $mailFontPool,
-                                private readonly MailFieldTypesPool $mailFieldTypesPool,
+                                private readonly bool                 $cachingEnabled,
+                                private readonly CacheInterface       $cache,
+                                private readonly MailFontPool         $mailFontPool,
+                                private readonly MailFieldTypesPool   $mailFieldTypesPool,
                                 private readonly MailWrapperTypesPool $mailWrapperTypesPool,
-                                private readonly MjmlAPIService $mjmlAPIService)
+                                private readonly MailContextTypesPool $mailContextTypesPool,
+                                private readonly MjmlAPIService       $mjmlAPIService)
     {
 
     }
@@ -36,29 +38,33 @@ class MailContentProvider
     {
         return $this->getCachingMailContent('@SuluMailingList/mails/email', $locale,[
             ...$this->getMailTranslateData($mailTranslatable,$locale),
-            ...$data
-        ]);
+            ...$data,
+        ], $mailTranslatable);
     }
     /**
      * @throws InvalidArgumentException
      */
-    public function getCachingMailContent(string $mailTemplate, string $locale, array $data):string
+    public function getCachingMailContent(string $mailTemplate, string $locale, array $data,MailTranslatable $mailTranslatable):string
     {
         $replaceableContent = [];
         foreach ($data as $key => $value) {
             if($key === 'content'){
                 continue;
             }
+            if(array_key_exists($key, $mailTranslatable->getContextVars())){
+                continue;
+            }
             $replaceableContent[$key] = '{{ ' . $key . ' }}';
         }
 
         $fonts = array_reduce($this->mailFontPool->getAll(),fn(array $carry,MailFontInterface $font) => [...$carry,$font->getConfiguration()],[]);
-        $contentGenerator = function () use ($fonts, $data, $replaceableContent, $mailTemplate, $locale) {
+        $contentGenerator = function () use ($mailTranslatable, $fonts, $data, $replaceableContent, $mailTemplate, $locale) {
             $mjmlContent = $this->twig->render($mailTemplate . '.'
                 . self::$EXTENSIONS, [...$replaceableContent,
                 "content" => $data['content'],
                 "fonts" => $fonts,
-                'locale' => $locale
+                'locale' => $locale,
+                ...array_reduce(array_keys($mailTranslatable->getContextVars()),fn($carry,string $key)=>[...$carry,$key=>$data[$key]],[]),
             ]);
 
             return $this->mjmlAPIService->render($mjmlContent);
@@ -70,6 +76,9 @@ class MailContentProvider
             $html = $contentGenerator();
         }
         unset($data['content']);
+        foreach ($mailTranslatable->getContextVars() as $key => $value){
+            unset($data[$key]);
+        }
         $search  = array_values($replaceableContent);
         $replace = array_values($data);
         return str_replace($search, $replace, $html);
@@ -79,7 +88,7 @@ class MailContentProvider
         if($mailTranslatable->getContent() === null){
             return ['content'=>[]];
         }
-        return ['content' => array_map(function($wrapper) use ($locale) {
+        $data = ['content' => array_map(function($wrapper) use ($locale) {
 
             $wrapperType = $this->mailWrapperTypesPool->get($wrapper['type']);
             $components = array_reduce($wrapperType->getConfiguration()->getContentKeys(),
@@ -95,6 +104,11 @@ class MailContentProvider
                 ...$this->mailWrapperTypesPool->get($wrapper['type'])->build($wrapper,$locale),
                 ...$components
             ];
-        }, $mailTranslatable->getContent())];
+        }, $mailTranslatable->getContent()), 'context' => $mailTranslatable->getContext()];
+        if($mailTranslatable->getContext() && $mailTranslatable->getContextVars()){
+            $data = [...$data, ...$this->mailContextTypesPool->get($mailTranslatable->getContext())
+                ->build($mailTranslatable->getContextVars(),$locale)];
+        }
+        return $data;
     }
 }

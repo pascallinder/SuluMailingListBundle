@@ -4,7 +4,8 @@
                container-background-color="{{ item.backgroundColor|default }}"
                color="{{ item.color|default }}"
                padding="{{ item.padding|default }}"
-               font-size="{{ item.fontSize|default('16') }}px"
+               font-size="{{ item.fontSize|default }}px"
+               line-height="{{ item.fontLineHeight|default }}"
                font-family="{{ item.fontFamily |default}}"
                href="{{ item.url }}" align="{{ item.align|default('center') }}">
         {{ item.label }}

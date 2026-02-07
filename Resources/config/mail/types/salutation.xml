@@ -26,13 +26,7 @@
     <xi:include href="../props/align.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>
-    <xi:include href="../props/font.xml"
-                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
-                      xpointer(/sulu:properties/sulu:property)"/>
-    <xi:include href="../props/background-color.xml"
-                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
-                      xpointer(/sulu:properties/sulu:property)"/>
-    <xi:include href="../props/padding.xml"
+    <xi:include href="../grouped-props/text-props.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>
 </properties>

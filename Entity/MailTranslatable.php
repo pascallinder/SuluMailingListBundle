@@ -13,7 +13,10 @@ abstract class MailTranslatable
 {
     use IdTrait;
     use LocaleTrait;
-
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    protected ?string $context = null;
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    protected ?array $contextVars = null;
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     protected string $senderMail;
 
@@ -96,6 +99,26 @@ abstract class MailTranslatable
     public function setSenderMail(?string $senderMail): void
     {
         $this->senderMail = $senderMail;
+    }
+
+    public function getContext(): ?string
+    {
+        return $this->context;
+    }
+
+    public function setContext(?string $context): void
+    {
+        $this->context = $context;
+    }
+
+    public function getContextVars(): ?array
+    {
+        return $this->contextVars;
+    }
+
+    public function setContextVars(?array $contextVars): void
+    {
+        $this->contextVars = $contextVars;
     }
     public function applyFrom(self $source): void
     {

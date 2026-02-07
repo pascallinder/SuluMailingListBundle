@@ -14,14 +14,14 @@ readonly class HeroWrapperType implements MailWrapperTypeInterface
             'mailingListMail.props.content.hero.label',
             __DIR__ . "/../../../Resources/config/mail/wrappers/hero.xml",
             "hero"
-        ))->setPriority(10);
+        ))->setPriority(40);
     }
 
-    public function build(array $wrapper, string $locale): array
+    public function build(array $item, string $locale): array
     {
-        if(!array_key_exists('backgroundImage',$wrapper) || !$wrapper['backgroundImage']['id']){
-            return [ ...$wrapper, "backgroundImage" => null];
+        if(!array_key_exists('backgroundImage',$item) || !$item['backgroundImage']['id']){
+            return [ ...$item, "backgroundImage" => null];
         }
-        return [ ...$wrapper, "backgroundImage" => $this->imageUrlProvider->getUrl($wrapper['backgroundImage']["id"], $locale)];
+        return [ ...$item, "backgroundImage" => $this->imageUrlProvider->getUrl($item['backgroundImage']["id"], $locale)];
     }
 }

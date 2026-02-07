@@ -11,13 +11,13 @@ readonly class SingleColumnSectionWrapperType implements MailWrapperTypeInterfac
             'mailingListMail.props.content.singleColumnSection.label',
             __DIR__ . "/../../../Resources/config/mail/wrappers/single-column-section.xml",
             "single-column-section"
-        ))->setPriority(20)->setContentKeys([
+        ))->setPriority(10)->setContentKeys([
             'mailingListMail.props.content.components' => 'columnOne'
         ]);
     }
 
-    public function build(array $wrapper, string $locale): array
+    public function build(array $item, string $locale): array
     {
-        return $wrapper;
+        return $item;
     }
 }

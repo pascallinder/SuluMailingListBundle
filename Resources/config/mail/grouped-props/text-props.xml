@@ -3,18 +3,13 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns:xi="http://www.w3.org/2001/XInclude"
             xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/properties-1.0.xsd">
-    <property name="url" type="link" mandatory="true" multilingual="false">
-        <meta>
-            <title>mailingListMail.props.content.button.url</title>
-        </meta>
-        <params>
-            <param name="types" type="collection">
-                <param name="page"/>
-                <param name="external"/>
-            </param>
-        </params>
-    </property>
-    <xi:include href="../grouped-props/button-props.xml"
+    <xi:include href="../props/font.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+    <xi:include href="../props/background-color.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+    <xi:include href="../props/padding.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>
 </properties>

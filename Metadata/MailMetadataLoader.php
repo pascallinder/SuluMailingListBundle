@@ -103,7 +103,12 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
                                 $existing ? '(' . $existing . ') AND ' . $visibleContext : $visibleContext
                             );
                         }
-
+                        $existing = $child->getDisabledCondition();
+                        $child->setDisabledCondition(
+                            $existing ? '(' . $existing . ') AND ' .
+                                $contextType->getConfiguration()->getContextVarsDisabledCondition() :
+                                $contextType->getConfiguration()->getContextVarsDisabledCondition()
+                        );
                         $formMetadata->addItem($child);
                     }
 
@@ -176,6 +181,7 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
         $selection->addOption($defaultValueOption);
         $selection->addOption($valuesOption);
         $selection->setRequired(true);
+        $selection->setDisabledCondition('__parent.sent == true');
         return $selection;
     }
     /**

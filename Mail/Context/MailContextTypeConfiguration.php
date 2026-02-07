@@ -8,6 +8,7 @@ class MailContextTypeConfiguration extends MailMetadataXmlConfiguration
 {
     private array $acceptedResources = [];
     private array $contextVarsKeys = ['backgroundColor'];
+    private string $contextVarsDisabledCondition = "__parent.sent == true";
 
     public function getContextVarsKeys(): array
     {
@@ -30,4 +31,16 @@ class MailContextTypeConfiguration extends MailMetadataXmlConfiguration
         $this->acceptedResources = $acceptedResources;
         return $this;
     }
+
+    public function getContextVarsDisabledCondition(): string
+    {
+        return $this->contextVarsDisabledCondition;
+    }
+
+    public function setContextVarsDisabledCondition(string $contextVarsDisabledCondition): static
+    {
+        $this->contextVarsDisabledCondition = $contextVarsDisabledCondition;
+        return $this;
+    }
+
 }

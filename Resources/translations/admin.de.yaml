@@ -79,6 +79,9 @@ mailingListMail:
                     label: Schriftgrösse
                 fontLineHeight:
                     label: Zeilenhöhe
+                padding:
+                    label: Innenabstand
+                    info: Werte sind in Pixel (oben, rechts, unten, links)
             spacer:
                 label: Abstand
                 height: Höhe

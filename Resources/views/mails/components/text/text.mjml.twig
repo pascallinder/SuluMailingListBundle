@@ -1,7 +1,6 @@
 {% block salutation %}
 
     {% if item.value is defined %}
-        {% set textWidth = 100 / columns %}
         <mj-table width="100%" cellpadding="0" cellspacing="6px" role="presentation"
                   font-size="{{ item.fontSize|default }}px" line-height="{{ item.fontLineHeight|default }}"
                   padding="{{ item.padding|default }}"

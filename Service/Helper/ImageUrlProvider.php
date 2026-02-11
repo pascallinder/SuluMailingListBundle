@@ -15,11 +15,12 @@ readonly class ImageUrlProvider
      * @param array<string, mixed> $item
      */
     public function getUrl(array $item, string $locale): ?string{
-        if(!array_key_exists('image',$item) || !$item['image']['id']){
+        $media = $item['image'] ?? $item['backgroundImage'] ?? null;
+        if (!\is_array($media) || !array_key_exists('id', $media) || !$media['id']) {
             return null;
         }
-        $formats = $this->mediaManager->getFormatUrls([$item['image']['id']], $locale);
-        $url = $formats[$item['image']['id']]['1080x.png'];
+        $formats = $this->mediaManager->getFormatUrls([$media['id']], $locale);
+        $url = $formats[$media['id']]['1080x.png'];
         return str_replace('/'.$locale,'',
             $this->webspaceManager->findUrlByResourceLocator($url, null,$locale));
     }

@@ -8,7 +8,8 @@
             {% for item in wrapper.columnOne %}
 
                     {% include '@SuluMailingList/mails/components/'~  item.type ~ '/' ~ item.type ~ '.mjml.twig' with {
-                        item: item
+                        item: item,
+                        columns: 2
                     } %}
 
             {% endfor %}
@@ -16,7 +17,8 @@
         <mj-column vertical-align="{{ wrapper.verticalAlign|default }}">
             {% for item in wrapper.columnTwo %}
                 {% include '@SuluMailingList/mails/components/'~  item.type ~ '/' ~ item.type ~ '.mjml.twig' with {
-                    item: item
+                    item: item,
+                    columns: 2
                 } %}
             {% endfor %}
         </mj-column>

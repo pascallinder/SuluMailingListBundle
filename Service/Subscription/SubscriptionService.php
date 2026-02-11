@@ -17,6 +17,9 @@ readonly class SubscriptionService
         private DomainEventCollectorInterface    $domainEventCollector
     ){
     }
+    /**
+     * @param array<string, mixed> $contactData
+     */
     public function handleSavedContact(ContactInterface $contact, array $contactData,string $locale): void
     {
         if(!isset($contactData['newsletters'])){
@@ -27,6 +30,7 @@ readonly class SubscriptionService
 
     /**
      * @param Newsletter[] $newsletters
+     * @param ContactInterface[] $contacts
      */
     public function handleNewsletters(array $newsletters, array $contacts, string $locale, bool $doubleOptEnabled = true): void
     {

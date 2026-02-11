@@ -12,6 +12,9 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewO
     ){
 
     }
+    /**
+     * @param array<string, mixed> $data
+     */
     public function setMailTranslatableValues(MailTranslatable $object, array $data): void
     {
         $propertyAccess = PropertyAccess::createPropertyAccessorBuilder()
@@ -32,17 +35,25 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewO
         $object->setContextVars(array_reduce($keys,fn($carry, $key) => [...$carry, $key =>$data[$key]],[]));
     }
 
-    public function setContext($object, $locale, array $context)
-    {}
-
-    public function serialize($object)
+    /**
+     * @param object $object
+     * @param array<string, mixed> $context
+     */
+    public function setContext($object, $locale, array $context): void
     {
-        return serialize($object);
     }
 
-    public function deserialize($serializedObject, $objectClass)
+    /**
+     * @param object $object
+     */
+    public function serialize($object): string
     {
-        return unserialize($serializedObject);
+        return \serialize($object);
+    }
+
+    public function deserialize($serializedObject, $objectClass): mixed
+    {
+        return \unserialize($serializedObject);
     }
 
     public function getSecurityContext($id, $locale): ?string
@@ -50,6 +61,9 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewO
         return null;
     }
 
+    /**
+     * @param object $object
+     */
     public function getId($object)
     {
         return $object->getId();

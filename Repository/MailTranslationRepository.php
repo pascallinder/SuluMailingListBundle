@@ -7,8 +7,15 @@ use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 use Linderp\SuluMailingListBundle\Entity\MailTranslation;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @template T of MailTranslation
+ * @extends ServiceEntityRepository<T>
+ */
 abstract class MailTranslationRepository extends ServiceEntityRepository
 {
+    /**
+     * @param class-string<T> $entityClass
+     */
     public function __construct(ManagerRegistry $registry, string $entityClass)
     {
         parent::__construct($registry, $entityClass);
@@ -25,5 +32,8 @@ abstract class MailTranslationRepository extends ServiceEntityRepository
         $this->getEntityManager()->persist($dest);
         $this->getEntityManager()->flush();
     }
-    protected abstract function findOneByLocale(MailTranslatable $mailTranslatable, string $locale):?MailTranslation;
+    /**
+     * @return T|null
+     */
+    protected abstract function findOneByLocale(MailTranslatable $mailTranslatable, string $locale): ?MailTranslation;
 }

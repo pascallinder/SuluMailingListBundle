@@ -11,6 +11,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
  */
 class MailWrapperTypesPool extends BaseMailTypesPool
 {
+    /**
+     * @param iterable<MailWrapperTypeInterface> $handlers
+     */
     public function __construct(
         #[AutowireIterator('mailing.wrapper-type')]
         iterable $handlers

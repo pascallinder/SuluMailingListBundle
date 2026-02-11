@@ -36,7 +36,7 @@ class Newsletter
     #[ORM\OneToMany(mappedBy: 'newsletter', targetEntity: NewsletterSubscription::class, cascade: ['persist'])]
     private Collection $newsletterSubscriptions;
     /**
-     * @var Collection<string, Newsletter>
+     * @var Collection<int, NewsletterMail>
      */
     #[ManyToMany(targetEntity: NewsletterMail::class, mappedBy: 'newsletters', cascade: ['persist'])]
     private Collection $newsletterMails;
@@ -54,7 +54,7 @@ class Newsletter
     }
 
     /**
-     * @return Collection
+     * @return Collection<string, NewsletterTranslation>
      */
     public function getTranslations(): Collection
     {
@@ -62,7 +62,7 @@ class Newsletter
     }
 
     /**
-     * @return Collection
+     * @return Collection<string, NewsletterSubscription>
      */
     public function getNewsletterSubscriptions(): Collection
     {
@@ -84,7 +84,7 @@ class Newsletter
 
         return $translation;
     }
-    public function getTitle($locale = null): ?string
+    public function getTitle(?string $locale = null): ?string
     {
         $translation = $this->getTranslation($locale ?? $this->locale);
         if (!$translation instanceof NewsletterTranslation) {
@@ -107,7 +107,7 @@ class Newsletter
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, NewsletterMail>
      */
     public function getNewsletterMails(): Collection
     {
@@ -115,7 +115,7 @@ class Newsletter
     }
 
     /**
-     * @param Collection $newsletterMails
+     * @param Collection<int, NewsletterMail> $newsletterMails
      */
     public function setNewsletterMails(Collection $newsletterMails): void
     {

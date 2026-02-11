@@ -1,0 +1,24 @@
+{% block spacer %}
+    <mj-social align="{{ item.align|default }}"
+               font-size="{{ item.fontSize|default }}px"
+               icon-size="{{ item.iconSize|default }}px"
+               mode="{{ item.mode|default }}"
+               line-height="{{ item.fontLineHeight|default }}"
+               font-family="{{ item.fontFamily|default }}"
+               color="{{ item.color|default }}"
+               container-background-color="{{ item.backgroundColor|default }}"
+               padding="{{ item.padding|default }}">
+        {% for element in item.elements %}
+            <mj-social-element name="{{ element.name }}"
+                               href="{{ element.url }}"
+                               icon-position="{{ element.position|default('left')}}"
+                               background-color="{{ element.backgroundColor|default('inherit') }}"
+                               text-padding="0 {% if element.position|default('left') === 'right' %}5px{% else %} 0 {% endif %} 0
+                                    {% if element.position|default('left') === 'left' %}5px{% else %} 0 {% endif %}"
+                               color="{{ item.color|default('inherit') }}"
+                                src="{{ element.src|default }}">
+                {{ element.label|default }}
+            </mj-social-element>
+        {% endfor %}
+    </mj-social>
+{% endblock %}

@@ -17,11 +17,14 @@ readonly class HeroWrapperType implements MailWrapperTypeInterface
         ))->setPriority(40);
     }
 
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return array<string, mixed>
+     */
     public function build(array $item, string $locale): array
     {
-        if(!array_key_exists('backgroundImage',$item) || !$item['backgroundImage']['id']){
-            return [ ...$item, "backgroundImage" => null];
-        }
-        return [ ...$item, "backgroundImage" => $this->imageUrlProvider->getUrl($item['backgroundImage']["id"], $locale)];
+        $item['backgroundImage'] = $this->imageUrlProvider->getUrl($item, $locale);
+        return $item;
     }
 }

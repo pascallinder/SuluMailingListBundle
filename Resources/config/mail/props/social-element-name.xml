@@ -1,0 +1,15 @@
+
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <property name="name" type="single_select" multilingual="false" mandatory="true">
+        <meta>
+            <title>mailingListMail.props.content.social.element.name</title>
+        </meta>
+
+        <params>
+            <param name="default_value" type="expression" value="service('mailing.social-pool').getDefaultValue()"/>
+            <param name="values" type="expression" value="service('mailing.social-pool').getSocialSelection(locale)"/>
+        </params>
+    </property>
+</properties>

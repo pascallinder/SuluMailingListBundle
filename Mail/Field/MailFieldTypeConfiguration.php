@@ -6,17 +6,20 @@ use Linderp\SuluMailingListBundle\Mail\MailMetadataXmlConfiguration;
 
 class MailFieldTypeConfiguration extends MailMetadataXmlConfiguration
 {
-    /** @var string[] $acceptedResources */
+    /** @var list<class-string> $acceptedResources */
     private array $acceptedResources = [];
     /**
-     * @param string[] $acceptedContext;
+     * @var list<string>
      */
     private array $acceptedContext = [];
     /**
-     * @param string[] $acceptedWrapper
+     * @var list<string>
      */
     private array $acceptedWrapper = [];
 
+    /**
+     * @param class-string ...$acceptedResources
+     */
     public function setAcceptedResources(string ...$acceptedResources): static
     {
         $this->acceptedResources = $acceptedResources;
@@ -28,23 +31,32 @@ class MailFieldTypeConfiguration extends MailMetadataXmlConfiguration
         $this->acceptedWrapper = $acceptedWrapper;
         return $this;
     }
+    /**
+     * @return list<class-string>
+     */
     public function getAcceptedResources(): array
     {
         return $this->acceptedResources;
     }
     /**
-     * @return string[]
+     * @return list<string>
      */
     public function getAcceptedWrapper(): array
     {
         return $this->acceptedWrapper;
     }
 
+    /**
+     * @return list<string>
+     */
     public function getAcceptedContext(): array
     {
         return $this->acceptedContext;
     }
 
+    /**
+     * @param string ...$acceptedContext
+     */
     public function setAcceptedContext(string ...$acceptedContext): static
     {
         $this->acceptedContext = $acceptedContext;

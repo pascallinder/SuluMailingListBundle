@@ -40,6 +40,10 @@ mailingListMail:
         contexts:
             default:
                 label: Standard
+        global:
+            position:
+                left: Links
+                right: Rechts
         content:
             label: Inhalt
             components: Kompontente
@@ -59,6 +63,7 @@ mailingListMail:
                 height: Höhe
                 backgroundImageHeight: Hintergrundbildhöhe
             global:
+                url: URL
                 verticalAlign:
                     label: Vertikale Ausrichtung
                     middle: Mittig
@@ -82,11 +87,24 @@ mailingListMail:
                 padding:
                     label: Innenabstand
                     info: Werte sind in Pixel (oben, rechts, unten, links)
+                mode:
+                    label: Gliederung der Elemente
+                    horizontal: Horizontal
+                    vertical: Vertikal
+                icon:
+                    label: Icon
+                    color: Icon-Farbe
+                    size: Icon-Grösse
+                position:
+                    label: Position
+                    right: Rechts
+                    left: Links
             spacer:
                 label: Abstand
                 height: Höhe
             divider:
                 label: Trenner
+                color: Farbe
                 borderStyle:
                     label: Stil
                     solid: Solid
@@ -113,12 +131,54 @@ mailingListMail:
             button:
                 label: Knopf
                 buttonLabel: Knopftext
-                url: URL
                 backgroundColor: Hintergrundfarbe des Buttons
             confirmSubscriptionButton:
                 label: Subscription Bestätigungsknopf
                 buttonLabel: Knopftext
                 backgroundColor: Hintergrundfarbe des Buttons
+            social:
+                label: Soziale Elemente
+                iconSize: Icon Grösse
+                position: Icon Position
+                positionLeft: Links
+                positionRight: Rechts
+                element:
+                    name: Soziales Netzwerk
+                    elementLabel: Label
+                    label: Elemente
+                    facebook: Facebook (teilen)
+                    facebookNoShare: Facebook (nur Link)
+
+                    twitter: Twitter (teilen)
+                    twitterNoShare: Twitter (nur Link)
+
+                    x: X (teilen)
+                    xNoShare: X (nur Link)
+
+                    google: Google (teilen)
+                    googleNoShare: Google (nur Link)
+
+                    pinterest: Pinterest (teilen)
+                    pinterestNoShare: Pinterest (nur Link)
+
+                    linkedin: LinkedIn (teilen)
+                    linkedinNoShare: LinkedIn (nur Link)
+
+                    tumblr: Tumblr (teilen)
+                    tumblrNoShare: Tumblr (nur Link)
+
+                    xing: XING (teilen)
+                    xingNoShare: XING (nur Link)
+
+                    github: GitHub
+                    instagram: Instagram
+                    web: Website
+                    snapchat: Snapchat
+                    youtube: YouTube
+                    vimeo: Vimeo
+                    medium: Medium
+                    soundcloud: SoundCloud
+                    dribbble: Dribbble
 
 sulu_activity:
     resource:

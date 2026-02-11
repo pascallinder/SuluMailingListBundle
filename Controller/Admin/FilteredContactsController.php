@@ -15,15 +15,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @phpstan-type NewsletterData array{
- *     id: int|null,
- *     enabled: bool,
- *     title: string,
- *     category: array{id: int}|null,
- * }
- * @extends LocaleController<Newsletter>
- */
 class FilteredContactsController extends AbstractController
 {
 

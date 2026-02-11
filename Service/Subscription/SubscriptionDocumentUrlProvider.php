@@ -17,14 +17,16 @@ readonly class SubscriptionDocumentUrlProvider
      * @throws DocumentManagerException
      */
     public function getUnsubscribePageUrl(string $newsletterId, string $locale):string{
-        return $this->getUrl($this->newsletterRepository->findById($newsletterId,$locale)->getUnsubscribePage(),$locale);
+        $newsletter = $this->newsletterRepository->findById((int) $newsletterId, $locale);
+        return $this->getUrl($newsletter->getUnsubscribePage(), $locale);
     }
 
     /**
      * @throws DocumentManagerException
      */
     public function getConfirmedDoubleOptPageUrl(string $newsletterId, string $locale):string{
-        return $this->getUrl($this->newsletterRepository->findById($newsletterId,$locale)->getDoubleOptConfirmPage(),$locale);
+        $newsletter = $this->newsletterRepository->findById((int) $newsletterId, $locale);
+        return $this->getUrl($newsletter->getDoubleOptConfirmPage(), $locale);
     }
 
     /**

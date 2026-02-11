@@ -12,6 +12,9 @@ class MailFontPool implements MailPoolInterface
     /** @var MailFontInterface[] */
     private array $fonts = [];
     private string $defaultFont;
+    /**
+     * @param iterable<MailFontInterface> $fonts
+     */
     public function __construct(
         #[AutowireIterator('mailing.font')]
         iterable $fonts
@@ -24,10 +27,16 @@ class MailFontPool implements MailPoolInterface
             $this->fonts[$font->getConfiguration()->getFontFamily()] = $font;
         }
     }
+    /**
+     * @return array<string, MailFontInterface>
+     */
     public function getAll(): array{
         return $this->fonts;
     }
 
+    /**
+     * @return list<array{name: string, title: string}>
+     */
     public function getFontSelection(): array{
         return array_reduce($this->fonts, fn(array $carry, MailFontInterface $font)=> [...$carry,[
             'name'=> $font->getConfiguration()->getFontFamily(),

@@ -14,6 +14,11 @@ class NewsletterSubscriptionRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, NewsletterSubscription::class);
     }
+    /**
+     * @param array<string, mixed> $options
+     *
+     * @return array<string, mixed>
+     */
     protected function append(QueryBuilder $queryBuilder, string $alias, string $locale, $options = []): array
     {
         return [];

@@ -25,6 +25,9 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @extends MailTranslatableController<NewsletterMail>
+ */
 class NewsletterMailController extends MailTranslatableController
 {
     public function __construct(
@@ -88,6 +91,7 @@ class NewsletterMailController extends MailTranslatableController
 
     /**
      * @param NewsletterMail $entity
+     * @return array<string, mixed>
      */
     protected function getDataForEntity($entity, Request $request): array
     {
@@ -105,15 +109,22 @@ class NewsletterMailController extends MailTranslatableController
 
     /**
      * @param NewsletterMail $entity
+     * @param array<string, mixed> $data
      */
     protected function mapDataToEntity(array $data,$entity, Request $request): void
     {
 
-        $entity->setNewsletters(new ArrayCollection(
-            $this->newsletterRepository->findBy(['id'=>$data['newsletters']])));
+        $newsletters = array_filter(
+            $this->newsletterRepository->findBy(['id' => $data['newsletters']]),
+            static fn ($newsletter): bool => $newsletter instanceof Newsletter,
+        );
+        $entity->setNewsletters(new ArrayCollection($newsletters));
         $entity->setSubject($data['subject']);
-        $entity->setContacts(new ArrayCollection(
-            $this->contactRepository->findBy(['id'=>$data['contacts']])));
+        $contacts = array_filter(
+            $this->contactRepository->findBy(['id' => $data['contacts']]),
+            static fn ($contact): bool => $contact instanceof Contact,
+        );
+        $entity->setContacts(new ArrayCollection($contacts));
         $this->mapDataToMailTranslatable($entity,$data);
     }
 

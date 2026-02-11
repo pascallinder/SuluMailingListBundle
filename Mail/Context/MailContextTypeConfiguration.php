@@ -6,10 +6,19 @@ use Linderp\SuluMailingListBundle\Mail\MailMetadataXmlConfiguration;
 
 class MailContextTypeConfiguration extends MailMetadataXmlConfiguration
 {
+    /**
+     * @var list<class-string>
+     */
     private array $acceptedResources = [];
+    /**
+     * @var list<string>
+     */
     private array $contextVarsKeys = ['backgroundColor'];
     private string $contextVarsDisabledCondition = "__parent.sent == true";
 
+    /**
+     * @return list<string>
+     */
     public function getContextVarsKeys(): array
     {
         return $this->contextVarsKeys;
@@ -21,11 +30,17 @@ class MailContextTypeConfiguration extends MailMetadataXmlConfiguration
         return $this;
     }
 
+    /**
+     * @return list<class-string>
+     */
     public function getAcceptedResources(): array
     {
         return $this->acceptedResources;
     }
 
+    /**
+     * @param class-string ...$acceptedResources
+     */
     public function setAcceptedResources(string ...$acceptedResources): static
     {
         $this->acceptedResources = $acceptedResources;

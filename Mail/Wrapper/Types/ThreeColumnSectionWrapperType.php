@@ -18,6 +18,11 @@ readonly class ThreeColumnSectionWrapperType implements MailWrapperTypeInterface
         ])->setPriority(30);
     }
 
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return array<string, mixed>
+     */
     public function build(array $item, string $locale): array
     {
         return $item;

@@ -12,6 +12,9 @@ readonly class NewsletterService
     private RequestStack                                     $requestStack)
     {}
 
+    /**
+     * @return list<array{name: int|null, title: string|null}>
+     */
     public function getValues(): array
     {
         $request = $this->requestStack->getCurrentRequest();

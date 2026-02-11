@@ -6,9 +6,11 @@ use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 use Linderp\SuluMailingListBundle\Entity\MailTranslation;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation;
-use Linderp\SuluMailingListBundle\Repository\MailTranslatableRepository;
 use Linderp\SuluMailingListBundle\Repository\MailTranslationRepository;
 
+/**
+ * @extends MailTranslationRepository<NewsletterMailTranslation>
+ */
 class NewsletterMailTranslationRepository extends MailTranslationRepository
 {
     public function __construct(ManagerRegistry $registry)

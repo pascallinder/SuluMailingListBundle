@@ -20,11 +20,14 @@ readonly class ImageMailFieldType implements MailFieldTypeInterface
         ))->setPriority(30);
     }
 
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return array<string, mixed>
+     */
     public function build(array $item, string $locale): array
     {
-        if(!array_key_exists('image',$item) || !$item['image']['id']){
-            return [ ...$item, "image" => null];
-        }
-        return [ ...$item, "image" => $this->imageUrlProvider->getUrl($item['image']["id"], $locale)];
+        $item['image']=$this->imageUrlProvider->getUrl($item, $locale);
+        return $item;
     }
 }

@@ -23,7 +23,7 @@ readonly class NewsletterSubscribedEventSubscriber implements EventSubscriberInt
      * @throws TransportExceptionInterface
      * @throws InvalidArgumentException
      */
-    public function onNewsletterSubscribed(NewsletterSubscribedEvent $event){
+    public function onNewsletterSubscribed(NewsletterSubscribedEvent $event): void{
         $subscription = $event->getNewsletterSubscription();
         $this->subscriptionMailService->sendDoubleOptMailToSubscriber($subscription);
     }

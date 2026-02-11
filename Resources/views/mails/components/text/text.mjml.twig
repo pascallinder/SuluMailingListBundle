@@ -1,14 +1,32 @@
 {% block salutation %}
+
     {% if item.value is defined %}
-        <mj-text font-size="{{ item.fontSize|default }}px"
-                 font-family="{{ item.fontFamily |default}}"
-                 css-class="mjml-text-container"
-                 padding="{{ item.padding|default }}"
-                 line-height="{{ item.fontLineHeight|default }}"
-                 align="{{ item.align|default }}"
-                 container-background-color="{{ item.backgroundColor|default }}"
-                 color="{{ item.color|default }}">
-            {{ item.value |raw }}
-        </mj-text>
+        {% set textWidth = 100 / columns %}
+        <mj-table width="100%" cellpadding="0" cellspacing="6px" role="presentation"
+                  font-size="{{ item.fontSize|default }}px" line-height="{{ item.fontLineHeight|default }}"
+                  padding="{{ item.padding|default }}"
+                  font-family="{{ item.fontFamily |default}}" container-background-color="{{ item.backgroundColor|default }}">
+            <tr>
+                {% if item.icon is defined and item.icon %}
+                <td width="{{ item.iconSize|default(24) }}px" style="vertical-align:middle;">
+                    {% include '@SuluMailingList/mails/components/icon/icon.mjml.twig' with {
+                        item:{
+                            ...item,
+                            iconColor: ((item.iconColor|default) == 'inherit' or (item.iconColor|default) == null)
+                            ? (item.color|default) : (item.iconColor|default)
+                        }
+                    }%}
+                </td>
+                {% endif %}
+                <td style="vertical-align:middle; color: {{ item.color|default }}">
+                    <div class="mjml-text-container"
+                         style="line-height: {{ item.fontLineHeight|default }};
+                                 text-align: {{ item.align|default }}
+                                 ">
+                    {{ item.value | raw }}
+                    </div>
+                </td>
+            </tr>
+        </mj-table>
     {% endif %}
 {% endblock %}

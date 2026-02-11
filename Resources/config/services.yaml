@@ -16,6 +16,7 @@ services:
     resource: '../../'
     exclude:
       - '../../Entity/'
+      - '../../vendor/'
   Linderp\SuluMailingListBundle\Form\Dynamic\Types\NewsletterFieldType:
     tags:
       - { name: 'sulu_form.dynamic.type', alias: 'newsletter' }

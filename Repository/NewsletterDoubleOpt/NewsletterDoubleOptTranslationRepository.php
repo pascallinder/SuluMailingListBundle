@@ -10,7 +10,7 @@ use Linderp\SuluMailingListBundle\Repository\MailTranslatableRepository;
 use Linderp\SuluMailingListBundle\Repository\MailTranslationRepository;
 
 /**
- * @extends ServiceEntityRepository<NewsletterDoubleOptTranslation>
+ * @extends MailTranslationRepository<NewsletterDoubleOptTranslation>
  */
 class NewsletterDoubleOptTranslationRepository extends MailTranslationRepository
 {
@@ -19,9 +19,9 @@ class NewsletterDoubleOptTranslationRepository extends MailTranslationRepository
         parent::__construct($registry, NewsletterDoubleOptTranslation::class);
     }
 
-    protected function findOneByLocale(MailTranslatable $mailTranslatable, string $locale): ?MailTranslation
+    protected function findOneByLocale(MailTranslatable $mailTranslatable, string $locale): ?NewsletterDoubleOptTranslation
     {
-        /** @var ?MailTranslation $result */
+        /** @var ?NewsletterDoubleOptTranslation $result */
         $result =  $this->findOneBy([
             'locale' => $locale,
             'newsletterDoubleOpt' => $mailTranslatable,

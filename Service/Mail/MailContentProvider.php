@@ -21,6 +21,8 @@ class MailContentProvider
     public function __construct(private readonly Environment          $twig,
                                 #[Autowire('%sulu_mailing_list.mjml.caching%')]
                                 private readonly bool                 $cachingEnabled,
+                                #[Autowire('%sulu_mailing_list.mjml.icons_path%')]
+                                private readonly ?string $iconsPath,
                                 private readonly CacheInterface       $cache,
                                 private readonly MailFontPool         $mailFontPool,
                                 private readonly MailFieldTypesPool   $mailFieldTypesPool,
@@ -34,6 +36,9 @@ class MailContentProvider
     /**
      * @throws InvalidArgumentException
      */
+    /**
+     * @param array<string, mixed> $data
+     */
     public function getMailTranslatableMailContent(MailTranslatable $mailTranslatable, string $locale, array $data): string
     {
         return $this->getCachingMailContent('@SuluMailingList/mails/email', $locale,[
@@ -44,14 +49,18 @@ class MailContentProvider
     /**
      * @throws InvalidArgumentException
      */
-    public function getCachingMailContent(string $mailTemplate, string $locale, array $data,MailTranslatable $mailTranslatable):string
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function getCachingMailContent(string $mailTemplate, string $locale, array $data, ?MailTranslatable $mailTranslatable = null): string
     {
         $replaceableContent = [];
         foreach ($data as $key => $value) {
             if($key === 'content'){
                 continue;
             }
-            if(array_key_exists($key, $mailTranslatable->getContextVars())){
+            $contextVars = $mailTranslatable?->getContextVars() ?? [];
+            if(array_key_exists($key, $contextVars)){
                 continue;
             }
             $replaceableContent[$key] = '{{ ' . $key . ' }}';
@@ -59,12 +68,14 @@ class MailContentProvider
 
         $fonts = array_reduce($this->mailFontPool->getAll(),fn(array $carry,MailFontInterface $font) => [...$carry,$font->getConfiguration()],[]);
         $contentGenerator = function () use ($mailTranslatable, $fonts, $data, $replaceableContent, $mailTemplate, $locale) {
+            $contextVars = $mailTranslatable?->getContextVars() ?? [];
             $mjmlContent = $this->twig->render($mailTemplate . '.'
                 . self::$EXTENSIONS, [...$replaceableContent,
                 "content" => $data['content'],
                 "fonts" => $fonts,
+                "iconsPath" => $this->iconsPath,
                 'locale' => $locale,
-                ...array_reduce(array_keys($mailTranslatable->getContextVars()),fn($carry,string $key)=>[...$carry,$key=>$data[$key]],[]),
+                ...array_reduce(array_keys($contextVars), fn(array $carry, string $key): array => [...$carry, $key => $data[$key] ?? null], []),
             ]);
 
             return $this->mjmlAPIService->render($mjmlContent);
@@ -72,46 +83,67 @@ class MailContentProvider
         if($this->cachingEnabled){
             $templateCacheKey = 'mail_translatable_' . hash('sha256', $mailTemplate . $locale
                     . json_encode($data['content']) . json_encode($fonts)
-                    . array_reduce(array_keys($mailTranslatable->getContextVars()),
-                        fn($carry,$key)=>$carry . json_encode($data[$key]),''));
+                    . array_reduce(array_keys($mailTranslatable?->getContextVars() ?? []),
+                        fn(string $carry, string $key): string => $carry . json_encode($data[$key] ?? null), ''));
             $html = $this->cache->get($templateCacheKey,$contentGenerator );
         }else{
             $html = $contentGenerator();
         }
         unset($data['content']);
-        foreach ($mailTranslatable->getContextVars() as $key => $value){
-            unset($data[$key]);
+        if ($mailTranslatable) {
+            foreach ($mailTranslatable->getContextVars() ?? [] as $key => $value) {
+                unset($data[$key]);
+            }
         }
         $search  = array_values($replaceableContent);
         $replace = array_values($data);
         return str_replace($search, $replace, $html);
     }
 
-    private function getMailTranslateData(MailTranslatable $mailTranslatable, string $locale):array{
-        if($mailTranslatable->getContent() === null){
-            return ['content'=>[]];
-        }
-        $data = ['content' => array_map(function($wrapper) use ($locale) {
+    /**
+     * @return array<string, mixed>
+     */
+    private function getMailTranslateData(MailTranslatable $mailTranslatable, string $locale): array{
+        $content = $mailTranslatable->getContent();
 
-            $wrapperType = $this->mailWrapperTypesPool->get($wrapper['type']);
-            $components = array_reduce($wrapperType->getConfiguration()->getContentKeys(),
-                function ($carry,$key) use ($locale, $wrapper) {
-                    $carry[$key] = array_map(
-                        fn($component)=> $this->mailFieldTypesPool
-                            ->get($component['type'])->build($component,$locale),
-                        $wrapper[$key]
-                    );
-                    return $carry;
-            },[]);
-            return [
-                ...$this->mailWrapperTypesPool->get($wrapper['type'])->build($wrapper,$locale),
-                ...$components
-            ];
-        }, $mailTranslatable->getContent()), 'context' => $mailTranslatable->getContext()];
-        if($mailTranslatable->getContext() && $mailTranslatable->getContextVars()){
-            $data = [...$data, ...$this->mailContextTypesPool->get($mailTranslatable->getContext())
-                ->build($mailTranslatable->getContextVars(),$locale)];
+        if ($content === null) {
+            return ['content' => []];
         }
+
+        $translatedContent = array_map(function (array $wrapper) use ($locale): array {
+            $wrapperType = $this->mailWrapperTypesPool->get($wrapper['type']);
+            $wrapperConfig = $wrapperType->getConfiguration();
+
+            $result = $wrapperType->build($wrapper, $locale);
+
+            foreach ($wrapperConfig->getContentKeys() as $key) {
+                $result[$key] = array_map(
+                    function (array $component) use ($locale): array {
+                        $fieldType = $this->mailFieldTypesPool->get($component['type']);
+                        return $fieldType->build($component, $locale);
+                    },
+                    $wrapper[$key] ?? []
+                );
+            }
+
+            return $result;
+        }, $content);
+
+        $data = [
+            'content' => $translatedContent,
+            'context' => $mailTranslatable->getContext(),
+        ];
+
+        $context = $mailTranslatable->getContext();
+        $contextVars = $mailTranslatable->getContextVars();
+
+        if ($context && $contextVars) {
+            $data = array_replace(
+                $data,
+                $this->mailContextTypesPool->get($context)->build($contextVars, $locale)
+            );
+        }
+
         return $data;
     }
 }

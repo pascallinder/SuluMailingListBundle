@@ -17,6 +17,11 @@ readonly class ConfirmSubscriptionButtonMailFieldType implements MailFieldTypeIn
         ))->setAcceptedResources(DoubleOptMailResource::class)->setPriority(20);
     }
 
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return array<string, mixed>
+     */
     public function build(array $item, string $locale): array
     {
         return $item;

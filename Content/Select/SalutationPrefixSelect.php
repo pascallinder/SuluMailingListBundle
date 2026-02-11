@@ -10,7 +10,10 @@ readonly class SalutationPrefixSelect
     public function __construct(private TranslatorInterface $translator)
     {
     }
-    public function getValues($locale):array{
+    /**
+     * @return list<array{name: string, title: string}>
+     */
+    public function getValues(string $locale): array{
         return [
             [
                 'name' => '0',

@@ -9,6 +9,12 @@ abstract class BaseFieldHandler extends FieldHandler
     public function __construct(private readonly NewsletterRepository $newsletterRepository){
 
     }
+    /**
+     * @param array<string, mixed> $field
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
     protected function handleField(array $field, array $data): array
     {
 

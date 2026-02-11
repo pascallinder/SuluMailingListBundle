@@ -17,9 +17,9 @@ class NewsletterRepository extends LocaleRepositoryUtil
         parent::__construct($registry, Newsletter::class);
     }
     /**
-     * @param array $options
+     * @param array<string, mixed> $options
      *
-     * @return string[]
+     * @return array<string, mixed>
      */
     protected function append(QueryBuilder $queryBuilder, string $alias, string $locale, $options = []): array
     {

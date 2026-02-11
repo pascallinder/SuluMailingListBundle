@@ -9,6 +9,9 @@ abstract class BaseMailTypesPool implements MailPoolInterface
 {
     /** @var array<string,T> $types */
     private array $types;
+    /**
+     * @param iterable<T> $handlers
+     */
     public function __construct(
         iterable $handlers
     ) {
@@ -26,6 +29,9 @@ abstract class BaseMailTypesPool implements MailPoolInterface
     {
         return $this->types[$typeKey];
     }
+    /**
+     * @return array<int, T>
+     */
     public function getAll(): array
     {
         return array_values($this->types);

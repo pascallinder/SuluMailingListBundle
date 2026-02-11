@@ -24,7 +24,7 @@ class NewsletterUnsubscribedEvent extends DomainEvent
 
     public function getResourceId(): string
     {
-        return $this->newsletterSubscription->getId();
+        return (string) $this->newsletterSubscription->getId();
     }
     public function getResourceTitle(): ?string
     {

@@ -13,6 +13,9 @@ abstract class MailTranslation
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     protected ?string $subject = null;
 
+    /**
+     * @var array<string, mixed>|null
+     */
     #[ORM\Column(type: Types::JSON, nullable: true)]
     protected ?array $content = null;
 
@@ -38,12 +41,18 @@ abstract class MailTranslation
         $this->subject = $subject;
     }
 
-    public function getContent():?array
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function getContent(): ?array
     {
         return $this->content;
     }
 
-    public function setContent(array $content): void
+    /**
+     * @param array<string, mixed>|null $content
+     */
+    public function setContent(?array $content): void
     {
         $this->content = $content;
     }
@@ -65,5 +74,5 @@ abstract class MailTranslation
         $this->subject = $source->subject;
         $this->content = $source->content;
     }
-    public abstract function copyTo(string $destLocale): static;
+    public abstract function copyTo(string $destLocale): self;
 }

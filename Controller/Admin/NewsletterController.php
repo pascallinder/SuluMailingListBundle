@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *     title: string,
  *     category: array{id: int}|null,
  * }
- * @extends LocaleController<Newsletter>
+ * @extends MailTranslatableController<Newsletter>
  */
 class NewsletterController extends MailTranslatableController
 {
@@ -102,6 +102,9 @@ class NewsletterController extends MailTranslatableController
     }
     /**
      * @param Newsletter $entity
+     */
+    /**
+     * @param array<string, mixed> $data
      */
     protected function mapDataToEntity(array $data, $entity, Request $request): void
     {

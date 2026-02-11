@@ -6,8 +6,15 @@ use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluBaseBundle\Repository\LocaleRepositoryUtil;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 
+/**
+ * @template T of MailTranslatable
+ * @extends LocaleRepositoryUtil<T>
+ */
 abstract class MailTranslatableRepository extends LocaleRepositoryUtil
 {
+    /**
+     * @param class-string<T> $entityClass
+     */
     public function __construct(ManagerRegistry $registry, string $entityClass)
     {
         parent::__construct($registry, $entityClass);

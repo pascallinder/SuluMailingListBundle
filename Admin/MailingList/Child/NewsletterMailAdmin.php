@@ -21,7 +21,7 @@ class NewsletterMailAdmin extends Admin implements AdminNavigationItem
     {
     }
 
-    private static function getListView():string
+    public static function getListView(): string
     {
         return 'newsletter_mails.list';
     }

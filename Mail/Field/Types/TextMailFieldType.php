@@ -19,8 +19,16 @@ readonly class TextMailFieldType implements MailFieldTypeInterface
         ))->setPriority(10);
     }
 
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return array<string, mixed>
+     */
     public function build(array $item, string $locale): array
     {
+        if(array_key_exists('align', $item)){
+            unset($item['align']);
+        }
         return $item;
     }
 }

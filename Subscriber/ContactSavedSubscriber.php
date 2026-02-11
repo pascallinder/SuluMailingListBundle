@@ -17,7 +17,7 @@ readonly class ContactSavedSubscriber implements EventSubscriberInterface
             DynamicFormSavedContactEvent::class => "contactSavedThroughDynamicForm",
         ];
     }
-    public function contactSavedThroughDynamicForm(DynamicFormSavedContactEvent $event){
+    public function contactSavedThroughDynamicForm(DynamicFormSavedContactEvent $event): void{
         $this->subscriptionService->handleSavedContact($event->getContact(),$event->getContactData(), $event->getLocale());
     }
 }

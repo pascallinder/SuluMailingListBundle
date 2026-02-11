@@ -1,0 +1,15 @@
+{% block icon %}
+    {% if item.icon is defined and item.icon and iconsPath is defined and iconsPath %}
+        <img
+            {% if item.iconColor is not defined or item.iconColor == null or item.iconColor == 'inherit' %}
+                src="{{ iconsPath }}{{ item.icon }}.png"
+            {% else %}
+                src="{{ iconsPath}}{{ item.icon }}-{{ item.iconColor |url_encode}}.png"
+            {% endif %}
+            width="{{ item.iconSize|default(24) }}px"
+            height="{{ item.iconSize|default(24) }}px"
+            style="display:block; height: 100%; padding-right: 10px"
+            alt="{{ item.icon }}-icon"
+        />
+    {% endif %}
+{% endblock %}

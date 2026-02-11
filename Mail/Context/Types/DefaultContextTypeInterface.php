@@ -14,6 +14,11 @@ class DefaultContextTypeInterface implements MailContextTypeInterface
         );
     }
 
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return array<string, mixed>
+     */
     public function build(array $item, string $locale): array
     {
         return $item;

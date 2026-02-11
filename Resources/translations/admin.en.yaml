@@ -38,7 +38,16 @@ mailingListMail:
         mailingLists: Affected mailing lists
         contacts: Affected subscribers
         contactsInfo: If no subscribers are selected, the email will be sent to all subscribers in the mailing list
+        contextSelection: Mail type
+        contexts:
+            default:
+                label: Default
+        global:
+            position:
+                left: Left
+                right: Right
         content:
+            label: Content
             components: Components
             columnOne: First column
             columnTwo: Second column
@@ -56,6 +65,7 @@ mailingListMail:
                 height: Height
                 backgroundImageHeight: Background image height
             global:
+                url: URL
                 verticalAlign:
                     label: Vertical alignment
                     middle: Middle
@@ -76,11 +86,27 @@ mailingListMail:
                     label: Font size
                 fontLineHeight:
                     label: Line height
+                padding:
+                    label: Padding
+                    info: Values are in pixels (top, right, bottom, left)
+                mode:
+                    label: Layout mode
+                    horizontal: Horizontal
+                    vertical: Vertical
+                icon:
+                    label: Icon
+                    color: Icon color
+                    size: Icon size
+                position:
+                    label: Position
+                    right: Right
+                    left: Left
             spacer:
                 label: Spacer
                 height: Height
             divider:
                 label: Divider
+                color: Color
                 borderStyle:
                     label: Style
                     solid: Solid
@@ -113,6 +139,38 @@ mailingListMail:
                 label: Subscription confirmation button
                 buttonLabel: Button text
                 backgroundColor: Button background color
+            social:
+                label: Social elements
+                iconSize: Icon size
+                element:
+                    name: Social network
+                    elementLabel: Label
+                    label: Elements
+                    facebook: Facebook (share)
+                    facebookNoShare: Facebook (link only)
+                    twitter: Twitter (share)
+                    twitterNoShare: Twitter (link only)
+                    x: X (share)
+                    xNoShare: X (link only)
+                    google: Google (share)
+                    googleNoShare: Google (link only)
+                    pinterest: Pinterest (share)
+                    pinterestNoShare: Pinterest (link only)
+                    linkedin: LinkedIn (share)
+                    linkedinNoShare: LinkedIn (link only)
+                    tumblr: Tumblr (share)
+                    tumblrNoShare: Tumblr (link only)
+                    xing: XING (share)
+                    xingNoShare: XING (link only)
+                    github: GitHub
+                    instagram: Instagram
+                    web: Website
+                    snapchat: Snapchat
+                    youtube: YouTube
+                    vimeo: Vimeo
+                    medium: Medium
+                    soundcloud: SoundCloud
+                    dribbble: Dribbble
 
 sulu_activity:
     resource:

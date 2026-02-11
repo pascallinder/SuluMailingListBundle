@@ -16,6 +16,11 @@ readonly class DividerMailFieldType implements MailFieldTypeInterface
         ))->setPriority(40);
     }
 
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return array<string, mixed>
+     */
     public function build(array $item, string $locale): array
     {
         return $item;

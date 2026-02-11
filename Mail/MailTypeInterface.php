@@ -12,5 +12,10 @@ interface MailTypeInterface
      */
     public function getConfiguration(): MailMetadataXmlConfiguration;
 
-    public function build(array $item, string $locale):array;
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return array<string, mixed>
+     */
+    public function build(array $item, string $locale): array;
 }

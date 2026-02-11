@@ -26,7 +26,7 @@ class NewsletterMailSentEvent extends DomainEvent
 
     public function getResourceId(): string
     {
-        return $this->newsletterMail->getId();
+        return (string) $this->newsletterMail->getId();
     }
     public function getResourceTitle(): ?string
     {

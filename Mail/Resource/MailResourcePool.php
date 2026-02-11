@@ -9,6 +9,9 @@ class MailResourcePool implements MailPoolInterface
 {
     /** @var MailResourceInterface[] $resources */
     private array $resources;
+    /**
+     * @param iterable<MailResourceInterface> $resources
+     */
     public function __construct(
 
         #[AutowireIterator('mailing.resource')]

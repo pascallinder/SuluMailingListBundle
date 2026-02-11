@@ -22,6 +22,9 @@
     <xi:include href="../props/color.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>
+    <xi:include href="../props/icon.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
     <xi:include href="../props/background-color.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>

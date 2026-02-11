@@ -5,12 +5,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
+use Linderp\SuluMailingListBundle\Entity\MailTranslation;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Repository\Newsletter\NewsletterRepository;
 
 #[ORM\Entity(repositoryClass: NewsletterRepository::class)]
 class NewsletterDoubleOpt extends MailTranslatable
 {
+    /**
+     * @var Collection<string, MailTranslation>
+     */
     #[ORM\OneToMany(mappedBy: 'newsletterDoubleOpt', targetEntity: NewsletterDoubleOptTranslation::class, cascade: ['persist'], fetch: 'EAGER', indexBy: 'locale')]
     protected Collection $translations;
 
@@ -46,17 +50,23 @@ class NewsletterDoubleOpt extends MailTranslatable
         return $translation;
     }
 
+    /**
+     * @return Collection<string, MailTranslation>
+     */
     public function getTranslations(): Collection
     {
         return $this->translations;
     }
 
+    /**
+     * @param Collection<string, MailTranslation> $translations
+     */
     public function setTranslations(Collection $translations): void
     {
        $this->translations = $translations;
     }
 
-    public function copy(): static
+    public function copy(): self
     {
         $dest = new self();
         $dest->applyFrom($this);

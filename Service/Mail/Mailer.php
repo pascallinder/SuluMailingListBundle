@@ -18,6 +18,7 @@ readonly class Mailer
 
     /**
      * @throws InvalidArgumentException
+     * @param array<string, mixed> $additionalData
      */
     public function prepareMail(MailTranslatable $newsletterMail, NewsletterSubscription $subscription,
                                 array $additionalData = []): Email

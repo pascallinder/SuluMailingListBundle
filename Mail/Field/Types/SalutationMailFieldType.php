@@ -20,9 +20,14 @@ readonly class SalutationMailFieldType implements MailFieldTypeInterface
         ))->setPriority(10);
     }
 
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return array<string, mixed>
+     */
     public function build(array $item, string $locale): array
     {
-        return [ ...$item,
-            "prefix"=> $this->salutationPrefixSelect->getValue($item['prefix'],$locale)];
+        $item['prefix'] = $this->salutationPrefixSelect->getValue($item['prefix'],$locale);
+        return $item;
     }
 }

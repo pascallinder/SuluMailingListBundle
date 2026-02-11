@@ -4,12 +4,11 @@ namespace Linderp\SuluMailingListBundle\Repository\NewsletterDoubleOpt;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Linderp\SuluBaseBundle\Repository\LocaleRepositoryUtil;
 use Linderp\SuluMailingListBundle\Entity\NewsletterDoubleOpt\NewsletterDoubleOpt;
 use Linderp\SuluMailingListBundle\Repository\MailTranslatableRepository;
 
 /**
- * @extends LocaleRepositoryUtil<NewsletterDoubleOpt>
+ * @extends MailTranslatableRepository<NewsletterDoubleOpt>
  */
 class NewsletterDoubleOptRepository extends MailTranslatableRepository
 {
@@ -18,9 +17,9 @@ class NewsletterDoubleOptRepository extends MailTranslatableRepository
         parent::__construct($registry, NewsletterDoubleOpt::class);
     }
     /**
-     * @param array $options
+     * @param array<string, mixed> $options
      *
-     * @return string[]
+     * @return array<string, mixed>
      */
     protected function append(QueryBuilder $queryBuilder, string $alias, string $locale, $options = []): array
     {

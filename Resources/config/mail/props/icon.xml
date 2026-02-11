@@ -1,0 +1,28 @@
+
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:xi="http://www.w3.org/2001/XInclude"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+    <property name="icon" type="fa_icon_picker" multilingual="false" colspan="6">
+        <meta>
+            <title>mailingListMail.props.content.global.icon.label</title>
+        </meta>
+    </property>
+    <property name="iconSize" type="range_picker" mandatory="true" disabledCondition="__parent.icon == null" colspan="6">
+        <meta>
+            <title>mailingListMail.props.content.global.icon.size</title>
+        </meta>
+        <params>
+            <param name="min" value="1"/>
+            <param name="max" value="100"/>
+            <param name="step" value="1"/>
+            <param name="default" value="24" />
+        </params>
+    </property>
+
+    <property name="iconColor" type="color_picker_custom" multilingual="false" disabledCondition="__parent.icon == null">
+        <meta>
+            <title>mailingListMail.props.content.global.icon.color</title>
+        </meta>
+    </property>
+</properties>

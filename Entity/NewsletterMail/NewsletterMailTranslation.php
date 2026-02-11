@@ -36,7 +36,7 @@ class NewsletterMailTranslation extends MailTranslation implements AuditableInte
         return $this->locale;
     }
 
-    public function copyTo(string $destLocale): static
+    public function copyTo(string $destLocale): self
     {
         $dest = new self($this->getNewsletterMail(), $destLocale);
         $dest->applyFrom($this);

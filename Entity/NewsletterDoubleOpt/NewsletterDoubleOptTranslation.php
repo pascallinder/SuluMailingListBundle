@@ -27,7 +27,7 @@ class NewsletterDoubleOptTranslation extends MailTranslation implements Auditabl
     {
         return $this->newsletterDoubleOpt;
     }
-    public function copyTo(string $destLocale): static
+    public function copyTo(string $destLocale): self
     {
         $dest = new self($this->getNewsletterDoubleOpt(), $destLocale);
         $dest->applyFrom($this);

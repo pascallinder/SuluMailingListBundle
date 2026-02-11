@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * @extends BaseController<NewsletterSubscription>
+ */
 class NewsletterSubscriptionController extends BaseController
 {
 
@@ -71,11 +74,17 @@ class NewsletterSubscriptionController extends BaseController
 
         return $this->json($listRepresentation->toArray());
     }
+    /**
+     * @return array<string, mixed>
+     */
     protected function getDataForEntity($entity, Request $request): array
     {
         return ["test" => "test"];
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     protected function mapDataToEntity(array $data, $entity, Request $request): void{}
 
 
@@ -85,7 +94,10 @@ class NewsletterSubscriptionController extends BaseController
         $newsletterSubscription =  $this->newsletterSubscriptionRepository->find($id);
         return $newsletterSubscription;
     }
-    protected function create(Request $request): void{}
+    protected function create(Request $request): NewsletterSubscription
+    {
+        throw new \LogicException('Creating newsletter subscriptions via this endpoint is not supported.');
+    }
 
     protected function save($entity): void{
         $this->newsletterSubscriptionRepository->save($entity);
@@ -99,7 +111,7 @@ class NewsletterSubscriptionController extends BaseController
      * @param NewsletterSubscription $entity
      * @throws \Exception
      */
-    protected function triggerSwitch(Request $request, string $action, $entity){
+    protected function triggerSwitch(Request $request, string $action, $entity): void{
         $entity->getNewsletter()->setLocale($request->getLocale());
         switch ($action) {
             case 'unsubscribe':

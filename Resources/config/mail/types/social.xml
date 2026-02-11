@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<properties xmlns="http://schemas.sulu.io/template/template"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:xi="http://www.w3.org/2001/XInclude"
+            xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/properties-1.0.xsd">
+
+    <property name="elements" type="block" minOccurs="1">
+        <meta>
+            <title>mailingListMail.props.content.social.element.label</title>
+        </meta>
+        <types>
+
+            <type name="element">
+                <properties>
+                    <xi:include href="../props/social-element-name.xml"
+                                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+                    <xi:include href="../props/url.xml"
+                                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+                    <property name="label" type="text_line">
+                        <meta>
+                            <title>mailingListMail.props.content.social.element.elementLabel</title>
+                        </meta>
+                    </property>
+                    <xi:include href="../props/position.xml"
+                                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+
+                    <xi:include href="../props/background-color.xml"
+                                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+
+                </properties>
+            </type>
+        </types>
+    </property>
+    <xi:include href="../props/mode.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+    <xi:include href="../props/align.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+    <property name="iconSize" type="range_picker">
+        <meta>
+            <title>mailingListMail.props.content.social.iconSize</title>
+        </meta>
+        <params>
+            <param name="min" value="0"/>
+            <param name="max" value="100"/>
+            <param name="step" value="1"/>
+            <param name="default" value="16" />
+        </params>
+    </property>
+    <xi:include href="../grouped-props/text-props.xml"
+                xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
+                      xpointer(/sulu:properties/sulu:property)"/>
+</properties>

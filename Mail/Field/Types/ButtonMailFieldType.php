@@ -4,6 +4,7 @@ namespace Linderp\SuluMailingListBundle\Mail\Field\Types;
 
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeConfiguration;
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeInterface;
+use Linderp\SuluMailingListBundle\Service\Helper\PageUrlProvider;
 use Sulu\Bundle\PageBundle\Document\PageDocument;
 use Sulu\Component\DocumentManager\DocumentManagerInterface;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
@@ -12,9 +13,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 readonly class ButtonMailFieldType implements MailFieldTypeInterface
 {
-    public function __construct(private WebspaceManagerInterface $webspaceManager,
-                                 #[Autowire('@sulu_document_manager.document_manager')]
-                                 private DocumentManagerInterface $documentManager){
+    public function __construct(private PageUrlProvider $pageUrlProvider){
 
     }
     public function getConfiguration(): MailFieldTypeConfiguration
@@ -29,20 +28,14 @@ readonly class ButtonMailFieldType implements MailFieldTypeInterface
     /**
      * @throws DocumentManagerException
      */
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return array<string, mixed>
+     */
     public function build(array $item, string $locale): array
     {
-        if (!array_key_exists('url', $item)) {
-            return [ ...$item, 'url' => null];
-        }
-        if($item['url']['provider'] === 'page'){
-            $uuid = $item['url']['href'];
-            /** @var PageDocument $document */
-            $document = $this->documentManager->find($uuid, $locale);
-            $url = $this->webspaceManager->findUrlByResourceLocator($document->getResourceSegment(), null,$locale);
-            return [ ...$item, 'url' => $url];
-        }
-        else{
-            return [ ...$item, 'url' => $item['url']['href']];
-        }
+        $item['url'] = $this->pageUrlProvider->getUrl($item, $locale);
+        return $item;
     }
 }

@@ -7,6 +7,9 @@ use Sulu\Bundle\RouteBundle\Routing\Defaults\RouteDefaultsProviderInterface;
 
 class NewsletterMailRouteDefaultsProvider implements RouteDefaultsProviderInterface
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function getByEntity($entityClass, $id, $locale, $object = null): array
     {
 

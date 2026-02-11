@@ -15,14 +15,13 @@ abstract class MailTranslatable
     use LocaleTrait;
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     protected ?string $context = null;
+    /**
+     * @var array<string, mixed>|null
+     */
     #[ORM\Column(type: Types::JSON, nullable: true)]
     protected ?array $contextVars = null;
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     protected string $senderMail;
-
-    /**
-     * @return Collection<MailTranslation>
-     */
 
     public function hasTranslation(string $locale):bool{
         return $this->getTranslations()->containsKey($locale);
@@ -35,8 +34,11 @@ abstract class MailTranslatable
         return $this->getTranslations()->get($locale);
     }
 
-    protected abstract function createTranslation(string $locale);
+    protected abstract function createTranslation(string $locale): MailTranslation;
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getContent(?string $locale = null): ?array
     {
         $translation = $this->getTranslation($locale ?? $this->locale);
@@ -46,6 +48,9 @@ abstract class MailTranslatable
         return $translation->getContent();
     }
 
+    /**
+     * @param array<string, mixed>|null $content
+     */
     public function setContent(?array $content): self
     {
         $translation = $this->getTranslation($this->locale);
@@ -75,14 +80,14 @@ abstract class MailTranslatable
         return $this;
     }
     /**
-     * @param Collection<MailTranslation> $translations
+     * @param Collection<string, MailTranslation> $translations
      */
     public abstract function setTranslations(Collection $translations): void;
 
     /**
-     * @return Collection<MailTranslation>
+     * @return Collection<string, MailTranslation>
      */
-    public abstract function getTranslations():Collection;
+    public abstract function getTranslations(): Collection;
 
 
     /**
@@ -111,11 +116,17 @@ abstract class MailTranslatable
         $this->context = $context;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getContextVars(): ?array
     {
         return $this->contextVars;
     }
 
+    /**
+     * @param array<string, mixed>|null $contextVars
+     */
     public function setContextVars(?array $contextVars): void
     {
         $this->contextVars = $contextVars;
@@ -129,5 +140,5 @@ abstract class MailTranslatable
         }
     }
     protected abstract function getTranslationClass(): string;
-    public abstract function copy(): static;
+    public abstract function copy(): self;
 }

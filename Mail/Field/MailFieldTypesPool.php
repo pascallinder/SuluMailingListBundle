@@ -10,6 +10,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
  */
 class MailFieldTypesPool extends BaseMailTypesPool
 {
+    /**
+     * @param iterable<MailFieldTypeInterface> $handlers
+     */
     public function __construct(
 
         #[AutowireIterator('mailing.field-type')]

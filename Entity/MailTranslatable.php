@@ -134,6 +134,8 @@ abstract class MailTranslatable
     public function applyFrom(self $source): void
     {
         $this->setSenderMail($source->getSenderMail());
+        $this->setContext($source->getContext());
+        $this->setContextVars($source->getContextVars());
         foreach ($source->getTranslations() as $translation) {
             $copy= $this->createTranslation($translation->getLocale());
             $copy->applyFrom($translation);

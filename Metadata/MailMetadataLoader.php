@@ -121,15 +121,19 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
                     ));
                     $content->setType('block');
                     $content->setRequired(true);
-
+                    $first = null;
                     foreach ($this->sortedMailWrapperTypes as $wrapperType) {
-                        $content->addType(
-                            $this->createWrappersMetadata($wrapperType, $locale, $resource, $contextType)
-                        );
+                        if(empty($wrapperType->getConfiguration()->getAcceptedContexts())  ||
+                            in_array($contextType->getConfiguration()->getKey(), $wrapperType->getConfiguration()->getAcceptedContexts())) {
+                            $content->addType(
+                                $this->createWrappersMetadata($wrapperType, $locale, $resource, $contextType)
+                            );
+                            if($first === null){
+                                $first = $wrapperType->getConfiguration()->getKey();
+                            }
+                        }
                     }
-
-                    $defaultWrapperKey = $this->sortedMailWrapperTypes[0]->getConfiguration()->getKey();
-                    $content->setDefaultType($defaultWrapperKey);
+                    $content->setDefaultType($first);
                     $content->setDisabledCondition('sent');
                     $content->setMinOccurs(1);
                     $content->setVisibleCondition($visibleContext);

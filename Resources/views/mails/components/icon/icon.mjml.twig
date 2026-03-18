@@ -6,9 +6,9 @@
             {% else %}
                 src="{{ iconsPath}}{{ item.icon }}-{{ item.iconColor |url_encode}}.png"
             {% endif %}
-            width="{{ item.iconSize|default(24) }}px"
-            height="{{ item.iconSize|default(24) }}px"
-            style="display:block; width: {{ item.iconSize|default(24) }}px; height: {{ item.iconSize|default(24) }}px; padding-right: 10px;"
+            width="{{ item.iconSize|default(34) }}px"
+            height="{{ item.iconSize |default(34) }}px"
+            style="display:block; width: {{ item.iconSize|default(34) }}px; height: auto; padding-right: 10px;"
             alt="{{ item.icon }}-icon"
         />
     {% endif %}

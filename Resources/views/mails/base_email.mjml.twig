@@ -7,6 +7,16 @@
         {% set defaultFont = fonts|filter(f => f.defaultFont)|first %}
         {% block css %}
             <mj-style>
+                body,
+                table,
+                td,
+                div,
+                p,
+                a {
+                    -webkit-text-size-adjust: 100%;
+                    -ms-text-size-adjust: 100%;
+                    text-size-adjust: 100%;
+                }
                 .mjml-text-container *{
                     text-align: inherit;
                 }

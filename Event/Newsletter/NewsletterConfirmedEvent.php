@@ -26,11 +26,19 @@ class NewsletterConfirmedEvent extends DomainEvent
     {
         return (string) $this->newsletterSubscription->getId();
     }
+
     public function getResourceTitle(): ?string
     {
-        return $this->newsletterSubscription->getContact()->getFirstName() . " NewsletterConfirmedEvent.php" .$this->newsletterSubscription->getContact()->getLastName()
-            . ' ('. $this->newsletterSubscription->getContact()->getMainEmail(). ')'
-            . ' - ' . $this->newsletterSubscription->getNewsletter()->getTitle();
+        $contact = $this->newsletterSubscription->getContact();
+        $newsletterTitle = $this->newsletterSubscription->getNewsletter()->getTitle($this->newsletterSubscription->getLocale());
+
+        return trim(sprintf(
+            '%s %s (%s) - %s',
+            $contact->getFirstName() ?? '',
+            $contact->getLastName() ?? '',
+            $contact->getMainEmail(),
+            $newsletterTitle ?? ''
+        ));
     }
 
     /**

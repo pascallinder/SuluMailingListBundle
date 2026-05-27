@@ -14,7 +14,7 @@
     <xi:include href="../props/align.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>
-    <property name="buttonBackgroundColor" type="color_picker_custom" multilingual="false">
+    <property name="buttonBackgroundColor" type="color_picker_simple" multilingual="false">
         <meta>
             <title>mailingListMail.props.content.button.backgroundColor</title>
         </meta>

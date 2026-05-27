@@ -3,7 +3,7 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns:xi="http://www.w3.org/2001/XInclude"
             xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/properties-1.0.xsd">
-    <property name="color" type="color_picker_custom" multilingual="false" mandatory="true">
+    <property name="color" type="color_picker_simple" multilingual="false" mandatory="true">
         <meta>
             <title>mailingListMail.props.content.divider.color</title>
         </meta>

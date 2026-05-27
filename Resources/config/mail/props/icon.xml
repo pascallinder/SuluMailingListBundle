@@ -20,7 +20,7 @@
         </params>
     </property>
 
-    <property name="iconColor" type="color_picker_custom" multilingual="false" disabledCondition="__parent.icon == null">
+    <property name="iconColor" type="color_picker_simple" multilingual="false" disabledCondition="__parent.icon == null">
         <meta>
             <title>mailingListMail.props.content.global.icon.color</title>
         </meta>

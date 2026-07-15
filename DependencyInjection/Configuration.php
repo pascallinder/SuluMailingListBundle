@@ -35,6 +35,7 @@ class Configuration implements ConfigurationInterface
                             ->useAttributeAsKey('name')
                             ->scalarPrototype()->end()
                         ->end()
+                        ->scalarNode('font_images_path')->defaultValue('')->end()
                         ->scalarNode('icons_path')
                         ->end()
                 ->end()

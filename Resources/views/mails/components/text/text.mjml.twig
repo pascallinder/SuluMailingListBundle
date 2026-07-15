@@ -1,31 +1,42 @@
 {% block salutation %}
 
+    {% set item = mail_text_item(item) %}
     {% if item.value is defined %}
-        <mj-table width="100%" cellpadding="0" cellspacing="6px" role="presentation"
-                  font-size="{{ item.fontSize|default }}px" line-height="{{ item.fontLineHeight|default }}"
-                  padding="{{ item.padding|default }}"
-                  font-family="{{ item.fontFamily |default}}" container-background-color="{{ item.backgroundColor|default }}">
-            <tr>
-                {% if item.icon is defined and item.icon %}
-                <td width="{{ item.iconSize|default(24) }}px" style="vertical-align:middle;">
-                    {% include '@SuluMailingList/mails/components/icon/icon.mjml.twig' with {
-                        item:{
-                            ...item,
-                            iconColor: ((item.iconColor|default) == 'inherit' or (item.iconColor|default) == null)
-                            ? (item.color|default) : (item.iconColor|default)
-                        }
-                    }%}
-                </td>
-                {% endif %}
-                <td style="vertical-align:middle; color: {{ item.color|default }}">
-                    <div class="mjml-text-container"
-                         style="line-height: {{ item.fontLineHeight|default }};
-                                 text-align: {{ item.align|default }}
-                                 ">
-                    {{ item.value | raw }}
-                    </div>
-                </td>
-            </tr>
-        </mj-table>
+        {% if item.image is defined and item.image %}
+            <mj-image alt="{{ item.value|striptags|trim }}"
+                      padding="{{ item.padding|default }}"
+                      width="{{ item.imageWidth|default(600) }}px"
+                      src="{{ item.image }}"
+                      align="{{ item.align|default('left') }}"
+                      container-background-color="{{ item.backgroundColor|default }}"
+            />
+        {% else %}
+            <mj-table width="100%" cellpadding="0" cellspacing="6px" role="presentation"
+                      font-size="{{ item.fontSize|default }}px" line-height="{{ item.fontLineHeight|default }}"
+                      padding="{{ item.padding|default }}"
+                      font-family="{{ item.fontFamily |default}}" container-background-color="{{ item.backgroundColor|default }}">
+                <tr>
+                    {% if item.icon is defined and item.icon %}
+                    <td width="{{ item.iconSize|default(24) }}px" style="vertical-align:middle;">
+                        {% include '@SuluMailingList/mails/components/icon/icon.mjml.twig' with {
+                            item:{
+                                ...item,
+                                iconColor: ((item.iconColor|default) == 'inherit' or (item.iconColor|default) == null)
+                                ? (item.color|default) : (item.iconColor|default)
+                            }
+                        }%}
+                    </td>
+                    {% endif %}
+                    <td style="vertical-align:middle; color: {{ item.color|default }}">
+                        <div class="mjml-text-container"
+                             style="line-height: {{ item.fontLineHeight|default }};
+                                     text-align: {{ item.align|default }}
+                                     ">
+                        {{ item.value | raw }}
+                        </div>
+                    </td>
+                </tr>
+            </mj-table>
+        {% endif %}
     {% endif %}
 {% endblock %}

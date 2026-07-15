@@ -37,6 +37,10 @@ class SuluMailingListExtension extends Extension implements PrependExtensionInte
             $config['mjml']['socials']
         );
         $container->setParameter(
+            'sulu_mailing_list.mjml.font_images_path',
+            $config['mjml']['font_images_path']
+        );
+        $container->setParameter(
             'sulu_mailing_list.mjml.icons_path',
             $config['mjml']['icons_path']
         );

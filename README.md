@@ -54,6 +54,7 @@ sulu_mailing_list:
     app_id: <api-id>
     secret_key: <secret-key>
     caching: true
+    font_images_path: '%kernel.project_dir%/public/mails/fonts'
     socials:
       facebook:
       facebookNoShare:
@@ -246,14 +247,30 @@ class MomoMailFont implements MailFontInterface
         return new MailFontConfiguration(
             '<url to momo.css>', // css file in /public
             'Momo Trust Sans',
-            'Momo Trust Sans, sans-serif',
-            true
+            'Momo Trust Sans, sans-serif'
         );
     }
 }
 ```
 
-Either provide the CSS yourself or use a service like Google Fonts. Example CSS:
+To render a selected font as a PNG for clients with limited webfont support,
+enable it explicitly. The font file referenced by the CSS URL is rasterized by
+the server-side Imagick extension, and the image is written below the configured
+public path:
+
+```php
+return (new MailFontConfiguration(
+    '<url to momo.css>',
+    'Momo Trust Sans',
+    'Momo Trust Sans, sans-serif'
+))->setWebFont(true);
+```
+
+This should be reserved for short decorative text. Live text remains the default
+because it is accessible and remains available when images are blocked.
+
+Provide the CSS and referenced font files locally below `public`. The renderer
+does not fetch remote CSS or font files during mail rendering. Example CSS:
 
 ```css
 @font-face {

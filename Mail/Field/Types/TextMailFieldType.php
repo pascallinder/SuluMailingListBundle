@@ -4,11 +4,13 @@ namespace Linderp\SuluMailingListBundle\Mail\Field\Types;
 
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeConfiguration;
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeInterface;
+use Linderp\SuluMailingListBundle\Service\Mail\MailFontImageRenderer;
 
 readonly class TextMailFieldType implements MailFieldTypeInterface
 {
-    public function __construct(){
-
+    public function __construct(
+        private MailFontImageRenderer $mailFontImageRenderer,
+    ) {
     }
     public function getConfiguration(): MailFieldTypeConfiguration
     {
@@ -26,9 +28,10 @@ readonly class TextMailFieldType implements MailFieldTypeInterface
      */
     public function build(array $item, string $locale): array
     {
-        if(array_key_exists('align', $item)){
+        if (!isset($item['image']) && array_key_exists('align', $item)) {
             unset($item['align']);
         }
+
         return $item;
     }
 }

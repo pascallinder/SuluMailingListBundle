@@ -5,6 +5,7 @@ namespace Linderp\SuluMailingListBundle\Mail\Font;
 class MailFontConfiguration
 {
     private bool $defaultFont = false;
+    private bool $webFont = false;
     public function __construct(private readonly string $cssUrl,
                                 private readonly string $name,
                                 private readonly string $fontFamily)
@@ -32,6 +33,17 @@ class MailFontConfiguration
     }
     public function setDefaultFont(bool $defaultFont): static{
         $this->defaultFont = $defaultFont;
+        return $this;
+    }
+
+    public function isWebFont(): bool
+    {
+        return $this->webFont;
+    }
+
+    public function setWebFont(bool $webFont): static
+    {
+        $this->webFont = $webFont;
         return $this;
     }
 }

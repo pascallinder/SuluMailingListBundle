@@ -1,6 +1,10 @@
 {% block salutation %}
 
-    {% set item = mail_text_item(item) %}
+    {% set textBackgroundColor = item.backgroundColor|default(null) %}
+    {% if textBackgroundColor is empty or textBackgroundColor == 'inherit' %}
+        {% set textBackgroundColor = wrapper.backgroundColor|default(backgroundColor|default(null)) %}
+    {% endif %}
+    {% set item = mail_text_item(item|merge({backgroundColor: textBackgroundColor})) %}
     {% if item.value is defined %}
         {% if item.image is defined and item.image %}
             <mj-image alt="{{ item.value|striptags|trim }}"
@@ -8,7 +12,6 @@
                       width="{{ item.imageWidth|default(600) }}px"
                       src="{{ item.image }}"
                       align="{{ item.align|default('left') }}"
-                      container-background-color="{{ item.backgroundColor|default }}"
             />
         {% else %}
             <mj-table width="100%" cellpadding="0" cellspacing="6px" role="presentation"

@@ -100,14 +100,16 @@ class MailFontImageRenderer
         }
 
         $hash = hash('sha256', json_encode([
-            'imagick-v1',
+            'imagick-v2',
             $text,
             $font->getCssUrl(),
             $font->getFontFamily(),
             $fontSize,
             $lineHeight,
             $item['color'] ?? null,
+            $item['backgroundColor'] ?? null,
             $item['align'] ?? null,
+            $font->getStrokeWidth(),
         ], JSON_THROW_ON_ERROR));
         $filename = $hash . '.png';
         $filePath = $imagePath . '/' . $filename;
@@ -165,6 +167,12 @@ class MailFontImageRenderer
         $draw->setFont($fontFilePath);
         $draw->setFontSize($fontSize);
         $draw->setFillColor($this->getTextColor($item['color'] ?? null));
+        $backgroundColor = $this->getBackgroundColor($item['backgroundColor'] ?? null);
+        $strokeWidth = $font->getStrokeWidth();
+        $draw->setStrokeWidth(0);
+        if ($backgroundColor !== null && $strokeWidth > 0) {
+            $draw->setStrokeColor($backgroundColor);
+        }
         $draw->setTextAntialias(true);
 
         try {
@@ -192,7 +200,15 @@ class MailFontImageRenderer
                     'right' => $width - $lineWidth - $padding,
                     default => $padding,
                 };
-                $canvas->annotateImage($draw, $x, $padding + $fontSize + ($index * $lineHeightInPixels), 0, $line);
+                $y = $padding + $fontSize + ($index * $lineHeightInPixels);
+
+                if ($backgroundColor !== null && $strokeWidth > 0) {
+                    $draw->setStrokeWidth($strokeWidth * $scale);
+                    $canvas->annotateImage($draw, $x, $y, 0, $line);
+                }
+
+                $draw->setStrokeWidth(0);
+                $canvas->annotateImage($draw, $x, $y, 0, $line);
             }
 
             if (!$canvas->writeImage($filePath)) {
@@ -312,6 +328,16 @@ class MailFontImageRenderer
     private function getTextColor(mixed $color): string
     {
         return is_string($color) && preg_match('/^#[0-9a-f]{3,8}$/i', $color) ? $color : '#000000';
+    }
+
+    private function getBackgroundColor(mixed $color): ?string
+    {
+        if (!is_string($color) || strcasecmp($color, 'inherit') === 0 ||
+            !preg_match('/^#?([0-9a-f]{3,8})$/i', $color, $matches)) {
+            return null;
+        }
+
+        return '#' . $matches[1];
     }
 
     private function getPublicDirectory(): string

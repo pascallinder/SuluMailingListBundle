@@ -263,8 +263,13 @@ return (new MailFontConfiguration(
     '<url to momo.css>',
     'Momo Trust Sans',
     'Momo Trust Sans, sans-serif'
-))->setWebFont(true);
+))->setWebFont(true)->setStrokeWidth(1);
 ```
+
+The optional stroke width is measured in output pixels and is configured per
+font. It defaults to `0`, so a webfont only receives a background-colored text
+outline when `setStrokeWidth()` is enabled. The outline is rendered underneath
+the text, so it remains outside the glyphs and does not reduce their fill.
 
 This should be reserved for short decorative text. Live text remains the default
 because it is accessible and remains available when images are blocked.

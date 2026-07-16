@@ -36,6 +36,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarPrototype()->end()
                         ->end()
                         ->scalarNode('font_images_path')->defaultValue('')->end()
+                        ->scalarNode('default_background_color')->defaultValue('#FFFFFF')->cannotBeEmpty()->end()
                         ->scalarNode('icons_path')
                         ->end()
                 ->end()

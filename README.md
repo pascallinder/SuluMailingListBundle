@@ -55,6 +55,7 @@ sulu_mailing_list:
     secret_key: <secret-key>
     caching: true
     font_images_path: '%kernel.project_dir%/public/mails/fonts'
+    default_background_color: '#FFFFFF'
     socials:
       facebook:
       facebookNoShare:
@@ -268,8 +269,10 @@ return (new MailFontConfiguration(
 
 The optional stroke width is measured in output pixels and is configured per
 font. It defaults to `0`, so a webfont only receives a background-colored text
-outline when `setStrokeWidth()` is enabled. The outline is rendered underneath
-the text, so it remains outside the glyphs and does not reduce their fill.
+outline when `setStrokeWidth()` is enabled. The outline is centered on the
+glyph edge. The default background color used for `inherit` or missing
+backgrounds can be configured with `mjml.default_background_color` and
+defaults to `#FFFFFF`.
 
 This should be reserved for short decorative text. Live text remains the default
 because it is accessible and remains available when images are blocked.

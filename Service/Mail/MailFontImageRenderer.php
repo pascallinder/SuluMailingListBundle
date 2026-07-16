@@ -12,12 +12,15 @@ class MailFontImageRenderer
     private const RENDER_SCALE = 2;
     private const MAX_IMAGE_WIDTH = 600;
     private const IMAGE_PADDING = 4;
+    private const FALLBACK_BACKGROUND_COLOR = '#FFFFFF';
     private const PADDING_SIDES = 2;
     private const LINE_HEIGHT_PADDING = 4;
 
     public function __construct(
         #[Autowire('%sulu_mailing_list.mjml.font_images_path%')]
         private readonly string $imagePath,
+        #[Autowire('%sulu_mailing_list.mjml.default_background_color%')]
+        private readonly string $defaultBackgroundColor,
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
         private readonly RequestStack $requestStack,
@@ -32,10 +35,6 @@ class MailFontImageRenderer
      */
     public function renderTextItem(array $item): array
     {
-        if (isset($item['image'], $item['imageWidth'])) {
-            return $item;
-        }
-
         $item['align'] = $this->getTextAlignment($item);
 
         $fontFamily = $item['fontFamily'] ?? $this->mailFontPool->getDefaultValue();
@@ -99,17 +98,19 @@ class MailFontImageRenderer
             return null;
         }
 
+        $backgroundColor = $this->getBackgroundColor($item['backgroundColor'] ?? null)
+            ?? $this->getDefaultBackgroundColor();
         $hash = hash('sha256', json_encode([
-            'imagick-v2',
+            'imagick-v4-resolved-stroke-background',
             $text,
             $font->getCssUrl(),
             $font->getFontFamily(),
             $fontSize,
             $lineHeight,
             $item['color'] ?? null,
-            $item['backgroundColor'] ?? null,
+            $backgroundColor,
             $item['align'] ?? null,
-            $font->getStrokeWidth(),
+            'strokeWidth' => $font->getStrokeWidth(),
         ], JSON_THROW_ON_ERROR));
         $filename = $hash . '.png';
         $filePath = $imagePath . '/' . $filename;
@@ -167,11 +168,14 @@ class MailFontImageRenderer
         $draw->setFont($fontFilePath);
         $draw->setFontSize($fontSize);
         $draw->setFillColor($this->getTextColor($item['color'] ?? null));
-        $backgroundColor = $this->getBackgroundColor($item['backgroundColor'] ?? null);
+        $backgroundColor = $this->getBackgroundColor($item['backgroundColor'] ?? null)
+            ?? $this->getDefaultBackgroundColor();
         $strokeWidth = $font->getStrokeWidth();
-        $draw->setStrokeWidth(0);
         if ($backgroundColor !== null && $strokeWidth > 0) {
             $draw->setStrokeColor($backgroundColor);
+            $draw->setStrokeWidth($strokeWidth * $scale);
+        } else {
+            $draw->setStrokeWidth(0);
         }
         $draw->setTextAntialias(true);
 
@@ -201,13 +205,6 @@ class MailFontImageRenderer
                     default => $padding,
                 };
                 $y = $padding + $fontSize + ($index * $lineHeightInPixels);
-
-                if ($backgroundColor !== null && $strokeWidth > 0) {
-                    $draw->setStrokeWidth($strokeWidth * $scale);
-                    $canvas->annotateImage($draw, $x, $y, 0, $line);
-                }
-
-                $draw->setStrokeWidth(0);
                 $canvas->annotateImage($draw, $x, $y, 0, $line);
             }
 
@@ -338,6 +335,12 @@ class MailFontImageRenderer
         }
 
         return '#' . $matches[1];
+    }
+
+    private function getDefaultBackgroundColor(): string
+    {
+        return $this->getBackgroundColor($this->defaultBackgroundColor)
+            ?? self::FALLBACK_BACKGROUND_COLOR;
     }
 
     private function getPublicDirectory(): string

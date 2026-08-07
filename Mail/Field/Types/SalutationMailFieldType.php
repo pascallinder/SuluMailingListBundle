@@ -25,7 +25,9 @@ readonly class SalutationMailFieldType implements MailFieldTypeInterface
      */
     public function build(array $item, string $locale): array
     {
-        $item['prefix'] = $this->salutationPrefixSelect->getValue($item['prefix'], $locale);
+        $prefix = $item['prefix'] ?? $this->salutationPrefixSelect->getDefaultValue();
+        $item['prefix'] = $this->salutationPrefixSelect->getValue((int) $prefix, $locale);
+
         return $item;
     }
 }

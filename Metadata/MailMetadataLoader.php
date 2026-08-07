@@ -216,7 +216,9 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
         $wrapperForm->setTitle($this->translator->trans($configuration->getTitle(), [], 'admin', $locale), $locale);
         $properties = $this->propertiesXmlLoader->load($configuration->getXmlPath());
 
-        $wrapperForm->setItems($properties);
+        foreach ($properties as $property) {
+            $wrapperForm->addItem($property);
+        }
         $wrapperForm->setKey($mailWrapperType->getConfiguration()->getKey());
         foreach ($mailWrapperType->getConfiguration()->getContentKeys() as $label => $key) {
             $wrapperForm->addItem($this->createComponentsMetadata(
@@ -270,7 +272,9 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
         $configuration = $type->getConfiguration();
         $properties = $this->propertiesXmlLoader->load($configuration->getXmlPath());
 
-        $form->setItems($properties);
+        foreach ($properties as $property) {
+            $form->addItem($property);
+        }
         $form->setKey($typeKey);
         $form->setTitle($this->translator->trans($configuration->getTitle(), [], 'admin', $locale), $locale);
         return $form;

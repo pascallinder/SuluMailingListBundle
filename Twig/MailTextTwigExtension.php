@@ -8,9 +8,7 @@ use Twig\TwigFunction;
 
 class MailTextTwigExtension extends AbstractExtension
 {
-    public function __construct(private readonly MailFontImageRenderer $mailFontImageRenderer)
-    {
-    }
+    public function __construct(private readonly MailFontImageRenderer $mailFontImageRenderer) {}
 
     public function getFunctions(): array
     {

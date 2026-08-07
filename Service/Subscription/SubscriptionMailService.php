@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Service\Subscription;
+
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail;
 use Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription;
@@ -12,11 +13,11 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 readonly class SubscriptionMailService
 {
-    public function __construct(private Mailer                        $subscriptionMailer,
-                                private NewsletterUrlProvider         $unsubscribeUrlProvider,
-                                private DomainEventCollectorInterface $domainEventCollector){
-
-    }
+    public function __construct(
+        private Mailer                        $subscriptionMailer,
+        private NewsletterUrlProvider         $unsubscribeUrlProvider,
+        private DomainEventCollectorInterface $domainEventCollector
+    ) {}
 
     /**
      * @throws InvalidArgumentException
@@ -24,32 +25,35 @@ readonly class SubscriptionMailService
      */
     public function sendMailToSubscribers(NewsletterMail $newsletterMail): void
     {
-        if($newsletterMail->isSent()){
+        if ($newsletterMail->isSent()) {
             return;
         }
         /** @var NewsletterSubscription[] $subscriptions */
         $subscriptions = $newsletterMail->getNewsletters()
-            ->map(fn(Newsletter $newsletter)=> $newsletter->getNewsletterSubscriptions()->getValues())
-            ->reduce(fn(array $carry, array $subscriptions)=> [...$carry,...$subscriptions],[]);
-        if(count($newsletterMail->getContacts())){
-            $subscriptions = array_filter($subscriptions,function(NewsletterSubscription $subscription) use ($newsletterMail) {
+            ->map(fn(Newsletter $newsletter) => $newsletter->getNewsletterSubscriptions()->getValues())
+            ->reduce(fn(array $carry, array $subscriptions) => [...$carry,...$subscriptions], []);
+        if (count($newsletterMail->getContacts())) {
+            $subscriptions = array_filter($subscriptions, function (NewsletterSubscription $subscription) use ($newsletterMail) {
                 return $newsletterMail->getContacts()->contains($subscription->getContact());
             });
         }
         $map = [];
-        $subscriptions = array_filter($subscriptions,function(NewsletterSubscription $subscription) use (&$map){
-           if(!array_key_exists($subscription->getContact()->getId(), $map)){
-               $map[$subscription->getContact()->getId()]=true;
-               return true;
-           }
-           return false;
+        $subscriptions = array_filter($subscriptions, function (NewsletterSubscription $subscription) use (&$map) {
+            if (!array_key_exists($subscription->getContact()->getId(), $map)) {
+                $map[$subscription->getContact()->getId()] = true;
+                return true;
+            }
+            return false;
         });
         $mails = [];
-        foreach ($subscriptions as $subscription){
-            if($subscription->isConfirmed() && !$subscription->isUnsubscribed()){
+        foreach ($subscriptions as $subscription) {
+            if ($subscription->isConfirmed() && !$subscription->isUnsubscribed()) {
                 $this->domainEventCollector->collect(new NewsletterMailSentEvent($newsletterMail, $subscription));
-                $mails[] =$this->subscriptionMailer->prepareMail($newsletterMail, $subscription,
-                [ 'unsubscribeUrl' => $this->unsubscribeUrlProvider->getUnsubscribeUrl($subscription)]);
+                $mails[] = $this->subscriptionMailer->prepareMail(
+                    $newsletterMail,
+                    $subscription,
+                    [ 'unsubscribeUrl' => $this->unsubscribeUrlProvider->getUnsubscribeUrl($subscription)]
+                );
             }
         }
         $this->subscriptionMailer->sendMails(...$mails);
@@ -62,12 +66,15 @@ readonly class SubscriptionMailService
      */
     public function sendDoubleOptMailToSubscriber(NewsletterSubscription $subscription): void
     {
-        if($subscription->isConfirmed()) {
+        if ($subscription->isConfirmed()) {
             return;
         }
-        $mail = $this->subscriptionMailer->prepareMail($subscription->getNewsletter()->getNewsletterDoubleOpt(), $subscription,
+        $mail = $this->subscriptionMailer->prepareMail(
+            $subscription->getNewsletter()->getNewsletterDoubleOpt(),
+            $subscription,
             [ 'doubleOptUrl' => $this->unsubscribeUrlProvider->getDoubleOptUrl($subscription),
-                'unsubscribeUrl' => $this->unsubscribeUrlProvider->getUnsubscribeUrl($subscription)]);
+                'unsubscribeUrl' => $this->unsubscribeUrlProvider->getUnsubscribeUrl($subscription)]
+        );
         $this->subscriptionMailer->sendMails($mail);
     }
 }

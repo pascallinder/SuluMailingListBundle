@@ -1,8 +1,8 @@
 import {action} from 'mobx';
-import React from 'react';
 import {translate} from 'sulu-admin-bundle/utils';
 import {AbstractFormToolbarAction} from 'sulu-admin-bundle/views';
 import ResourceRequester from 'sulu-admin-bundle/services/ResourceRequester';
+
 export default class SendToolbarAction extends AbstractFormToolbarAction {
 
     getToolbarItemConfig() {

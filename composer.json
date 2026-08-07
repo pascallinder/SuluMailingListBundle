@@ -4,18 +4,19 @@
     "type": "symfony-bundle",
     "require": {
         "php": "^8.2",
-        "sulu/sulu": "^2.6",
-        "linderp/sulu-form-save-contact-bundle": "^0.1 || dev-main",
-        "linderp/sulu-base-bundle": "^0.1 || dev-main",
-        "symfony/config": "^6.2 | ^7.0",
+        "ext-curl": "*",
+        "qferr/mjml-php": "^2.0",
+        "sulu/sulu": "^3.0.8",
+        "linderp/sulu-form-save-contact-bundle": "^0.2 || dev-main",
+        "linderp/sulu-base-bundle": "^0.2 || dev-main",
+        "symfony/config": "^6.4 | ^7.1",
         "symfony/dependency-injection": "^6.2 | ^7.0",
         "symfony/framework-bundle": "^6.2 | ^7.0",
         "symfony/http-foundation": "^6.2 | ^7.0",
         "symfony/http-kernel": "^6.2 | ^7.0",
         "symfony/intl": "^6.2 | ^7.0",
         "symfony/translation": "^6.2 | ^7.0",
-        "symfony/security-core": "^6.3 | ^7.0",
-        "jackalope/jackalope-doctrine-dbal": "^2.0"
+        "symfony/security-core": "^6.4 | ^7.1"
     },
     "license": "MIT",
     "autoload": {

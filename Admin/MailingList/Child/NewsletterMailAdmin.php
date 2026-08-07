@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Admin\MailingList\Child;
+
 use Linderp\SuluBaseBundle\Admin\AdminNavigationItem;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail;
 use Sulu\Bundle\AdminBundle\Admin\Admin;
@@ -17,9 +18,8 @@ class NewsletterMailAdmin extends Admin implements AdminNavigationItem
     public function __construct(
         private readonly KernelInterface $kernel,
         protected ViewBuilderFactoryInterface $viewBuilderFactory,
-        protected readonly WebspaceManagerInterface $webspaceManager)
-    {
-    }
+        protected readonly WebspaceManagerInterface $webspaceManager
+    ) {}
 
     public static function getListView(): string
     {
@@ -30,14 +30,16 @@ class NewsletterMailAdmin extends Admin implements AdminNavigationItem
     public function configureViews(ViewCollection $viewCollection): void
     {
         $locales = $this->webspaceManager->getAllLocales();
-        $listToolbarActions = [new ToolbarAction('sulu_admin.add'), new ToolbarAction('sulu_admin.delete',
+        $listToolbarActions = [new ToolbarAction('sulu_admin.add'), new ToolbarAction(
+            'sulu_admin.delete',
             [
-                'disabled_condition' => 'sent'
-            ])];
+                'disabled_condition' => 'sent',
+            ]
+        )];
         $addMailFormView = "app.newsletter_mail_add_form";
         $editMailFormView = "app.newsletter_mail_edit_form";
         $mailFormKey = "newsletter_mail_details";
-        $mailList = $this->viewBuilderFactory->createListViewBuilder(self::getListView(), '/'.NewsletterMail::RESOURCE_KEY.'/:locale')
+        $mailList = $this->viewBuilderFactory->createListViewBuilder(self::getListView(), '/' . NewsletterMail::RESOURCE_KEY . '/:locale')
             ->setResourceKey(NewsletterMail::RESOURCE_KEY)
             ->setUserSettingsKey('newsletter_mails')
             ->addListAdapters(['table'])
@@ -51,8 +53,10 @@ class NewsletterMailAdmin extends Admin implements AdminNavigationItem
         $viewCollection->add($mailList);
 
         $locales = $this->webspaceManager->getAllLocales();
-        $addFormView = $this->viewBuilderFactory->createResourceTabViewBuilder($addMailFormView,
-            '/'.NewsletterMail::RESOURCE_KEY.'/:locale/add')
+        $addFormView = $this->viewBuilderFactory->createResourceTabViewBuilder(
+            $addMailFormView,
+            '/' . NewsletterMail::RESOURCE_KEY . '/:locale/add'
+        )
             ->setResourceKey(NewsletterMail::RESOURCE_KEY)
             ->setBackView(self::getListView())
             ->addLocales($locales);
@@ -68,16 +72,20 @@ class NewsletterMailAdmin extends Admin implements AdminNavigationItem
         $viewCollection->add($addDetailsFormView);
 
         // Configure Wardrobe Edit View
-        $editFormView = $this->viewBuilderFactory->createResourceTabViewBuilder($editMailFormView,
-            '/'.NewsletterMail::RESOURCE_KEY.'/:locale/:id')
+        $editFormView = $this->viewBuilderFactory->createResourceTabViewBuilder(
+            $editMailFormView,
+            '/' . NewsletterMail::RESOURCE_KEY . '/:locale/:id'
+        )
             ->setResourceKey(NewsletterMail::RESOURCE_KEY)
             ->setBackView(self::getListView())
             ->setTitleProperty("title")
             ->addLocales($locales);
         $viewCollection->add($editFormView);
 
-        $editDetailsFormView = $this->viewBuilderFactory->createPreviewFormViewBuilder($editMailFormView . '.details',
-            '/details')
+        $editDetailsFormView = $this->viewBuilderFactory->createPreviewFormViewBuilder(
+            $editMailFormView . '.details',
+            '/details'
+        )
             ->setResourceKey(NewsletterMail::RESOURCE_KEY)
             ->setFormKey($mailFormKey)
             ->setPreviewResourceKey('newsletters_mails')
@@ -85,25 +93,27 @@ class NewsletterMailAdmin extends Admin implements AdminNavigationItem
             ->addToolbarActions([
                 new ToolbarAction('app.newsletter-subscription.send'),
                 new ToolbarAction('sulu_admin.save'),
-                new ToolbarAction('sulu_admin.delete',[
-                    'visible_condition' => 'sent == false'
+                new ToolbarAction('sulu_admin.delete', [
+                    'visible_condition' => 'sent == false',
                 ]),
                 new DropdownToolbarAction(
                     'sulu_admin.edit',
                     'su-pen',
                     [
                         new ToolbarAction('sulu_admin.copy'),
-                        new ToolbarAction('sulu_admin.copy_locale',[
-                            'visible_condition' => 'sent == false'
+                        new ToolbarAction('sulu_admin.copy_locale', [
+                            'visible_condition' => 'sent == false',
                         ]),
                     ],
-                )
+                ),
             ]);
         if (isset($this->kernel->getBundles()['SuluAITranslatorBundle'])) {
             $editDetailsFormView->addToolbarActions([
-                new ToolbarAction('ai_translator.toolbar',
+                new ToolbarAction(
+                    'ai_translator.toolbar',
                     ['allow_overwrite' => true,
-                    'visible_condition' => 'sent == false'])
+                        'visible_condition' => 'sent == false']
+                ),
             ]);
         }
         $editDetailsFormView->setParent($editMailFormView);

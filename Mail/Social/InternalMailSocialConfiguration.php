@@ -4,12 +4,12 @@ namespace Linderp\SuluMailingListBundle\Mail\Social;
 
 readonly class InternalMailSocialConfiguration
 {
-    public function __construct(private string $name,
-                                private string $title,
-                                private ?string $src,
-                                private bool $internal = true)
-    {
-    }
+    public function __construct(
+        private string $name,
+        private string $title,
+        private ?string $src,
+        private bool $internal = true
+    ) {}
 
     public function getName(): ?string
     {

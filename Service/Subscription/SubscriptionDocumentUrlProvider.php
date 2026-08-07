@@ -1,41 +1,54 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Service\Subscription;
+
 use Linderp\SuluMailingListBundle\Repository\Newsletter\NewsletterRepository;
-use Sulu\Bundle\PageBundle\Document\PageDocument;
-use Sulu\Component\DocumentManager\DocumentManagerInterface;
-use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+use Sulu\Content\Domain\Model\DimensionContentInterface;
+use Sulu\Content\Infrastructure\Doctrine\DimensionContentQueryEnhancer;
+use Sulu\Page\Domain\Repository\PageRepositoryInterface;
 
 readonly class SubscriptionDocumentUrlProvider
 {
+    public function __construct(
+        private NewsletterRepository $newsletterRepository,
+        private PageRepositoryInterface $pageRepository,
+    ) {}
 
-    public function __construct(private DocumentManagerInterface $documentManager,
-    private NewsletterRepository $newsletterRepository){
-}
-
-    /**
-     * @throws DocumentManagerException
-     */
-    public function getUnsubscribePageUrl(string $newsletterId, string $locale):string{
+    public function getUnsubscribePageUrl(string $newsletterId, string $locale): string
+    {
         $newsletter = $this->newsletterRepository->findById((int) $newsletterId, $locale);
         return $this->getUrl($newsletter->getUnsubscribePage(), $locale);
     }
 
-    /**
-     * @throws DocumentManagerException
-     */
-    public function getConfirmedDoubleOptPageUrl(string $newsletterId, string $locale):string{
+    public function getConfirmedDoubleOptPageUrl(string $newsletterId, string $locale): string
+    {
         $newsletter = $this->newsletterRepository->findById((int) $newsletterId, $locale);
         return $this->getUrl($newsletter->getDoubleOptConfirmPage(), $locale);
     }
 
-    /**
-     * @throws DocumentManagerException
-     */
     private function getUrl(string $documentUuid, string $locale): string
     {
-        /** @var PageDocument $document */
-        $document = $this->documentManager->find($documentUuid, $locale);
-        return "/".$locale.$document->getResourceSegment();
+        $page = $this->pageRepository->findOneBy(
+            ['uuid' => $documentUuid],
+            [
+                PageRepositoryInterface::SELECT_PAGE_CONTENT => [
+                    'dimensionAttributes' => [
+                        'locale' => $locale,
+                        'stage' => DimensionContentInterface::STAGE_LIVE,
+                        'version' => DimensionContentInterface::CURRENT_VERSION,
+                    ],
+                    'selects' => [DimensionContentQueryEnhancer::GROUP_SELECT_CONTENT_WEBSITE => true],
+                ],
+            ],
+        );
+        if (!$page) {
+            return '/' . $locale;
+        }
+        $dimensionContent = $page->getDimensionContents()->filter(
+            static fn($content): bool => $content->getLocale() === $locale,
+        )->first();
+        $resourceSegment = $dimensionContent?->getRoute()?->getSlug() ?? '/';
+
+        return '/' . $locale . $resourceSegment;
     }
 }

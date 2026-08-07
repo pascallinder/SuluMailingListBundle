@@ -3,9 +3,9 @@
 namespace Linderp\SuluMailingListBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 use Linderp\SuluMailingListBundle\Entity\MailTranslation;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @template T of MailTranslation
@@ -24,9 +24,9 @@ abstract class MailTranslationRepository extends ServiceEntityRepository
     {
         $src = $this->findOneByLocale($mailTranslatable, $srcLocale);
         $dest = $this->findOneByLocale($mailTranslatable, $destLocale);
-        if($dest !== null){
+        if ($dest !== null) {
             $dest->applyFrom($src);
-        }else{
+        } else {
             $dest = $src->copyTo($destLocale);
         }
         $this->getEntityManager()->persist($dest);
@@ -35,5 +35,5 @@ abstract class MailTranslationRepository extends ServiceEntityRepository
     /**
      * @return T|null
      */
-    protected abstract function findOneByLocale(MailTranslatable $mailTranslatable, string $locale): ?MailTranslation;
+    abstract protected function findOneByLocale(MailTranslatable $mailTranslatable, string $locale): ?MailTranslation;
 }

@@ -1,19 +1,17 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Entity\NewsletterMail;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
-use Linderp\SuluBaseBundle\Entity\IdTrait;
-use Linderp\SuluBaseBundle\Entity\LocaleTrait;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 use Linderp\SuluMailingListBundle\Entity\MailTranslation;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Repository\NewsletterMail\NewsletterMailRepository;
 use Sulu\Bundle\ContactBundle\Entity\Contact;
-
 
 #[ORM\Entity(repositoryClass: NewsletterMailRepository::class)]
 class NewsletterMail extends MailTranslatable
@@ -34,7 +32,9 @@ class NewsletterMail extends MailTranslatable
     /**
      * @var Collection<int, Contact>
      */
-    #[ORM\ManyToMany(targetEntity: Contact::class, inversedBy: 'newsletterMails', cascade: ['persist'])]
+    // Sulu's Contact entity does not expose a newsletterMails inverse collection.
+    // Keep this association unidirectional; NewsletterMail is the owning side.
+    #[ORM\ManyToMany(targetEntity: Contact::class, cascade: ['persist'])]
     #[JoinTable(name: 'newsletter_mail_contact_mapping')]
     private Collection $contacts;
 

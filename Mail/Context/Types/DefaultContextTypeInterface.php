@@ -1,7 +1,9 @@
 <?php
+
 namespace Linderp\SuluMailingListBundle\Mail\Context\Types;
-use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypeInterface;
+
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypeConfiguration;
+use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypeInterface;
 
 class DefaultContextTypeInterface implements MailContextTypeInterface
 {

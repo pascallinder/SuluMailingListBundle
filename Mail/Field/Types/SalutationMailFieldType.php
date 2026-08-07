@@ -8,9 +8,7 @@ use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeInterface;
 
 readonly class SalutationMailFieldType implements MailFieldTypeInterface
 {
-    public function __construct( private SalutationPrefixSelect $salutationPrefixSelect){
-
-    }
+    public function __construct(private SalutationPrefixSelect $salutationPrefixSelect) {}
     public function getConfiguration(): MailFieldTypeConfiguration
     {
         return (new MailFieldTypeConfiguration(
@@ -27,7 +25,7 @@ readonly class SalutationMailFieldType implements MailFieldTypeInterface
      */
     public function build(array $item, string $locale): array
     {
-        $item['prefix'] = $this->salutationPrefixSelect->getValue($item['prefix'],$locale);
+        $item['prefix'] = $this->salutationPrefixSelect->getValue($item['prefix'], $locale);
         return $item;
     }
 }

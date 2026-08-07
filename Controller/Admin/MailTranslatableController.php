@@ -23,8 +23,8 @@ abstract class MailTranslatableController extends LocaleController
         protected readonly MailContextTypesPool $mailContextTypes,
         protected readonly string $noReplyEmail,
         protected readonly MailContentProvider $mailContentProvider,
-        LocaleRepositoryUtil $localeRepositoryUtil)
-    {
+        LocaleRepositoryUtil $localeRepositoryUtil
+    ) {
         parent::__construct($localeRepositoryUtil);
     }
 
@@ -37,9 +37,9 @@ abstract class MailTranslatableController extends LocaleController
     {
         $data = [...$data,
             'subject' => $mailTranslatable->getSubject(),
-            'senderMail'=>$mailTranslatable->getSenderMail(),
-            'context'=>$mailTranslatable->getContext(),
-            'content_'.$mailTranslatable->getContext() => $mailTranslatable->getContent() ?? []
+            'senderMail' => $mailTranslatable->getSenderMail(),
+            'context' => $mailTranslatable->getContext(),
+            'content_' . $mailTranslatable->getContext() => $mailTranslatable->getContent() ?? [],
         ];
         foreach ($mailTranslatable->getContextVars() ?? [] as $key => $value) {
             $data[$key] = $value;
@@ -50,13 +50,17 @@ abstract class MailTranslatableController extends LocaleController
     /**
      * @param array<string, mixed> $data
      */
-    protected function mapDataToMailTranslatable(MailTranslatable $mailTranslatable, array $data): void{
+    protected function mapDataToMailTranslatable(MailTranslatable $mailTranslatable, array $data): void
+    {
         $mailTranslatable->setSenderMail($data['senderMail'] ?? $this->noReplyEmail);
         $mailTranslatable->setContext($data['context']);
-        $mailTranslatable->setContent($data['content_'.$data['context']]);
-        $contextType= $this->mailContextTypes->get($mailTranslatable->getContext());
-        $contextVars= array_reduce($contextType->getConfiguration()->getContextVarsKeys(),
-            fn(array $carry, string $key): array => [...$carry, $key => $data[$key] ?? null], []);
+        $mailTranslatable->setContent($data['content_' . $data['context']]);
+        $contextType = $this->mailContextTypes->get($mailTranslatable->getContext());
+        $contextVars = array_reduce(
+            $contextType->getConfiguration()->getContextVarsKeys(),
+            fn(array $carry, string $key): array => [...$carry, $key => $data[$key] ?? null],
+            []
+        );
         $mailTranslatable->setContextVars($contextVars);
     }
 
@@ -68,11 +72,14 @@ abstract class MailTranslatableController extends LocaleController
      */
     protected function getIndexResponse(MailTranslatable $mail, array $additionalData = []): Response
     {
-        return new Response('<!-- CONTENT-REPLACER -->'.$this->mailContentProvider->getMailTranslatableMailContent($mail,$mail->getLocale(),[
-                    'firstName' => 'Max',
-                    'lastName' => 'Mustermann',
-                    'unsubscribeUrl' => 'https://google.ch',
-                    ...$additionalData]
-            ).'<!-- CONTENT-REPLACER -->');
+        return new Response('<!-- CONTENT-REPLACER -->' . $this->mailContentProvider->getMailTranslatableMailContent(
+            $mail,
+            $mail->getLocale(),
+            [
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'unsubscribeUrl' => 'https://google.ch',
+                ...$additionalData]
+        ) . '<!-- CONTENT-REPLACER -->');
     }
 }

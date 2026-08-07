@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Repository\Newsletter;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\NewsletterTranslation;

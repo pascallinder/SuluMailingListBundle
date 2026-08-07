@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Entity\NewsletterDoubleOpt;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,7 +22,8 @@ class NewsletterDoubleOpt extends MailTranslatable
     #[ORM\OneToOne(mappedBy: 'newsletterDoubleOpt', targetEntity: Newsletter::class, cascade: ['persist','remove'])]
     private ?Newsletter $newsletter = null;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->translations = new ArrayCollection();
     }
     /**
@@ -63,7 +65,7 @@ class NewsletterDoubleOpt extends MailTranslatable
      */
     public function setTranslations(Collection $translations): void
     {
-       $this->translations = $translations;
+        $this->translations = $translations;
     }
 
     public function copy(): self

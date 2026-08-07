@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Entity\Newsletter;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -42,7 +43,7 @@ class Newsletter
     private Collection $newsletterMails;
 
     #[ORM\OneToOne(inversedBy: 'newsletter', targetEntity: NewsletterDoubleOpt::class, cascade: ['persist','remove'])]
-    #[ORM\JoinColumn(name: 'double_opt_id', referencedColumnName: 'id',onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'double_opt_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private NewsletterDoubleOpt $newsletterDoubleOpt;
 
     public function __construct()

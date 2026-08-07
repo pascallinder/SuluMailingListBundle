@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Form\Dynamic\Types;
+
 use Sulu\Bundle\FormBundle\Dynamic\FormFieldTypeConfiguration;
 use Sulu\Bundle\FormBundle\Dynamic\FormFieldTypeInterface;
 use Sulu\Bundle\FormBundle\Entity\FormField;
@@ -9,8 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class NewsletterFieldType implements FormFieldTypeInterface
 {
-    public function __construct()
-    {}
+    public function __construct() {}
 
     public function getConfiguration(): FormFieldTypeConfiguration
     {

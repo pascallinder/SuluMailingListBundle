@@ -1,5 +1,7 @@
 <?php
+
 namespace Linderp\SuluMailingListBundle\Mail\Wrapper\Types;
+
 use Linderp\SuluMailingListBundle\Mail\Wrapper\MailWrapperTypeConfiguration;
 use Linderp\SuluMailingListBundle\Mail\Wrapper\MailWrapperTypeInterface;
 
@@ -12,7 +14,7 @@ readonly class SingleColumnSectionWrapperType implements MailWrapperTypeInterfac
             __DIR__ . "/../../../Resources/config/mail/wrappers/single-column-section.xml",
             "single-column-section"
         ))->setPriority(10)->setContentKeys([
-            'mailingListMail.props.content.components' => 'columnOne'
+            'mailingListMail.props.content.components' => 'columnOne',
         ]);
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Repository\NewsletterMail;
+
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,7 +15,7 @@ class NewsletterMailRepository extends MailTranslatableRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct( $registry, NewsletterMail::class);
+        parent::__construct($registry, NewsletterMail::class);
     }
     /**
      * @param array<string, mixed> $options

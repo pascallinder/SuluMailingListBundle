@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
+
 use Linderp\SuluBaseBundle\Common\DoctrineListRepresentationFactory;
 use Linderp\SuluBaseBundle\Controller\Admin\BaseController;
 use Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription;
@@ -20,7 +21,6 @@ use Symfony\Component\Routing\Attribute\Route;
  */
 class NewsletterSubscriptionController extends BaseController
 {
-
     public function __construct(
         private readonly DomainEventCollectorInterface $domainEventCollector,
         private readonly NewsletterSubscriptionRepository $newsletterSubscriptionRepository,
@@ -28,22 +28,22 @@ class NewsletterSubscriptionController extends BaseController
         private readonly ContactRepositoryInterface $contactRepository,
         private readonly SubscriptionService $subscriptionService,
         private readonly DoctrineListRepresentationFactory $doctrineListRepresentationFactory
-    ){
-    }
+    ) {}
 
     #[Route(path: '/admin/api/newsletters-subscriptions/{id}', name: 'app.get_newsletter_subscription', methods: ['GET'])]
     public function getAction(int $id, Request $request): Response
     {
-        if($request->query->has('newsletter_id')){
+        if ($request->query->has('newsletter_id')) {
             return $this->json(['newsletter' => $request->query->get('newsletter_id')]);
         }
-        return $this->handleGetByIdRequest($id,$request);
+        return $this->handleGetByIdRequest($id, $request);
     }
     #[Route(path: '/admin/api/newsletters-subscriptions/{id}', name: 'app.post_newsletter_subscription', methods: ['PUT'])]
-    public function postAction(int $id,Request $request): Response
+    public function postAction(int $id, Request $request): Response
     {
         $data = $request->toArray();
-        $this->subscriptionService->handleNewsletters(  [$this->newsletterRepository->find($id)],
+        $this->subscriptionService->handleNewsletters(
+            [$this->newsletterRepository->find($id)],
             $this->contactRepository->findByIds($data['contacts']),
             $data['locale'],
             $data['doubleOpt']
@@ -54,7 +54,7 @@ class NewsletterSubscriptionController extends BaseController
     #[Route(path: '/admin/api/newsletters-subscriptions/{id}', name: 'app.post_newsletter_subscription_trigger', methods: ['POST'])]
     public function postTriggerAction(int $id, Request $request): Response
     {
-        return $this->handlePostTriggerRequest($id,$request);
+        return $this->handlePostTriggerRequest($id, $request);
     }
 
     #[Route(path: '/admin/api/newsletters-subscriptions/{id}', name: 'app.delete_newsletter_subscription', methods: ['DELETE'])]
@@ -68,7 +68,7 @@ class NewsletterSubscriptionController extends BaseController
 
         $listRepresentation = $this->doctrineListRepresentationFactory->createDoctrineListRepresentation(
             NewsletterSubscription::RESOURCE_KEY,
-            ['newsletter'=> $request->query->get('newsletter_id')],
+            ['newsletter' => $request->query->get('newsletter_id')],
             [],
         );
 
@@ -85,7 +85,7 @@ class NewsletterSubscriptionController extends BaseController
     /**
      * @param array<string, mixed> $data
      */
-    protected function mapDataToEntity(array $data, $entity, Request $request): void{}
+    protected function mapDataToEntity(array $data, $entity, Request $request): void {}
 
 
     protected function load(int $id, Request $request): ?NewsletterSubscription
@@ -99,29 +99,30 @@ class NewsletterSubscriptionController extends BaseController
         throw new \LogicException('Creating newsletter subscriptions via this endpoint is not supported.');
     }
 
-    protected function save($entity): void{
+    protected function save($entity): void
+    {
         $this->newsletterSubscriptionRepository->save($entity);
         $this->newsletterSubscriptionRepository->flush();
     }
 
-    protected function remove(int $id): void
-    {}
+    protected function remove(int $id): void {}
 
     /**
      * @param NewsletterSubscription $entity
      * @throws \Exception
      */
-    protected function triggerSwitch(Request $request, string $action, $entity): void{
+    protected function triggerSwitch(Request $request, string $action, $entity): void
+    {
         $entity->getNewsletter()->setLocale($request->getLocale());
         switch ($action) {
             case 'unsubscribe':
-                if(!$entity->isUnsubscribed()){
+                if (!$entity->isUnsubscribed()) {
                     $entity->setUnsubscribed();
                     $this->domainEventCollector->collect(new NewsletterUnsubscribedEvent($entity));
                 }
                 break;
             case 'subscribe':
-                if($entity->isUnsubscribed()) {
+                if ($entity->isUnsubscribed()) {
                     $entity->setSubscribed();
                     $this->domainEventCollector->collect(new NewsletterSubscribedEvent($entity));
                 }

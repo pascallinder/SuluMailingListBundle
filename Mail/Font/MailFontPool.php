@@ -21,7 +21,7 @@ class MailFontPool implements MailPoolInterface
     ) {
         /** @var MailFontInterface $font */
         foreach ($fonts as $font) {
-            if($font->getConfiguration()->isDefaultFont()){
+            if ($font->getConfiguration()->isDefaultFont()) {
                 $this->defaultFont = $font->getConfiguration()->getFontFamily();
             }
             $this->fonts[$font->getConfiguration()->getFontFamily()] = $font;
@@ -30,19 +30,22 @@ class MailFontPool implements MailPoolInterface
     /**
      * @return array<string, MailFontInterface>
      */
-    public function getAll(): array{
+    public function getAll(): array
+    {
         return $this->fonts;
     }
 
     /**
      * @return list<array{name: string, title: string}>
      */
-    public function getFontSelection(): array{
-        return array_reduce($this->fonts, fn(array $carry, MailFontInterface $font)=> [...$carry,[
-            'name'=> $font->getConfiguration()->getFontFamily(),
-            'title'=>$font->getConfiguration()->getName()]], []);
+    public function getFontSelection(): array
+    {
+        return array_reduce($this->fonts, fn(array $carry, MailFontInterface $font) => [...$carry,[
+            'name' => $font->getConfiguration()->getFontFamily(),
+            'title' => $font->getConfiguration()->getName()]], []);
     }
-    public function getDefaultValue(): string{
+    public function getDefaultValue(): string
+    {
         return $this->defaultFont;
     }
 }

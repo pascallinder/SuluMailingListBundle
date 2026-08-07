@@ -1,10 +1,10 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Entity;
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Linderp\SuluBaseBundle\Entity\IdTrait;
-use Sulu\Bundle\MediaBundle\Entity\Media;
 
 abstract class MailTranslation
 {
@@ -21,9 +21,8 @@ abstract class MailTranslation
 
     public function __construct(
         #[ORM\Column(type: Types::STRING, length: 5, nullable: false)]
-        protected string $locale){
-
-    }
+        protected string $locale
+    ) {}
 
     /**
      * @return string|null
@@ -74,5 +73,5 @@ abstract class MailTranslation
         $this->subject = $source->subject;
         $this->content = $source->content;
     }
-    public abstract function copyTo(string $destLocale): self;
+    abstract public function copyTo(string $destLocale): self;
 }

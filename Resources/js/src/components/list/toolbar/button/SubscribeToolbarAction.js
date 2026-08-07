@@ -1,9 +1,8 @@
-import {action,observable ,computed} from 'mobx';
-import jexl from 'jexl';
-import React from 'react';
+import {action} from 'mobx';
 import {translate} from 'sulu-admin-bundle/utils';
 import {AbstractListToolbarAction} from 'sulu-admin-bundle/views';
-import ResourceRequester, {RequestPromise} from 'sulu-admin-bundle/services/ResourceRequester';
+import ResourceRequester from 'sulu-admin-bundle/services/ResourceRequester';
+
 export default class SubscribeToolbarAction extends AbstractListToolbarAction {
     getToolbarItemConfig() {
 

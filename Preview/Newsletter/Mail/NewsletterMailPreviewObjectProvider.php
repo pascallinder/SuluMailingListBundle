@@ -1,7 +1,9 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Preview\Newsletter\Mail;
+
 use Doctrine\Common\Collections\ArrayCollection;
+use Linderp\SuluMailingListBundle\Controller\Admin\NewsletterMailController;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation;
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
@@ -25,8 +27,12 @@ readonly class NewsletterMailPreviewObjectProvider extends MailTranslationPrevie
             throw new \RuntimeException('Newsletter mail not found.');
         }
         $newsletterMail->setTranslations(new ArrayCollection(
-            array_reduce($this->newsletterMailTranslationRepository->findBy(['newsletterMail'=>$newsletterMail->getId()]),
-            fn(array $carry, NewsletterMailTranslation $item)=>[...$carry,$item->getLocale()=>$item],[])));
+            array_reduce(
+                $this->newsletterMailTranslationRepository->findBy(['newsletterMail' => $newsletterMail->getId()]),
+                fn(array $carry, NewsletterMailTranslation $item) => [...$carry,$item->getLocale() => $item],
+                []
+            )
+        ));
         return $newsletterMail;
     }
 
@@ -44,5 +50,10 @@ readonly class NewsletterMailPreviewObjectProvider extends MailTranslationPrevie
     public function setValues($object, $locale, array $data): void
     {
         $this->setMailTranslatableValues($object, $data);
+    }
+
+    public function getPreviewController(): string
+    {
+        return NewsletterMailController::class . '::indexAction';
     }
 }

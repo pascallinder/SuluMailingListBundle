@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Admin\MailingList\Child;
+
 use Linderp\SuluBaseBundle\Admin\AdminChild;
 use Linderp\SuluBaseBundle\Admin\AdminCrud;
 use Linderp\SuluBaseBundle\Admin\AdminCrudConfig;
@@ -22,10 +23,10 @@ class NewsletterEntryAdmin extends AdminCrud implements AdminChild
     public function __construct(
         private readonly KernelInterface $kernel,
         protected ViewBuilderFactoryInterface $viewBuilderFactory,
-                                protected ActivityViewBuilderFactoryInterface $activityViewBuilderFactory,
-                                protected ReferenceViewBuilderFactoryInterface $referenceViewBuilderFactory,
-                                protected WebspaceManagerInterface $webspaceManager)
-    {
+        protected ActivityViewBuilderFactoryInterface $activityViewBuilderFactory,
+        protected ReferenceViewBuilderFactoryInterface $referenceViewBuilderFactory,
+        protected WebspaceManagerInterface $webspaceManager
+    ) {
         parent::__construct(
             $this->viewBuilderFactory,
             $this->activityViewBuilderFactory,
@@ -56,7 +57,7 @@ class NewsletterEntryAdmin extends AdminCrud implements AdminChild
     public function configureViews(ViewCollection $viewCollection): void
     {
         parent::configureViews($viewCollection);
-        $doubleOptMailForm = $this->viewBuilderFactory->createPreviewFormViewBuilder($this->getDefinition()->form->editView.'double-opt-mail','/double-opt-mail/')
+        $doubleOptMailForm = $this->viewBuilderFactory->createPreviewFormViewBuilder($this->getDefinition()->form->editView . 'double-opt-mail', '/double-opt-mail/')
             ->setResourceKey(Newsletter::RESOURCE_KEY)
             ->setFormKey('newsletter_double_opt_details')
             ->setTabTitle('mailingList.tabs.doubleOptMail')
@@ -66,8 +67,10 @@ class NewsletterEntryAdmin extends AdminCrud implements AdminChild
             ]);
         if (isset($this->kernel->getBundles()['SuluAITranslatorBundle'])) {
             $doubleOptMailForm->addToolbarActions([
-                new ToolbarAction('ai_translator.toolbar',
-                    ['allow_overwrite' => true])
+                new ToolbarAction(
+                    'ai_translator.toolbar',
+                    ['allow_overwrite' => true]
+                ),
             ]);
         }
         $doubleOptMailForm->setParent($this->getDefinition()->form->editView);
@@ -85,36 +88,40 @@ class NewsletterEntryAdmin extends AdminCrud implements AdminChild
             ->setResourceKey(NewsletterSubscription::RESOURCE_KEY)
             ->addListAdapters(['table'])
             ->setListKey("newsletters_subscriptions")
-            ->addRouterAttributesToListRequest(['id'=>'newsletter_id'])
+            ->addRouterAttributesToListRequest(['id' => 'newsletter_id'])
             ->setUserSettingsKey('newsletter_subscriptions')
             ->setTabTitle('mailingList.tabs.subscriptions')
             ->addToolbarActions($subscriptionListToolbarActions)
             ->setAddView($addSubscriptionFormView)
             ->disableColumnOptions()
-            ->addRouterAttributesToListMetadata(['id'=>'newsletter_id'])
+            ->addRouterAttributesToListMetadata(['id' => 'newsletter_id'])
             ->setParent($this->getDefinition()->form->editView);
         $viewCollection->add($subscriptionList);
 
 
-        $addFormViewSubscription = $this->viewBuilderFactory->createResourceTabViewBuilder($addSubscriptionFormView,
-            '/subscriptions/add')
+        $addFormViewSubscription = $this->viewBuilderFactory->createResourceTabViewBuilder(
+            $addSubscriptionFormView,
+            '/subscriptions/add'
+        )
             ->setResourceKey(Newsletter::RESOURCE_KEY)
-            ->setBackView($this->getDefinition()->list->view. '.subscriptions')
+            ->setBackView($this->getDefinition()->list->view . '.subscriptions')
             ->setTabTitle('mailingList.tabs.addSubscriptions')
             ->setParent($this->getDefinition()->form->editView);
         $viewCollection->add($addFormViewSubscription);
 
-        $addDetailsFormView = $this->viewBuilderFactory->createFormViewBuilder($addSubscriptionFormView . '.details',
-            '/details')
+        $addDetailsFormView = $this->viewBuilderFactory->createFormViewBuilder(
+            $addSubscriptionFormView . '.details',
+            '/details'
+        )
             ->setResourceKey(NewsletterSubscription::RESOURCE_KEY)
             ->setFormKey($subscriptionFormKey)
-            ->addRouterAttributesToFormRequest(['id'=>'newsletter_id'])
-            ->addRouterAttributesToFormMetadata(['id'=>'newsletter_id'])
+            ->addRouterAttributesToFormRequest(['id' => 'newsletter_id'])
+            ->addRouterAttributesToFormMetadata(['id' => 'newsletter_id'])
             ->setTabTitle('sulu_admin.details')
             ->addToolbarActions([new ToolbarAction('sulu_admin.save')])
             ->setParent($addSubscriptionFormView);
         $viewCollection->add($addDetailsFormView);
     }
 
-  
+
 }

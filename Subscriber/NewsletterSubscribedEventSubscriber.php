@@ -1,30 +1,52 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Subscriber;
+
 use Linderp\SuluMailingListBundle\Event\Newsletter\NewsletterSubscribedEvent;
 use Linderp\SuluMailingListBundle\Service\Subscription\SubscriptionMailService;
-use Psr\Cache\InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\HttpKernel\Event\TerminateEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
-readonly class NewsletterSubscribedEventSubscriber implements EventSubscriberInterface
+class NewsletterSubscribedEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private SubscriptionMailService $subscriptionMailService){
+    /** @var array<int, \Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription> */
+    private array $pendingSubscriptions = [];
 
-    }
+    public function __construct(
+        private SubscriptionMailService $subscriptionMailService,
+        private LoggerInterface $logger,
+    ) {}
+
     public static function getSubscribedEvents(): array
     {
         return [
-            NewsletterSubscribedEvent::class => "onNewsletterSubscribed"
+            NewsletterSubscribedEvent::class => "onNewsletterSubscribed",
+            KernelEvents::TERMINATE => 'onTerminate',
         ];
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws InvalidArgumentException
-     */
-    public function onNewsletterSubscribed(NewsletterSubscribedEvent $event): void{
+    public function onNewsletterSubscribed(NewsletterSubscribedEvent $event): void
+    {
         $subscription = $event->getNewsletterSubscription();
-        $this->subscriptionMailService->sendDoubleOptMailToSubscriber($subscription);
+        $this->pendingSubscriptions[spl_object_id($subscription)] = $subscription;
+    }
+
+    public function onTerminate(TerminateEvent $event): void
+    {
+        $subscriptions = $this->pendingSubscriptions;
+        $this->pendingSubscriptions = [];
+
+        foreach ($subscriptions as $subscription) {
+            try {
+                $this->subscriptionMailService->sendDoubleOptMailToSubscriber($subscription);
+            } catch (\Throwable $exception) {
+                $this->logger->error('Unable to send newsletter double-opt-in email after subscription.', [
+                    'subscriptionId' => $subscription->getId(),
+                    'exception' => $exception,
+                ]);
+            }
+        }
     }
 }

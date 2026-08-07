@@ -32,17 +32,14 @@ services:
 
   Linderp\SuluMailingListBundle\Preview\Newsletter\Mail\NewsletterMailRouteDefaultsProvider:
     tags:
-      - { name: 'sulu_route.defaults_provider' }
+      - { name: 'sulu_route.route_defaults_provider', resource_key: 'newsletters_mails' }
 
   Linderp\SuluMailingListBundle\Preview\Newsletter\DoubleOpt\NewsletterDoubleOptPreviewObjectProvider:
     tags:
       - { name: 'sulu_preview.object_provider', provider-key: 'newsletters' }
   Linderp\SuluMailingListBundle\Preview\Newsletter\DoubleOpt\NewsletterDoubleOptRouteDefaultsProvider:
     tags:
-      - { name: 'sulu_route.defaults_provider' }
-  Linderp\SuluMailingListBundle\Service\Subscription\SubscriptionDocumentUrlProvider:
-    arguments:
-      - '@sulu_document_manager.document_manager'
+      - { name: 'sulu_route.route_defaults_provider', resource_key: 'newsletters' }
   Linderp\SuluMailingListBundle\Service\FormBundle\Handler:
     decorates: 'sulu_form.handler'
     arguments:

@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Linderp\SuluMailingListBundle\DependencyInjection;
 
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
@@ -12,7 +13,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class SuluMailingListExtension extends Extension implements PrependExtensionInterface
 {
-
     /**
      * @throws \Exception
      */
@@ -68,32 +68,32 @@ class SuluMailingListExtension extends Extension implements PrependExtensionInte
                     ],
                     'forms' => [
                         'directories' => [
-                            __DIR__ . '/../Resources/config/forms'
+                            __DIR__ . '/../Resources/config/forms',
                         ],
                     ],
                     'resources' => [
                         'filtered_contacts' => [
                             'routes' => [
-                                'list' => 'app.get_filtered_contacts'
-                            ]
+                                'list' => 'app.get_filtered_contacts',
+                            ],
                         ],
                         'newsletters' => [
                             'routes' => [
                                 'list' => 'app.get_newsletter_list',
-                                'detail' => 'app.get_newsletter'
-                            ]
+                                'detail' => 'app.get_newsletter',
+                            ],
                         ],
                         'newsletters_subscriptions' => [
                             'routes' => [
                                 'list' => 'app.get_newsletter_subscriptions_list',
-                                'detail' => 'app.get_newsletter_subscription'
-                            ]
+                                'detail' => 'app.get_newsletter_subscription',
+                            ],
                         ],
                         'newsletters_mails' => [
                             'routes' => [
                                 'list' => 'app.get_newsletter_mail_list',
-                                'detail' => 'app.get_newsletter_mail'
-                            ]
+                                'detail' => 'app.get_newsletter_mail',
+                            ],
                         ],
                     ],
                     'field_type_options' => [
@@ -113,7 +113,7 @@ class SuluMailingListExtension extends Extension implements PrependExtensionInte
                                     'auto_complete' => [
                                         'display_property' => 'title',
                                         'search_properties' => ['title'],
-                                    ]
+                                    ],
                                 ],
                             ],
                             'filtered_contact_selection' => [
@@ -131,7 +131,7 @@ class SuluMailingListExtension extends Extension implements PrependExtensionInte
                                     'auto_complete' => [
                                         'display_property' => 'firstName',
                                         'search_properties' => ['firstName'],
-                                    ]
+                                    ],
                                 ],
                             ],
                         ],

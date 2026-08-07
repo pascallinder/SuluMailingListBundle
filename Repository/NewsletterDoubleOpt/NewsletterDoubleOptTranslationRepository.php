@@ -1,12 +1,10 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Repository\NewsletterDoubleOpt;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+
 use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
-use Linderp\SuluMailingListBundle\Entity\MailTranslation;
 use Linderp\SuluMailingListBundle\Entity\NewsletterDoubleOpt\NewsletterDoubleOptTranslation;
-use Linderp\SuluMailingListBundle\Repository\MailTranslatableRepository;
 use Linderp\SuluMailingListBundle\Repository\MailTranslationRepository;
 
 /**

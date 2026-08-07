@@ -19,7 +19,8 @@ abstract class MailTranslatableRepository extends LocaleRepositoryUtil
     {
         parent::__construct($registry, $entityClass);
     }
-    public function copy(MailTranslatable $mailTranslatable):void{
+    public function copy(MailTranslatable $mailTranslatable): void
+    {
         $copy = $mailTranslatable->copy();
         $this->getEntityManager()->persist($copy);
         $this->getEntityManager()->flush();

@@ -1,17 +1,18 @@
 <?php
+
 namespace Linderp\SuluMailingListBundle\Preview\Newsletter;
+
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
-use Sulu\Bundle\PreviewBundle\Preview\Object\PreviewObjectProviderInterface;
+use Sulu\Bundle\PreviewBundle\Preview\PreviewContext;
+use Sulu\Bundle\PreviewBundle\Preview\Provider\PreviewDefaultsProviderInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-abstract readonly class MailTranslationPreviewObjectProvider implements PreviewObjectProviderInterface
+abstract readonly class MailTranslationPreviewObjectProvider implements PreviewDefaultsProviderInterface
 {
     public function __construct(
         private MailContextTypesPool $contextTypesPool,
-    ){
-
-    }
+    ) {}
     /**
      * @param array<string, mixed> $data
      */
@@ -22,7 +23,7 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewO
             ->getPropertyAccessor();
 
         foreach ($data as $property => $value) {
-            if($property === 'id' || !$propertyAccess->isWritable($object,$property)){
+            if ($property === 'id' || !$propertyAccess->isWritable($object, $property)) {
                 continue;
             }
             try {
@@ -30,42 +31,47 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewO
             } catch (\InvalidArgumentException $e) {
             }
         }
-        $object->setContent($data['content_'.$object->getContext()]);
+        $object->setContent($data['content_' . $object->getContext()]);
         $keys = $this->contextTypesPool->get($data['context'])->getConfiguration()->getContextVarsKeys();
-        $object->setContextVars(array_reduce($keys,fn($carry, $key) => [...$carry, $key =>$data[$key]],[]));
+        $object->setContextVars(array_reduce($keys, fn($carry, $key) => [...$carry, $key => $data[$key]], []));
     }
 
-    /**
-     * @param object $object
-     * @param array<string, mixed> $context
-     */
-    public function setContext($object, $locale, array $context): void
+    public function getDefaults(PreviewContext $previewContext): array
     {
+        $object = $this->getObject($previewContext->getId(), $previewContext->getLocale());
+        if (!\is_object($object)) {
+            return [];
+        }
+
+        return [
+            'object' => $object,
+            '_controller' => $this->getPreviewController(),
+        ];
     }
 
-    /**
-     * @param object $object
-     */
-    public function serialize($object): string
+    public function updateValues(PreviewContext $previewContext, array $defaults, array $data): array
     {
-        return \serialize($object);
+        if (isset($defaults['object']) && \is_object($defaults['object'])) {
+            $this->setValues($defaults['object'], $previewContext->getLocale(), $data);
+        }
+
+        return $defaults;
     }
 
-    public function deserialize($serializedObject, $objectClass): mixed
+    public function updateContext(PreviewContext $previewContext, array $defaults, array $context): array
     {
-        return \unserialize($serializedObject);
+        return $defaults;
     }
 
-    public function getSecurityContext($id, $locale): ?string
+    public function getSecurityContext(PreviewContext $previewContext): ?string
     {
         return null;
     }
 
-    /**
-     * @param object $object
-     */
-    public function getId($object)
-    {
-        return $object->getId();
-    }
+    abstract public function getObject($id, $locale): mixed;
+
+    abstract public function getPreviewController(): string;
+
+    abstract public function setValues($object, $locale, array $data): void;
+
 }

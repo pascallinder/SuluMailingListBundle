@@ -162,8 +162,8 @@ class NewsletterMailController extends MailTranslatableController
     /**
      * @throws InvalidArgumentException
      */
-    public function indexAction(NewsletterMail $mail): Response
+    public function indexAction(NewsletterMail $object): Response
     {
-        return $this->getIndexResponse($mail);
+        return $this->getIndexResponse($object);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Preview\Newsletter\DoubleOpt;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Linderp\SuluMailingListBundle\Controller\Admin\NewsletterController;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
@@ -26,8 +27,12 @@ readonly class NewsletterDoubleOptPreviewObjectProvider extends MailTranslationP
             return null;
         }
         $newsletter->getNewsletterDoubleOpt()->setTranslations(new ArrayCollection(
-            array_reduce($this->newsletterDoubleOptTranslationRepository->findBy(['newsletterDoubleOpt'=>$newsletter->getNewsletterDoubleOpt()->getId()]),
-            fn(array $carry, NewsletterDoubleOptTranslation $item)=>[...$carry,$item->getLocale()=>$item],[])));
+            array_reduce(
+                $this->newsletterDoubleOptTranslationRepository->findBy(['newsletterDoubleOpt' => $newsletter->getNewsletterDoubleOpt()->getId()]),
+                fn(array $carry, NewsletterDoubleOptTranslation $item) => [...$carry,$item->getLocale() => $item],
+                []
+            )
+        ));
         return $newsletter;
     }
 
@@ -44,7 +49,7 @@ readonly class NewsletterDoubleOptPreviewObjectProvider extends MailTranslationP
      */
     public function setValues($object, $locale, array $data): void
     {
-        $this->setMailTranslatableValues($object->getNewsletterDoubleOpt(),$data);
+        $this->setMailTranslatableValues($object->getNewsletterDoubleOpt(), $data);
     }
 
     public function getPreviewController(): string

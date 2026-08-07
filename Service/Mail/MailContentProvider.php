@@ -17,20 +17,19 @@ class MailContentProvider
 {
     public static string $EXTENSIONS = 'mjml.twig';
 
-    public function __construct(private readonly Environment          $twig,
-                                #[Autowire('%sulu_mailing_list.mjml.caching%')]
-                                private readonly bool                 $cachingEnabled,
-                                #[Autowire('%sulu_mailing_list.mjml.icons_path%')]
-                                private readonly ?string $iconsPath,
-                                private readonly CacheInterface       $cache,
-                                private readonly MailFontPool         $mailFontPool,
-                                private readonly MailFieldTypesPool   $mailFieldTypesPool,
-                                private readonly MailWrapperTypesPool $mailWrapperTypesPool,
-                                private readonly MailContextTypesPool $mailContextTypesPool,
-                                private readonly MjmlAPIService       $mjmlAPIService)
-    {
-
-    }
+    public function __construct(
+        private readonly Environment          $twig,
+        #[Autowire('%sulu_mailing_list.mjml.caching%')]
+        private readonly bool                 $cachingEnabled,
+        #[Autowire('%sulu_mailing_list.mjml.icons_path%')]
+        private readonly ?string $iconsPath,
+        private readonly CacheInterface       $cache,
+        private readonly MailFontPool         $mailFontPool,
+        private readonly MailFieldTypesPool   $mailFieldTypesPool,
+        private readonly MailWrapperTypesPool $mailWrapperTypesPool,
+        private readonly MailContextTypesPool $mailContextTypesPool,
+        private readonly MjmlAPIService       $mjmlAPIService
+    ) {}
 
     /**
      * @throws InvalidArgumentException
@@ -40,8 +39,8 @@ class MailContentProvider
      */
     public function getMailTranslatableMailContent(MailTranslatable $mailTranslatable, string $locale, array $data): string
     {
-        return $this->getCachingMailContent('@SuluMailingList/mails/email', $locale,[
-            ...$this->getMailTranslateData($mailTranslatable,$locale),
+        return $this->getCachingMailContent('@SuluMailingList/mails/email', $locale, [
+            ...$this->getMailTranslateData($mailTranslatable, $locale),
             ...$data,
         ], $mailTranslatable);
     }
@@ -55,37 +54,40 @@ class MailContentProvider
     {
         $replaceableContent = [];
         foreach ($data as $key => $value) {
-            if($key === 'content'){
+            if ($key === 'content') {
                 continue;
             }
             $contextVars = $mailTranslatable?->getContextVars() ?? [];
-            if(array_key_exists($key, $contextVars)){
+            if (array_key_exists($key, $contextVars)) {
                 continue;
             }
             $replaceableContent[$key] = '{{ ' . $key . ' }}';
         }
 
-        $fonts = array_reduce($this->mailFontPool->getAll(),fn(array $carry,MailFontInterface $font) => [...$carry,$font->getConfiguration()],[]);
+        $fonts = array_reduce($this->mailFontPool->getAll(), fn(array $carry, MailFontInterface $font) => [...$carry,$font->getConfiguration()], []);
         $contentGenerator = function () use ($mailTranslatable, $fonts, $data, $replaceableContent, $mailTemplate, $locale) {
             $contextVars = $mailTranslatable?->getContextVars() ?? [];
             $mjmlContent = $this->twig->render($mailTemplate . '.'
                 . self::$EXTENSIONS, [...$replaceableContent,
-                "content" => $data['content'],
-                "fonts" => $fonts,
-                "iconsPath" => $this->iconsPath,
-                'locale' => $locale,
-                ...array_reduce(array_keys($contextVars), fn(array $carry, string $key): array => [...$carry, $key => $data[$key] ?? null], []),
-            ]);
+                    "content" => $data['content'],
+                    "fonts" => $fonts,
+                    "iconsPath" => $this->iconsPath,
+                    'locale' => $locale,
+                    ...array_reduce(array_keys($contextVars), fn(array $carry, string $key): array => [...$carry, $key => $data[$key] ?? null], []),
+                ]);
 
             return $this->mjmlAPIService->render($mjmlContent);
         };
-        if($this->cachingEnabled){
+        if ($this->cachingEnabled) {
             $templateCacheKey = 'mail_translatable_' . hash('sha256', $mailTemplate . $locale
                     . json_encode($data['content']) . json_encode($fonts)
-                    . array_reduce(array_keys($mailTranslatable?->getContextVars() ?? []),
-                        fn(string $carry, string $key): string => $carry . json_encode($data[$key] ?? null), ''));
-            $html = $this->cache->get($templateCacheKey,$contentGenerator );
-        }else{
+                    . array_reduce(
+                        array_keys($mailTranslatable?->getContextVars() ?? []),
+                        fn(string $carry, string $key): string => $carry . json_encode($data[$key] ?? null),
+                        ''
+                    ));
+            $html = $this->cache->get($templateCacheKey, $contentGenerator);
+        } else {
             $html = $contentGenerator();
         }
         unset($data['content']);
@@ -102,7 +104,8 @@ class MailContentProvider
     /**
      * @return array<string, mixed>
      */
-    private function getMailTranslateData(MailTranslatable $mailTranslatable, string $locale): array{
+    private function getMailTranslateData(MailTranslatable $mailTranslatable, string $locale): array
+    {
         $content = $mailTranslatable->getContent();
 
         if ($content === null) {

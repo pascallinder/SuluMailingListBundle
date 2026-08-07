@@ -14,11 +14,9 @@ class MailFieldTypesPool extends BaseMailTypesPool
      * @param iterable<MailFieldTypeInterface> $handlers
      */
     public function __construct(
-
         #[AutowireIterator('mailing.field-type')]
         iterable $handlers
-    )
-    {
+    ) {
         parent::__construct($handlers);
     }
 }

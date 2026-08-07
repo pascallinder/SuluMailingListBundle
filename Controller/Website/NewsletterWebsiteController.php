@@ -15,23 +15,22 @@ class NewsletterWebsiteController extends AbstractController
     public function __construct(
         private readonly SubscriptionService $subscriptionService,
         private readonly SubscriptionDocumentUrlProvider $subscriptionDocumentUrlProvider
-    ) {
-    }
+    ) {}
 
     #[Route('{locale}/newsletter/unsubscribe/{newsletterId}/{token}', name: 'app.newsletter.unsubscribe')]
-    public function unsubscribe(string $locale,string $newsletterId, string $token): Response
+    public function unsubscribe(string $locale, string $newsletterId, string $token): Response
     {
-        if($this->subscriptionService->unsubscribe($newsletterId,$token)){
-            return $this->redirect($this->subscriptionDocumentUrlProvider->getUnsubscribePageUrl($newsletterId,$locale));
+        if ($this->subscriptionService->unsubscribe($newsletterId, $token)) {
+            return $this->redirect($this->subscriptionDocumentUrlProvider->getUnsubscribePageUrl($newsletterId, $locale));
         }
-        return $this->redirect( "/".$locale);
+        return $this->redirect("/" . $locale);
     }
     #[Route('{locale}/newsletter/confirm/{newsletterId}/{token}', name: 'app.newsletter.confirm')]
-    public function doubleOptConfirm(string $locale,string $newsletterId, string $token): Response
+    public function doubleOptConfirm(string $locale, string $newsletterId, string $token): Response
     {
-        if($this->subscriptionService->confirmDoubleOpt($newsletterId,$token)){
-            return $this->redirect($this->subscriptionDocumentUrlProvider->getConfirmedDoubleOptPageUrl($newsletterId,$locale));
+        if ($this->subscriptionService->confirmDoubleOpt($newsletterId, $token)) {
+            return $this->redirect($this->subscriptionDocumentUrlProvider->getConfirmedDoubleOptPageUrl($newsletterId, $locale));
         }
-        return $this->redirect("/".$locale);
+        return $this->redirect("/" . $locale);
     }
 }

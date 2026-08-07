@@ -12,14 +12,13 @@ readonly class PageUrlProvider
     public function __construct(
         private WebspaceManagerInterface $webspaceManager,
         private PageRepositoryInterface $pageRepository,
-    ){
-
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $item
      */
-    public function getUrl(array $item, string $locale): ?string{
+    public function getUrl(array $item, string $locale): ?string
+    {
         if (!array_key_exists('url', $item)) {
             return  null;
         }
@@ -41,7 +40,7 @@ readonly class PageUrlProvider
                 return null;
             }
             $dimensionContent = $page->getDimensionContents()->filter(
-                static fn ($content): bool => $content->getLocale() === $locale,
+                static fn($content): bool => $content->getLocale() === $locale,
             )->first();
             $resourceSegment = $dimensionContent?->getRoute()?->getSlug();
             if (!is_string($resourceSegment)) {
@@ -54,8 +53,7 @@ readonly class PageUrlProvider
                 $locale,
                 $page->getWebspaceKey(),
             );
-        }
-        else{
+        } else {
             return $item['url']['href'] ?? null;
         }
 

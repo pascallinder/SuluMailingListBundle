@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Service\Subscription;
+
 use Linderp\SuluMailingListBundle\Repository\Newsletter\NewsletterRepository;
 use Sulu\Content\Domain\Model\DimensionContentInterface;
 use Sulu\Content\Infrastructure\Doctrine\DimensionContentQueryEnhancer;
@@ -8,19 +9,19 @@ use Sulu\Page\Domain\Repository\PageRepositoryInterface;
 
 readonly class SubscriptionDocumentUrlProvider
 {
-
     public function __construct(
         private NewsletterRepository $newsletterRepository,
         private PageRepositoryInterface $pageRepository,
-    ){
-}
+    ) {}
 
-    public function getUnsubscribePageUrl(string $newsletterId, string $locale):string{
+    public function getUnsubscribePageUrl(string $newsletterId, string $locale): string
+    {
         $newsletter = $this->newsletterRepository->findById((int) $newsletterId, $locale);
         return $this->getUrl($newsletter->getUnsubscribePage(), $locale);
     }
 
-    public function getConfirmedDoubleOptPageUrl(string $newsletterId, string $locale):string{
+    public function getConfirmedDoubleOptPageUrl(string $newsletterId, string $locale): string
+    {
         $newsletter = $this->newsletterRepository->findById((int) $newsletterId, $locale);
         return $this->getUrl($newsletter->getDoubleOptConfirmPage(), $locale);
     }
@@ -41,13 +42,13 @@ readonly class SubscriptionDocumentUrlProvider
             ],
         );
         if (!$page) {
-            return '/'.$locale;
+            return '/' . $locale;
         }
         $dimensionContent = $page->getDimensionContents()->filter(
-            static fn ($content): bool => $content->getLocale() === $locale,
+            static fn($content): bool => $content->getLocale() === $locale,
         )->first();
         $resourceSegment = $dimensionContent?->getRoute()?->getSlug() ?? '/';
 
-        return '/'.$locale.$resourceSegment;
+        return '/' . $locale . $resourceSegment;
     }
 }

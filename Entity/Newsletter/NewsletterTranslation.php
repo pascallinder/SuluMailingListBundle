@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Entity\Newsletter;
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Linderp\SuluBaseBundle\Entity\IdTrait;
@@ -21,8 +22,7 @@ class NewsletterTranslation implements AuditableInterface
         private readonly Newsletter $newsletter,
         #[ORM\Column(type: Types::STRING, length: 5, nullable: false)]
         private readonly string $locale,
-    ) {
-    }
+    ) {}
 
     /**
      * @return string|null

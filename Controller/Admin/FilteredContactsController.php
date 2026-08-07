@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription;
@@ -12,8 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class FilteredContactsController extends AbstractController
 {
-
-    public function __construct(private readonly EntityManagerInterface $em){}
+    public function __construct(private readonly EntityManagerInterface $em) {}
     #[Route(path: '/admin/api/filtered-contacts', name: 'app.get_filtered_contacts', methods: ['GET'])]
     public function getAction(Request $request): JsonResponse
     {
@@ -21,7 +21,7 @@ class FilteredContactsController extends AbstractController
         $limit = max(1, (int) $request->query->get('limit', 10));
         $offset = ($page - 1) * $limit;
 
-        $newsletterIds = $request->query->get('newsletterIds') ?explode(',', $request->query->get('newsletterIds')):[];
+        $newsletterIds = $request->query->get('newsletterIds') ? explode(',', $request->query->get('newsletterIds')) : [];
         $contactIds = $request->query->get('ids') ? explode(',', $request->query->get('ids')) : [];
         if (!$newsletterIds) {
             return $this->json(new PaginatedRepresentation([], 'filtered_contacts', $page, $limit, 0));
@@ -38,7 +38,7 @@ class FilteredContactsController extends AbstractController
             ->groupBy('c.id, c.firstName, c.lastName, c.mainEmail')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
-        if(count($contactIds)){
+        if (count($contactIds)) {
             $qb->andWhere('c.id IN (:contactIds)')
                 ->setParameter('contactIds', $contactIds);
         }

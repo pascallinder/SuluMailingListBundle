@@ -7,9 +7,7 @@ use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeInterface;
 
 readonly class SpacerMailFieldType implements MailFieldTypeInterface
 {
-    public function __construct(){
-
-    }
+    public function __construct() {}
     public function getConfiguration(): MailFieldTypeConfiguration
     {
         return (new MailFieldTypeConfiguration(

@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Entity\NewsletterSubscription;
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Linderp\SuluBaseBundle\Entity\IdTrait;
@@ -16,7 +17,7 @@ class NewsletterSubscription
 {
     use IdTrait;
     final public const RESOURCE_KEY = 'newsletters_subscriptions';
-    #[ORM\Column(type: 'datetime' , nullable: false)]
+    #[ORM\Column(type: 'datetime', nullable: false)]
     private \DateTimeInterface $subscribedAt;
 
     #[ORM\Column(type: 'datetime', nullable: true)]

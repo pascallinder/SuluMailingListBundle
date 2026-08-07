@@ -13,11 +13,10 @@ class MailResourcePool implements MailPoolInterface
      * @param iterable<MailResourceInterface> $resources
      */
     public function __construct(
-
         #[AutowireIterator('mailing.resource')]
         iterable $resources
     ) {
-        $this->resources =[...$resources];
+        $this->resources = [...$resources];
     }
 
     /**

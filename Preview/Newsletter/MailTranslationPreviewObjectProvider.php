@@ -1,5 +1,7 @@
 <?php
+
 namespace Linderp\SuluMailingListBundle\Preview\Newsletter;
+
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
 use Sulu\Bundle\PreviewBundle\Preview\PreviewContext;
@@ -10,9 +12,7 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewD
 {
     public function __construct(
         private MailContextTypesPool $contextTypesPool,
-    ){
-
-    }
+    ) {}
     /**
      * @param array<string, mixed> $data
      */
@@ -23,7 +23,7 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewD
             ->getPropertyAccessor();
 
         foreach ($data as $property => $value) {
-            if($property === 'id' || !$propertyAccess->isWritable($object,$property)){
+            if ($property === 'id' || !$propertyAccess->isWritable($object, $property)) {
                 continue;
             }
             try {
@@ -31,9 +31,9 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewD
             } catch (\InvalidArgumentException $e) {
             }
         }
-        $object->setContent($data['content_'.$object->getContext()]);
+        $object->setContent($data['content_' . $object->getContext()]);
         $keys = $this->contextTypesPool->get($data['context'])->getConfiguration()->getContextVarsKeys();
-        $object->setContextVars(array_reduce($keys,fn($carry, $key) => [...$carry, $key =>$data[$key]],[]));
+        $object->setContextVars(array_reduce($keys, fn($carry, $key) => [...$carry, $key => $data[$key]], []));
     }
 
     public function getDefaults(PreviewContext $previewContext): array

@@ -8,13 +8,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsAlias(id: 'sulu_mailing_list.salutation_prefix_select', public: true)]
 readonly class SalutationPrefixSelect
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
+    public function __construct(private TranslatorInterface $translator) {}
     /**
      * @return list<array{name: string, title: string}>
      */
-    public function getValues(string $locale): array{
+    public function getValues(string $locale): array
+    {
         return [
             [
                 'name' => '0',
@@ -30,10 +29,12 @@ readonly class SalutationPrefixSelect
             ],
         ];
     }
-    public function getValue(int $index, string $locale):string{
+    public function getValue(int $index, string $locale): string
+    {
         return $this->getValues($locale)[$index]['title'] ?? '';
     }
-    public function getDefaultValue():string{
+    public function getDefaultValue(): string
+    {
         return '0';
     }
 }

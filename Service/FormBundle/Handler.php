@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Service\FormBundle;
+
 use Linderp\SuluMailingListBundle\Service\Mail\MailContentProvider;
 use Psr\Cache\InvalidArgumentException;
 use Sulu\Bundle\FormBundle\Configuration\FormConfigurationInterface;
@@ -12,9 +13,11 @@ readonly class Handler implements HandlerInterface
 {
     private Filesystem $filesystem;
     private string $templatesPath;
-    public function __construct(private HandlerInterface    $inner,
-                                string                      $projectDir,
-                                private MailContentProvider $mailContentProvider){
+    public function __construct(
+        private HandlerInterface    $inner,
+        string                      $projectDir,
+        private MailContentProvider $mailContentProvider
+    ) {
         $this->filesystem = new Filesystem();
         $this->templatesPath = $projectDir . '/templates';
     }
@@ -26,12 +29,12 @@ readonly class Handler implements HandlerInterface
     {
 
         $config = $configuration->getWebsiteMailConfiguration();
-        if($config != null){
+        if ($config != null) {
             $fullPath = $this->templatesPath . '/' . ltrim($config->getTemplate(), '/');
             if (!$this->filesystem->exists($fullPath)) {
-                $result = $this->mailContentProvider->getCachingMailContent(explode(".",$config->getTemplate())[0],$configuration->getLocale(),[
+                $result = $this->mailContentProvider->getCachingMailContent(explode(".", $config->getTemplate())[0], $configuration->getLocale(), [
                     'firstName' => "{{ formEntity.fields|filter(field => field.key == 'firstName')|first.value|default('') }}",
-                    'body' => "{{ formEntity.mailText|default('')|raw }}"
+                    'body' => "{{ formEntity.mailText|default('')|raw }}",
                 ]);
                 $this->filesystem->dumpFile($fullPath, $result);
             }

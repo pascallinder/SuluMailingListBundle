@@ -10,8 +10,7 @@ readonly class TextMailFieldType implements MailFieldTypeInterface
 {
     public function __construct(
         private MailFontImageRenderer $mailFontImageRenderer,
-    ) {
-    }
+    ) {}
     public function getConfiguration(): MailFieldTypeConfiguration
     {
         return (new MailFieldTypeConfiguration(

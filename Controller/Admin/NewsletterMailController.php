@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Linderp\SuluBaseBundle\Common\DoctrineListRepresentationFactory;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
@@ -27,7 +28,6 @@ use Symfony\Component\Routing\Attribute\Route;
 class NewsletterMailController extends MailTranslatableController
 {
     public function __construct(
-
         private readonly NewsletterMailRepository          $newsletterMailRepository,
         private readonly ContactRepositoryInterface $contactRepository,
         private readonly NewsletterMailTranslationRepository $newsletterMailTranslationRepository,
@@ -39,21 +39,24 @@ class NewsletterMailController extends MailTranslatableController
         MailContextTypesPool $mailContextTypes,
         #[Autowire('%sulu_mailing_list.no_reply_email%')]
         string $noReplyEmail,
-    )
-    {
-        parent::__construct($mailContextTypes,$noReplyEmail,$mailContentProvider,
-            $this->newsletterMailRepository);
+    ) {
+        parent::__construct(
+            $mailContextTypes,
+            $noReplyEmail,
+            $mailContentProvider,
+            $this->newsletterMailRepository
+        );
     }
     #[Route(path: '/admin/api/newsletters-mails/{id}', name: 'app.get_newsletter_mail', methods: ['GET'])]
     public function getAction(int $id, Request $request): Response
     {
-        return $this->handleGetByIdRequest($id,$request);
+        return $this->handleGetByIdRequest($id, $request);
     }
 
     #[Route(path: '/admin/api/newsletters-mails/{id}', name: 'app.put_newsletter_mail', methods: ['PUT'])]
     public function putAction(int $id, Request $request): Response
     {
-        return $this->handlePutRequest($id,$request);
+        return $this->handlePutRequest($id, $request);
     }
 
     #[Route(path: '/admin/api/newsletters-mails', name: 'app.post_newsletter_mail', methods: ['POST'])]
@@ -65,7 +68,7 @@ class NewsletterMailController extends MailTranslatableController
     #[Route(path: '/admin/api/newsletters-mails/{id}', name: 'app.post_newsletter_mail_trigger', methods: ['POST'])]
     public function postTriggerAction(int $id, Request $request): Response
     {
-        return $this->handlePostTriggerRequest($id,$request);
+        return $this->handlePostTriggerRequest($id, $request);
     }
 
     #[Route(path: '/admin/api/newsletters-mails/{id}', name: 'app.delete_newsletter_mail', methods: ['DELETE'])]
@@ -91,37 +94,41 @@ class NewsletterMailController extends MailTranslatableController
      */
     protected function getDataForEntity($entity, Request $request): array
     {
-          $data = [
-              'id' => $entity->getId(),
-              'newsletters'=>array_map(fn(Newsletter $newsletter)=> $newsletter->getId(),
-                $entity->getNewsletters()->getValues()),
-              'contacts'=>array_map(fn(Contact $contact)=> $contact->getId(),
-                  $entity->getContacts()->getValues()),
-              'sent' => $entity->isSent(),
-              'readyForSend'=> count(array_filter($this->webspaceManager->getAllLocales(),fn($locale)=>!$entity->hasTranslation($locale))) === 0
-          ];
-          return $this->getDataForMailTranslatable($entity, $data);
+        $data = [
+            'id' => $entity->getId(),
+            'newsletters' => array_map(
+                fn(Newsletter $newsletter) => $newsletter->getId(),
+                $entity->getNewsletters()->getValues()
+            ),
+            'contacts' => array_map(
+                fn(Contact $contact) => $contact->getId(),
+                $entity->getContacts()->getValues()
+            ),
+            'sent' => $entity->isSent(),
+            'readyForSend' => count(array_filter($this->webspaceManager->getAllLocales(), fn($locale) => !$entity->hasTranslation($locale))) === 0,
+        ];
+        return $this->getDataForMailTranslatable($entity, $data);
     }
 
     /**
      * @param NewsletterMail $entity
      * @param array<string, mixed> $data
      */
-    protected function mapDataToEntity(array $data,$entity, Request $request): void
+    protected function mapDataToEntity(array $data, $entity, Request $request): void
     {
 
         $newsletters = array_filter(
             $this->newsletterRepository->findBy(['id' => $data['newsletters']]),
-            static fn ($newsletter): bool => $newsletter instanceof Newsletter,
+            static fn($newsletter): bool => $newsletter instanceof Newsletter,
         );
         $entity->setNewsletters(new ArrayCollection($newsletters));
         $entity->setSubject($data['subject']);
         $contacts = array_filter(
             $this->contactRepository->findBy(['id' => $data['contacts']]),
-            static fn ($contact): bool => $contact instanceof Contact,
+            static fn($contact): bool => $contact instanceof Contact,
         );
         $entity->setContacts(new ArrayCollection($contacts));
-        $this->mapDataToMailTranslatable($entity,$data);
+        $this->mapDataToMailTranslatable($entity, $data);
     }
 
     /**
@@ -139,9 +146,11 @@ class NewsletterMailController extends MailTranslatableController
                 break;
             }
             case 'copy-locale':{
-                $this->newsletterMailTranslationRepository->copyLocale($entity,
+                $this->newsletterMailTranslationRepository->copyLocale(
+                    $entity,
                     $request->query->get('locale'),
-                    $request->query->get('dest'));
+                    $request->query->get('dest')
+                );
                 break;
             }
             case 'copy':{

@@ -9,6 +9,4 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
  * @extends MailTypeInterface<MailContextTypeConfiguration>
  */
 #[AutoconfigureTag('mailing.context-type')]
-interface MailContextTypeInterface extends MailTypeInterface
-{
-}
+interface MailContextTypeInterface extends MailTypeInterface {}

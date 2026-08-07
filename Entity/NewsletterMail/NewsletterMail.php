@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Entity\NewsletterMail;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -11,7 +12,6 @@ use Linderp\SuluMailingListBundle\Entity\MailTranslation;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Repository\NewsletterMail\NewsletterMailRepository;
 use Sulu\Bundle\ContactBundle\Entity\Contact;
-
 
 #[ORM\Entity(repositoryClass: NewsletterMailRepository::class)]
 class NewsletterMail extends MailTranslatable

@@ -85,8 +85,8 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
 
                     if (!isset($contextVarsByContextAndLocale[$contextKey][$locale])) {
                         $properties = $propertiesByContextKey[$contextKey];
-                        $contextVarsByContextAndLocale[$contextKey][$locale] =
-                            $properties;
+                        $contextVarsByContextAndLocale[$contextKey][$locale]
+                            = $properties;
                     }
 
                     $visibleContext = '__parent.context == "' . $contextKey . '"';
@@ -100,9 +100,9 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
                         }
                         $existing = $child->getDisabledCondition();
                         $child->setDisabledCondition(
-                            $existing ? '(' . $existing . ') AND ' .
-                                $contextType->getConfiguration()->getContextVarsDisabledCondition() :
-                                $contextType->getConfiguration()->getContextVarsDisabledCondition()
+                            $existing ? '(' . $existing . ') AND '
+                                . $contextType->getConfiguration()->getContextVarsDisabledCondition()
+                                : $contextType->getConfiguration()->getContextVarsDisabledCondition()
                         );
                         $formMetadata->addItem($child);
                     }
@@ -118,12 +118,12 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
                     $content->setRequired(true);
                     $first = null;
                     foreach ($this->sortedMailWrapperTypes as $wrapperType) {
-                        if(empty($wrapperType->getConfiguration()->getAcceptedContexts())  ||
-                            in_array($contextType->getConfiguration()->getKey(), $wrapperType->getConfiguration()->getAcceptedContexts())) {
+                        if (empty($wrapperType->getConfiguration()->getAcceptedContexts())
+                            || in_array($contextType->getConfiguration()->getKey(), $wrapperType->getConfiguration()->getAcceptedContexts())) {
                             $content->addType(
                                 $this->createWrappersMetadata($wrapperType, $locale, $resource, $contextType)
                             );
-                            if($first === null){
+                            if ($first === null) {
                                 $first = $wrapperType->getConfiguration()->getKey();
                             }
                         }
@@ -152,8 +152,8 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
     {
         $filteredContextTypes = [];
         foreach ($this->sortedContextTypes as $contextType) {
-            if(count($contextType->getConfiguration()->getAcceptedResources()) &&
-                !in_array($resource::class,$contextType->getConfiguration()->getAcceptedResources(),true)){
+            if (count($contextType->getConfiguration()->getAcceptedResources())
+                && !in_array($resource::class, $contextType->getConfiguration()->getAcceptedResources(), true)) {
                 continue;
             }
             $filteredContextTypes[] = $contextType;
@@ -169,7 +169,7 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
         $valuesOption = new OptionMetadata();
         $valuesOption->setName('values');
         $valuesOption->setType('collection');
-        $valuesOption->setValue(\array_map(function($contextType) use ($locale) {
+        $valuesOption->setValue(\array_map(function ($contextType) use ($locale) {
             $option = new OptionMetadata();
             $option->setName($contextType->getConfiguration()->getKey());
             $option->setValue($this->translator->trans($contextType->getConfiguration()->getTitle(), [], 'admin', $locale));
@@ -204,9 +204,12 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
     /**
      * @throws \Exception
      */
-    private function createWrappersMetadata(MailWrapperTypeInterface $mailWrapperType, string $locale,
-                                            MailResourceInterface $mailResource, MailContextTypeInterface $contextType): FormMetadata
-    {
+    private function createWrappersMetadata(
+        MailWrapperTypeInterface $mailWrapperType,
+        string $locale,
+        MailResourceInterface $mailResource,
+        MailContextTypeInterface $contextType
+    ): FormMetadata {
         $wrapperForm = new FormMetadata();
 
         $configuration = $mailWrapperType->getConfiguration();
@@ -216,30 +219,37 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
         $wrapperForm->setItems($properties);
         $wrapperForm->setKey($mailWrapperType->getConfiguration()->getKey());
         foreach ($mailWrapperType->getConfiguration()->getContentKeys() as $label => $key) {
-            $wrapperForm->addItem($this->createComponentsMetadata($key, $label, $locale, $mailResource::class,
-                $contextType::class, $mailWrapperType::class));
+            $wrapperForm->addItem($this->createComponentsMetadata(
+                $key,
+                $label,
+                $locale,
+                $mailResource::class,
+                $contextType::class,
+                $mailWrapperType::class
+            ));
         }
         return $wrapperForm;
     }
     /**
      * @throws \Exception
      */
-    private function createComponentsMetadata(string $contentKey, string $label, string $locale, string $resourceClass,string $contextClass, string $wrapperClass): FieldMetadata{
+    private function createComponentsMetadata(string $contentKey, string $label, string $locale, string $resourceClass, string $contextClass, string $wrapperClass): FieldMetadata
+    {
         $components = new FieldMetadata($contentKey);
         $components->setType('block');
         $components->setLabel($this->translator->trans($label, [], 'admin', $locale), $locale);
         $fieldTypeMetaDataCollection = [];
         foreach ($this->sortedMailFieldTypes as $type) {
-            if(count($type->getConfiguration()->getAcceptedResources()) &&
-                !in_array($resourceClass,$type->getConfiguration()->getAcceptedResources(),true)){
+            if (count($type->getConfiguration()->getAcceptedResources())
+                && !in_array($resourceClass, $type->getConfiguration()->getAcceptedResources(), true)) {
                 continue;
             }
-            if(count($type->getConfiguration()->getAcceptedContext()) &&
-                !in_array($contextClass,$type->getConfiguration()->getAcceptedContext(),true)){
+            if (count($type->getConfiguration()->getAcceptedContext())
+                && !in_array($contextClass, $type->getConfiguration()->getAcceptedContext(), true)) {
                 continue;
             }
-            if(count($type->getConfiguration()->getAcceptedWrapper()) &&
-                !in_array($wrapperClass,$type->getConfiguration()->getAcceptedWrapper(),true)){
+            if (count($type->getConfiguration()->getAcceptedWrapper())
+                && !in_array($wrapperClass, $type->getConfiguration()->getAcceptedWrapper(), true)) {
                 continue;
             }
             $fieldTypeMetaDataCollection[] = $this->loadFieldTypeMetadata($type->getConfiguration()->getKey(), $type, $locale);

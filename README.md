@@ -12,7 +12,7 @@ Sulu bundle to manage mailing lists, subscribe contacts (including via Sulu Form
 
 ## Requirements
 - PHP 8.2+
-- Sulu 2.6+
+- Sulu 3.0.8 or newer in the 3.0 release line
 - `linderp/sulu-form-save-contact-bundle`
 - `linderp/sulu-base-bundle`
 
@@ -37,13 +37,13 @@ return [
 `config/routes_admin.yaml`
 ```yaml
 SuluMailingListBundle:
-    resource: "@SuluMailingListBundle/Resources/config/routes_admin.yml"
+    resource: "@SuluMailingListBundle/Resources/config/routes_admin.yaml"
 ```
 
 `config/routes_website.yaml`
 ```yaml
 SuluMailingListBundle:
-    resource: "@SuluMailingListBundle/Resources/config/routes.yml"
+    resource: "@SuluMailingListBundle/Resources/config/routes.yaml"
 ```
 
 4. Configure MJML and sender settings in `config/packages/sulu_mailing_list.yaml`:

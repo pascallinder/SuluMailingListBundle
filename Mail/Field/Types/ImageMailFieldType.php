@@ -8,9 +8,7 @@ use Linderp\SuluMailingListBundle\Service\Helper\ImageUrlProvider;
 
 readonly class ImageMailFieldType implements MailFieldTypeInterface
 {
-    public function __construct(private ImageUrlProvider $imageUrlProvider){
-
-    }
+    public function __construct(private ImageUrlProvider $imageUrlProvider) {}
     public function getConfiguration(): MailFieldTypeConfiguration
     {
         return (new MailFieldTypeConfiguration(
@@ -27,7 +25,7 @@ readonly class ImageMailFieldType implements MailFieldTypeInterface
      */
     public function build(array $item, string $locale): array
     {
-        $item['image']=$this->imageUrlProvider->getUrl($item, $locale);
+        $item['image'] = $this->imageUrlProvider->getUrl($item, $locale);
         return $item;
     }
 }

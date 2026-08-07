@@ -8,9 +8,7 @@ use Linderp\SuluMailingListBundle\Service\Helper\PageUrlProvider;
 
 readonly class ButtonMailFieldType implements MailFieldTypeInterface
 {
-    public function __construct(private PageUrlProvider $pageUrlProvider){
-
-    }
+    public function __construct(private PageUrlProvider $pageUrlProvider) {}
     public function getConfiguration(): MailFieldTypeConfiguration
     {
         return (new MailFieldTypeConfiguration(

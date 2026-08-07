@@ -9,10 +9,10 @@ use Linderp\SuluMailingListBundle\Service\Helper\PageUrlProvider;
 
 readonly class SocialMailFieldType implements MailFieldTypeInterface
 {
-    public function __construct(private PageUrlProvider $pageUrlProvider,
-    private MailSocialPool $mailSocialPool){
-
-    }
+    public function __construct(
+        private PageUrlProvider $pageUrlProvider,
+        private MailSocialPool $mailSocialPool
+    ) {}
     public function getConfiguration(): MailFieldTypeConfiguration
     {
         return (new MailFieldTypeConfiguration(
@@ -33,7 +33,7 @@ readonly class SocialMailFieldType implements MailFieldTypeInterface
         foreach ($item['elements'] as $element) {
             $element['url'] = $this->pageUrlProvider->getUrl($element, $locale);
             $mailSocial = $this->mailSocialPool->getOne($element['name']);
-            if($mailSocial->getConfiguration()->getSrc() != null){
+            if ($mailSocial->getConfiguration()->getSrc() != null) {
                 $element['src'] = $mailSocial->getConfiguration()->getSrc();
             }
             $elements[] = $element;

@@ -1,5 +1,7 @@
 <?php
+
 namespace Linderp\SuluMailingListBundle\Mail\Wrapper\Types;
+
 use Linderp\SuluMailingListBundle\Mail\Wrapper\MailWrapperTypeConfiguration;
 use Linderp\SuluMailingListBundle\Mail\Wrapper\MailWrapperTypeInterface;
 

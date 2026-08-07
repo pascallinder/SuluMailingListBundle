@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
+
 use Linderp\SuluBaseBundle\Common\DoctrineListRepresentationFactory;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
@@ -25,7 +26,6 @@ use Symfony\Component\Routing\Attribute\Route;
 class NewsletterController extends MailTranslatableController
 {
     public function __construct(
-
         private readonly NewsletterRepository $newsletterRepository,
         private readonly NewsletterDoubleOptTranslationRepository $newsletterDoubleOptTranslationRepository,
         private readonly DoctrineListRepresentationFactory $doctrineListRepresentationFactory,
@@ -33,20 +33,19 @@ class NewsletterController extends MailTranslatableController
         MailContentProvider $mailContentProvider,
         #[Autowire('%sulu_mailing_list.no_reply_email%')]
         string $noReplyEmail,
-    )
-    {
-        parent::__construct($mailContextTypes,$noReplyEmail,$mailContentProvider,$this->newsletterRepository);
+    ) {
+        parent::__construct($mailContextTypes, $noReplyEmail, $mailContentProvider, $this->newsletterRepository);
     }
     #[Route(path: '/admin/api/newsletters/{id}', name: 'app.get_newsletter', methods: ['GET'])]
     public function getAction(int $id, Request $request): Response
     {
-        return $this->handleGetByIdRequest($id,$request);
+        return $this->handleGetByIdRequest($id, $request);
     }
 
     #[Route(path: '/admin/api/newsletters/{id}', name: 'app.put_newsletter', methods: ['PUT'])]
     public function putAction(int $id, Request $request): Response
     {
-        return $this->handlePutRequest($id,$request);
+        return $this->handlePutRequest($id, $request);
     }
 
     /**
@@ -61,7 +60,7 @@ class NewsletterController extends MailTranslatableController
     #[Route(path: '/admin/api/newsletters/{id}', name: 'app.post_newsletter_trigger', methods: ['POST'])]
     public function postTriggerAction(int $id, Request $request): Response
     {
-        return $this->handlePostTriggerRequest($id,$request);
+        return $this->handlePostTriggerRequest($id, $request);
     }
 
     #[Route(path: '/admin/api/newsletters/{id}', name: 'app.delete_newsletter', methods: ['DELETE'])]
@@ -94,7 +93,7 @@ class NewsletterController extends MailTranslatableController
             'doubleOptConfirmPage' => $entity->getDoubleOptConfirmPage(),
             'unsubscribePage' => $entity->getUnsubscribePage(),
         ];
-        return $this->getDataForMailTranslatable($doubleOpt,$data);
+        return $this->getDataForMailTranslatable($doubleOpt, $data);
     }
     /**
      * @param Newsletter $entity
@@ -105,11 +104,11 @@ class NewsletterController extends MailTranslatableController
     protected function mapDataToEntity(array $data, $entity, Request $request): void
     {
         $doubleOpt = $entity->getNewsletterDoubleOpt();
-        $entity->setTitle($data['title'] );
+        $entity->setTitle($data['title']);
         $entity->setDoubleOptConfirmPage($data['doubleOptConfirmPage']);
         $entity->setUnsubscribePage($data['unsubscribePage']);
         $doubleOpt->setSubject($data['subject'] ?? '');
-        $this->mapDataToMailTranslatable($doubleOpt,$data);
+        $this->mapDataToMailTranslatable($doubleOpt, $data);
     }
 
     /**
@@ -117,16 +116,18 @@ class NewsletterController extends MailTranslatableController
      */
     public function indexAction(Newsletter $newsletter): Response
     {
-        return $this->getIndexResponse($newsletter->getNewsletterDoubleOpt(),['doubleOptUrl' => 'https://google.ch']);
+        return $this->getIndexResponse($newsletter->getNewsletterDoubleOpt(), ['doubleOptUrl' => 'https://google.ch']);
     }
 
     protected function triggerSwitch(Request $request, string $action, $entity): void
     {
         switch ($action) {
             case 'copy-locale':{
-                $this->newsletterDoubleOptTranslationRepository->copyLocale($entity->getNewsletterDoubleOpt(),
+                $this->newsletterDoubleOptTranslationRepository->copyLocale(
+                    $entity->getNewsletterDoubleOpt(),
                     $request->query->get('locale'),
-                    $request->query->get('dest'));
+                    $request->query->get('dest')
+                );
                 break;
             }
         }

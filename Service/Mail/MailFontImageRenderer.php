@@ -25,8 +25,7 @@ class MailFontImageRenderer
         private readonly string $projectDir,
         private readonly RequestStack $requestStack,
         private readonly MailFontPool $mailFontPool,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $item
@@ -86,8 +85,8 @@ class MailFontImageRenderer
     {
         $publicDirectory = rtrim($this->getPublicDirectory(), '/');
         $imagePath = rtrim($this->imagePath, '/');
-        if (!class_exists(\Imagick::class) || $imagePath === '' || !is_dir($publicDirectory) ||
-            !str_starts_with($imagePath, $publicDirectory . '/')) {
+        if (!class_exists(\Imagick::class) || $imagePath === '' || !is_dir($publicDirectory)
+            || !str_starts_with($imagePath, $publicDirectory . '/')) {
             return null;
         }
 
@@ -151,7 +150,7 @@ class MailFontImageRenderer
         float $lineHeight,
         array $item,
     ): ?int {
-        if (!is_dir($this->imagePath) && !mkdir($this->imagePath, 0775, true) && !is_dir($this->imagePath)) {
+        if (!is_dir($this->imagePath) && !mkdir($this->imagePath, 0o775, true) && !is_dir($this->imagePath)) {
             return null;
         }
 
@@ -182,7 +181,7 @@ class MailFontImageRenderer
         try {
             $lines = $this->wrapText($canvas, $draw, $text, $maxWidth);
             $lineWidths = array_map(
-                fn (string $line): int => $this->getTextWidth($canvas, $draw, $line),
+                fn(string $line): int => $this->getTextWidth($canvas, $draw, $line),
                 $lines
             );
             $lineHeightInPixels = max(
@@ -329,8 +328,8 @@ class MailFontImageRenderer
 
     private function getBackgroundColor(mixed $color): ?string
     {
-        if (!is_string($color) || strcasecmp($color, 'inherit') === 0 ||
-            !preg_match('/^#?([0-9a-f]{3,8})$/i', $color, $matches)) {
+        if (!is_string($color) || strcasecmp($color, 'inherit') === 0
+            || !preg_match('/^#?([0-9a-f]{3,8})$/i', $color, $matches)) {
             return null;
         }
 

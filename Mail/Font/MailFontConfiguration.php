@@ -7,11 +7,11 @@ class MailFontConfiguration
     private bool $defaultFont = false;
     private bool $webFont = false;
     private float $strokeWidth = 0.0;
-    public function __construct(private readonly string $cssUrl,
-                                private readonly string $name,
-                                private readonly string $fontFamily)
-    {
-    }
+    public function __construct(
+        private readonly string $cssUrl,
+        private readonly string $name,
+        private readonly string $fontFamily
+    ) {}
 
     public function getCssUrl(): string
     {
@@ -32,7 +32,8 @@ class MailFontConfiguration
     {
         return $this->defaultFont;
     }
-    public function setDefaultFont(bool $defaultFont): static{
+    public function setDefaultFont(bool $defaultFont): static
+    {
         $this->defaultFont = $defaultFont;
         return $this;
     }

@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Repository\NewsletterMail;
+
 use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation;

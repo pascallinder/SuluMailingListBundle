@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Event\NewsletterMail;
+
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail;
 use Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription;
 use Sulu\Bundle\ActivityBundle\Domain\Event\DomainEvent;

@@ -13,12 +13,13 @@ class MailWrapperTypeConfiguration extends MailMetadataXmlConfiguration
     /**
      * @var array<string,string>
      */
-    private array $contentKeys = ['mailingListMail.props.content.components'=>'components'];
+    private array $contentKeys = ['mailingListMail.props.content.components' => 'components'];
 
     /**
      * @return array<string,string>
      */
-    public function getContentKeys(): array{
+    public function getContentKeys(): array
+    {
         return $this->contentKeys;
     }
 

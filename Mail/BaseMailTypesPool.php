@@ -39,9 +39,10 @@ abstract class BaseMailTypesPool implements MailPoolInterface
     /**
      * @return T[]
      */
-    public function getAllSorted(): array{
+    public function getAllSorted(): array
+    {
         $values = $this->getAll();
-        \usort($values, static function(MailTypeInterface $a, MailTypeInterface $b): int {
+        \usort($values, static function (MailTypeInterface $a, MailTypeInterface $b): int {
             $aConfig = $a->getConfiguration();
             $bConfig = $b->getConfiguration();
             $priorityCompare = $aConfig->getPriority() <=> $bConfig->getPriority();

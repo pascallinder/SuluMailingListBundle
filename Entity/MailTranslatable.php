@@ -1,6 +1,7 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Entity;
+
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,7 +22,8 @@ abstract class MailTranslatable
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     protected string $senderMail;
 
-    public function hasTranslation(string $locale):bool{
+    public function hasTranslation(string $locale): bool
+    {
         return $this->getTranslations()->containsKey($locale);
     }
     protected function getTranslation(string $locale): ?MailTranslation
@@ -32,7 +34,7 @@ abstract class MailTranslatable
         return $this->getTranslations()->get($locale);
     }
 
-    protected abstract function createTranslation(string $locale): MailTranslation;
+    abstract protected function createTranslation(string $locale): MailTranslation;
 
     /**
      * @return array<string, mixed>|null
@@ -80,12 +82,12 @@ abstract class MailTranslatable
     /**
      * @param Collection<string, MailTranslation> $translations
      */
-    public abstract function setTranslations(Collection $translations): void;
+    abstract public function setTranslations(Collection $translations): void;
 
     /**
      * @return Collection<string, MailTranslation>
      */
-    public abstract function getTranslations(): Collection;
+    abstract public function getTranslations(): Collection;
 
 
     /**
@@ -135,10 +137,10 @@ abstract class MailTranslatable
         $this->setContext($source->getContext());
         $this->setContextVars($source->getContextVars());
         foreach ($source->getTranslations() as $translation) {
-            $copy= $this->createTranslation($translation->getLocale());
+            $copy = $this->createTranslation($translation->getLocale());
             $copy->applyFrom($translation);
         }
     }
-    protected abstract function getTranslationClass(): string;
-    public abstract function copy(): self;
+    abstract protected function getTranslationClass(): string;
+    abstract public function copy(): self;
 }

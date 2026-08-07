@@ -17,7 +17,7 @@ readonly class MjmlAPIService
         #[Autowire('%sulu_mailing_list.mjml.secret_key%')]
         private string $secretKey
     ) {
-        $this->curlApi = new CurlApi($this->appId, $this->secretKey);
+        $this->curlApi = new CurlApi($this->appId, $this->secretKey, new BoundedCurl());
         $this->apiRenderer = new ApiRenderer($this->curlApi);
     }
 

@@ -4,6 +4,8 @@
     "type": "symfony-bundle",
     "require": {
         "php": "^8.2",
+        "ext-curl": "*",
+        "qferr/mjml-php": "^2.0",
         "sulu/sulu": "^3.0.8",
         "linderp/sulu-form-save-contact-bundle": "^0.1 || dev-main",
         "linderp/sulu-base-bundle": "^0.1 || dev-main",

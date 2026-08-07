@@ -5,6 +5,7 @@ use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Repository\Newsletter\NewsletterRepository;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Symfony\Component\HttpFoundation\RequestStack;
+
 #[AsAlias(id: 'sulu_mailing_list.newsletter_service', public: true)]
 readonly class NewsletterService
 {

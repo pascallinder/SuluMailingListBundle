@@ -2,16 +2,12 @@
 
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
 use Linderp\SuluBaseBundle\Common\DoctrineListRepresentationFactory;
-use Linderp\SuluBaseBundle\Controller\Admin\LocaleController;
-use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
 use Linderp\SuluMailingListBundle\Repository\Newsletter\NewsletterRepository;
-use Linderp\SuluMailingListBundle\Repository\NewsletterDoubleOpt\NewsletterDoubleOptRepository;
 use Linderp\SuluMailingListBundle\Repository\NewsletterDoubleOpt\NewsletterDoubleOptTranslationRepository;
 use Linderp\SuluMailingListBundle\Service\Mail\MailContentProvider;
 use Psr\Cache\InvalidArgumentException;
-use Sulu\Bundle\MediaBundle\Media\Manager\MediaManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

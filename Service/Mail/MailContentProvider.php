@@ -8,7 +8,6 @@ use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypesPool;
 use Linderp\SuluMailingListBundle\Mail\Font\MailFontInterface;
 use Linderp\SuluMailingListBundle\Mail\Font\MailFontPool;
 use Linderp\SuluMailingListBundle\Mail\Wrapper\MailWrapperTypesPool;
-use phpDocumentor\Reflection\PseudoTypes\IntegerRange;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Cache\CacheInterface;

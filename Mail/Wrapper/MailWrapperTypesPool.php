@@ -2,7 +2,6 @@
 
 namespace Linderp\SuluMailingListBundle\Mail\Wrapper;
 
-use Linderp\SuluMailingListBundle\Mail\MailPoolInterface;
 use Linderp\SuluMailingListBundle\Mail\BaseMailTypesPool;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 

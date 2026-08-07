@@ -4,6 +4,7 @@ namespace Linderp\SuluMailingListBundle\Content\Select;
 
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
 #[AsAlias(id: 'sulu_mailing_list.salutation_prefix_select', public: true)]
 readonly class SalutationPrefixSelect
 {

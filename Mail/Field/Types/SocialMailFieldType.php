@@ -6,7 +6,6 @@ use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeConfiguration;
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeInterface;
 use Linderp\SuluMailingListBundle\Mail\Social\MailSocialPool;
 use Linderp\SuluMailingListBundle\Service\Helper\PageUrlProvider;
-use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 
 readonly class SocialMailFieldType implements MailFieldTypeInterface
 {
@@ -23,9 +22,6 @@ readonly class SocialMailFieldType implements MailFieldTypeInterface
         ))->setPriority(50);
     }
 
-    /**
-     * @throws DocumentManagerException
-     */
     /**
      * @param array<string, mixed> $item
      *

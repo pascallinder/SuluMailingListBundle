@@ -5,11 +5,6 @@ namespace Linderp\SuluMailingListBundle\Mail\Field\Types;
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeConfiguration;
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeInterface;
 use Linderp\SuluMailingListBundle\Service\Helper\PageUrlProvider;
-use Sulu\Bundle\PageBundle\Document\PageDocument;
-use Sulu\Component\DocumentManager\DocumentManagerInterface;
-use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
-use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 readonly class ButtonMailFieldType implements MailFieldTypeInterface
 {
@@ -25,9 +20,6 @@ readonly class ButtonMailFieldType implements MailFieldTypeInterface
         ))->setPriority(20);
     }
 
-    /**
-     * @throws DocumentManagerException
-     */
     /**
      * @param array<string, mixed> $item
      *

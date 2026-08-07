@@ -1,7 +1,6 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Entity\NewsletterDoubleOpt;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Linderp\SuluMailingListBundle\Entity\MailTranslation;
 use Linderp\SuluMailingListBundle\Repository\NewsletterMail\NewsletterMailTranslationRepository;

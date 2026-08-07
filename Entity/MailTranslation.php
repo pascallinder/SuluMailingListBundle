@@ -4,7 +4,6 @@ namespace Linderp\SuluMailingListBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Linderp\SuluBaseBundle\Entity\IdTrait;
-use Sulu\Bundle\MediaBundle\Entity\Media;
 
 abstract class MailTranslation
 {

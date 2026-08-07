@@ -2,6 +2,7 @@
 
 namespace Linderp\SuluMailingListBundle\Preview\Newsletter\Mail;
 use Doctrine\Common\Collections\ArrayCollection;
+use Linderp\SuluMailingListBundle\Controller\Admin\NewsletterMailController;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation;
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
@@ -44,5 +45,10 @@ readonly class NewsletterMailPreviewObjectProvider extends MailTranslationPrevie
     public function setValues($object, $locale, array $data): void
     {
         $this->setMailTranslatableValues($object, $data);
+    }
+
+    public function getPreviewController(): string
+    {
+        return NewsletterMailController::class . '::indexAction';
     }
 }

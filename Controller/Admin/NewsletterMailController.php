@@ -2,12 +2,9 @@
 
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManagerInterface;
 use Linderp\SuluBaseBundle\Common\DoctrineListRepresentationFactory;
-use Linderp\SuluBaseBundle\Controller\Admin\LocaleController;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail;
-use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation;
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
 use Linderp\SuluMailingListBundle\Repository\Newsletter\NewsletterRepository;
 use Linderp\SuluMailingListBundle\Repository\NewsletterMail\NewsletterMailRepository;
@@ -23,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @extends MailTranslatableController<NewsletterMail>

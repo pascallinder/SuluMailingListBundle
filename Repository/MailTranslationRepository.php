@@ -3,9 +3,9 @@
 namespace Linderp\SuluMailingListBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 use Linderp\SuluMailingListBundle\Entity\MailTranslation;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @template T of MailTranslation

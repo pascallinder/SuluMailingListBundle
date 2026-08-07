@@ -1,13 +1,8 @@
 <?php
 
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Linderp\SuluBaseBundle\Common\DoctrineListRepresentationFactory;
-use Linderp\SuluBaseBundle\Controller\Admin\LocaleController;
-use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Entity\NewsletterSubscription\NewsletterSubscription;
 use Sulu\Component\Rest\ListBuilder\PaginatedRepresentation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

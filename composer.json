@@ -40,5 +40,8 @@
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^9.6",
         "symfony/phpunit-bridge": "^7.2"
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }

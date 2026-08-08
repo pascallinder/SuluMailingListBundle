@@ -30,10 +30,21 @@ readonly class SocialMailFieldType implements MailFieldTypeInterface
     public function build(array $item, string $locale): array
     {
         $elements = [];
-        foreach ($item['elements'] as $element) {
+        $configuredElements = $item['elements'] ?? [];
+        if (!\is_array($configuredElements)) {
+            $item['elements'] = [];
+
+            return $item;
+        }
+
+        foreach ($configuredElements as $element) {
+            if (!\is_array($element) || !\is_string($element['name'] ?? null)) {
+                continue;
+            }
+
             $element['url'] = $this->pageUrlProvider->getUrl($element, $locale);
             $mailSocial = $this->mailSocialPool->getOne($element['name']);
-            if ($mailSocial->getConfiguration()->getSrc() != null) {
+            if (null !== $mailSocial->getConfiguration()->getSrc()) {
                 $element['src'] = $mailSocial->getConfiguration()->getSrc();
             }
             $elements[] = $element;

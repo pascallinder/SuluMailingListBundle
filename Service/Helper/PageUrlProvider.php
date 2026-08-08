@@ -3,15 +3,12 @@
 namespace Linderp\SuluMailingListBundle\Service\Helper;
 
 use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
-use Sulu\Content\Domain\Model\DimensionContentInterface;
-use Sulu\Content\Infrastructure\Doctrine\DimensionContentQueryEnhancer;
-use Sulu\Page\Domain\Repository\PageRepositoryInterface;
 
 readonly class PageUrlProvider
 {
     public function __construct(
         private WebspaceManagerInterface $webspaceManager,
-        private PageRepositoryInterface $pageRepository,
+        private PageResourceLocatorProvider $pageResourceLocatorProvider,
     ) {}
 
     /**
@@ -19,43 +16,30 @@ readonly class PageUrlProvider
      */
     public function getUrl(array $item, string $locale): ?string
     {
-        if (!array_key_exists('url', $item)) {
-            return  null;
+        $url = $item['url'] ?? null;
+        if (!\is_array($url)) {
+            return null;
         }
-        if (($item['url']['provider'] ?? null) === 'page') {
-            $page = $this->pageRepository->findOneBy(
-                ['uuid' => (string) $item['url']['href']],
-                [
-                    PageRepositoryInterface::SELECT_PAGE_CONTENT => [
-                        'dimensionAttributes' => [
-                            'locale' => $locale,
-                            'stage' => DimensionContentInterface::STAGE_LIVE,
-                            'version' => DimensionContentInterface::CURRENT_VERSION,
-                        ],
-                        'selects' => [DimensionContentQueryEnhancer::GROUP_SELECT_CONTENT_WEBSITE => true],
-                    ],
-                ],
-            );
-            if (!$page) {
-                return null;
-            }
-            $dimensionContent = $page->getDimensionContents()->filter(
-                static fn($content): bool => $content->getLocale() === $locale,
-            )->first();
-            $resourceSegment = $dimensionContent?->getRoute()?->getSlug();
-            if (!is_string($resourceSegment)) {
+
+        $href = $url['href'] ?? null;
+        if (!\is_string($href)) {
+            return null;
+        }
+
+        if (($url['provider'] ?? null) === 'page') {
+            $page = $this->pageResourceLocatorProvider->get($href, $locale);
+            if (null === $page) {
                 return null;
             }
 
             return $this->webspaceManager->findUrlByResourceLocator(
-                $resourceSegment,
+                $page['resourceSegment'],
                 null,
                 $locale,
-                $page->getWebspaceKey(),
+                $page['webspaceKey'],
             );
-        } else {
-            return $item['url']['href'] ?? null;
         }
 
+        return $href;
     }
 }

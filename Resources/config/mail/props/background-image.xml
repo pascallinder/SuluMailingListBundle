@@ -31,7 +31,7 @@
             <param name="default" value="600" />
         </params>
     </property>
-    <xi:include href="./veritcal-align.xml"
+    <xi:include href="./vertical-align.xml"
                 xpointer="xmlns(sulu=http://schemas.sulu.io/template/template)
                       xpointer(/sulu:properties/sulu:property)"/>
 </properties>

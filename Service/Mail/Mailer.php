@@ -38,6 +38,25 @@ readonly class Mailer
     }
 
     /**
+     * @throws InvalidArgumentException
+     */
+    public function prepareTestMail(
+        MailTranslatable $newsletterMail,
+        string $recipient,
+        string $locale
+    ): Email {
+        return (new Email())
+            ->from($newsletterMail->getSenderMail())
+            ->to(new Address($recipient))
+            ->subject($newsletterMail->getSubject($locale))
+            ->html($this->mailContentProvider->getMailTranslatableMailContent($newsletterMail, $locale, [
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'unsubscribeUrl' => '#',
+            ]));
+    }
+
+    /**
      * @throws TransportExceptionInterface
      */
     public function sendMails(Email... $emails): void

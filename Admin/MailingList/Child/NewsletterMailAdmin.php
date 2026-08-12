@@ -67,7 +67,10 @@ class NewsletterMailAdmin extends Admin implements AdminNavigationItem
             ->setFormKey($mailFormKey)
             ->setTabTitle('sulu_admin.details')
             ->setEditView($editMailFormView)
-            ->addToolbarActions([new ToolbarAction('sulu_admin.save')])
+            ->addToolbarActions([
+                new ToolbarAction('app.newsletter-mail.send-test'),
+                new ToolbarAction('sulu_admin.save'),
+            ])
             ->setParent($addMailFormView);
         $viewCollection->add($addDetailsFormView);
 
@@ -91,6 +94,7 @@ class NewsletterMailAdmin extends Admin implements AdminNavigationItem
             ->setPreviewResourceKey('newsletters_mails')
             ->setTabTitle('sulu_admin.details')
             ->addToolbarActions([
+                new ToolbarAction('app.newsletter-mail.send-test'),
                 new ToolbarAction('app.newsletter-subscription.send'),
                 new ToolbarAction('sulu_admin.save'),
                 new ToolbarAction('sulu_admin.delete', [

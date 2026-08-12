@@ -27,6 +27,15 @@ mailingListSubscription:
 mailingListMail:
     action:
         copySuffix: (Copy)
+        sendTest: Send test email
+    testMail:
+        title: Send test email
+        description: Enter the email address that should receive the current version.
+        error: The test email could not be sent.
+    send:
+        title: Send email?
+        description: This email will now be sent to all intended recipients. This action cannot be undone.
+        error: The email could not be sent.
     nav:
         title: Emails
     props:

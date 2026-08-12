@@ -11,6 +11,7 @@ use Linderp\SuluMailingListBundle\Repository\Newsletter\NewsletterRepository;
 use Linderp\SuluMailingListBundle\Repository\NewsletterMail\NewsletterMailRepository;
 use Linderp\SuluMailingListBundle\Repository\NewsletterMail\NewsletterMailTranslationRepository;
 use Linderp\SuluMailingListBundle\Service\Mail\MailContentProvider;
+use Linderp\SuluMailingListBundle\Service\Mail\Mailer;
 use Linderp\SuluMailingListBundle\Service\Subscription\SubscriptionMailService;
 use Psr\Cache\InvalidArgumentException;
 use Sulu\Bundle\ContactBundle\Entity\Contact;
@@ -19,6 +20,8 @@ use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -34,6 +37,7 @@ class NewsletterMailController extends MailTranslatableController
         private readonly NewsletterRepository              $newsletterRepository,
         private readonly DoctrineListRepresentationFactory $doctrineListRepresentationFactory,
         private readonly SubscriptionMailService           $subscriptionMailService,
+        private readonly Mailer                            $mailer,
         protected readonly WebspaceManagerInterface        $webspaceManager,
         MailContentProvider  $mailContentProvider,
         MailContextTypesPool $mailContextTypes,
@@ -63,6 +67,35 @@ class NewsletterMailController extends MailTranslatableController
     public function postAction(Request $request): Response
     {
         return $this->handlePostRequest($request);
+    }
+
+    #[Route(path: '/admin/api/newsletters-mails/test', name: 'app.post_newsletter_mail_test', methods: ['POST'], priority: 10)]
+    public function postTestAction(Request $request): Response
+    {
+        $payload = $request->toArray();
+        $id = filter_var($payload['id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+        $recipient = $payload['recipient'] ?? null;
+        $locale = $payload['locale'] ?? null;
+
+        if (false === $id) {
+            throw new BadRequestHttpException('A saved newsletter ID is required.');
+        }
+        if (!is_string($recipient) || false === filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
+            throw new BadRequestHttpException('A valid test recipient email address is required.');
+        }
+        if (!is_string($locale) || !in_array($locale, $this->webspaceManager->getAllLocales(), true)) {
+            throw new BadRequestHttpException('A valid locale is required.');
+        }
+
+        $newsletterMail = $this->newsletterMailRepository->find($id);
+        if (!$newsletterMail instanceof NewsletterMail) {
+            throw new NotFoundHttpException('Newsletter mail not found.');
+        }
+
+        $newsletterMail->setLocale($locale);
+        $this->mailer->sendMails($this->mailer->prepareTestMail($newsletterMail, $recipient, $locale));
+
+        return $this->json(['sent' => true]);
     }
 
     #[Route(path: '/admin/api/newsletters-mails/{id}', name: 'app.post_newsletter_mail_trigger', methods: ['POST'])]

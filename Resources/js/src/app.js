@@ -2,7 +2,9 @@ import {formToolbarActionRegistry, listToolbarActionRegistry} from 'sulu-admin-b
 import UnsubscribeToolbarAction from "./components/list/toolbar/button/UnsubscribeToolbarAction";
 import SubscribeToolbarAction from "./components/list/toolbar/button/SubscribeToolbarAction";
 import SendToolbarAction from "./components/form/toolbar/button/SendToolbarAction";
+import SendTestToolbarAction from "./components/form/toolbar/button/SendTestToolbarAction";
 
 listToolbarActionRegistry.add('app.newsletter-subscription.unsubscribe', UnsubscribeToolbarAction);
 listToolbarActionRegistry.add('app.newsletter-subscription.subscribe', SubscribeToolbarAction);
 formToolbarActionRegistry.add('app.newsletter-subscription.send', SendToolbarAction);
+formToolbarActionRegistry.add('app.newsletter-mail.send-test', SendTestToolbarAction);

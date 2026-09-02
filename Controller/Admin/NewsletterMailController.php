@@ -178,11 +178,18 @@ class NewsletterMailController extends MailTranslatableController
                 $this->subscriptionMailService->sendMailToSubscribers($entity);
                 break;
             }
-            case 'copy-locale':{
+            case 'copy_locale':
+            {
+                $dest = $request->query->all()['dest'] ?? [];
+                $destLocales = array_values(array_filter(
+                    is_array($dest) ? $dest : [$dest],
+                    static fn(mixed $locale): bool => is_string($locale),
+                ));
+
                 $this->newsletterMailTranslationRepository->copyLocale(
                     $entity,
-                    $request->query->get('locale'),
-                    $request->query->get('dest')
+                    $request->query->getString('locale'),
+                    $destLocales,
                 );
                 break;
             }

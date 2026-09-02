@@ -20,16 +20,31 @@ abstract class MailTranslationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, $entityClass);
     }
-    public function copyLocale(MailTranslatable $mailTranslatable, string $srcLocale, string $destLocale): void
+    /**
+     * @param list<string> $destLocales
+     */
+    public function copyLocale(MailTranslatable $mailTranslatable, string $srcLocale, array $destLocales): void
     {
         $src = $this->findOneByLocale($mailTranslatable, $srcLocale);
-        $dest = $this->findOneByLocale($mailTranslatable, $destLocale);
-        if ($dest !== null) {
-            $dest->applyFrom($src);
-        } else {
-            $dest = $src->copyTo($destLocale);
+        if (!$src instanceof MailTranslation) {
+            throw new \InvalidArgumentException(sprintf('Source locale "%s" does not exist.', $srcLocale));
         }
-        $this->getEntityManager()->persist($dest);
+
+        foreach ($destLocales as $destLocale) {
+            if ($destLocale === $srcLocale) {
+                continue;
+            }
+
+            $dest = $this->findOneByLocale($mailTranslatable, $destLocale);
+            if ($dest !== null) {
+                $dest->applyFrom($src);
+            } else {
+                $dest = $src->copyTo($destLocale);
+            }
+
+            $this->getEntityManager()->persist($dest);
+        }
+
         $this->getEntityManager()->flush();
     }
     /**

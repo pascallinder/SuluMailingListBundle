@@ -20,7 +20,7 @@ class NewsletterMailRepository extends MailTranslatableRepository
     /**
      * @param array<string, mixed> $options
      *
-     * @return array<string, mixed>
+     * @return list<string>
      */
     protected function append(QueryBuilder $queryBuilder, string $alias, string $locale, $options = []): array
     {

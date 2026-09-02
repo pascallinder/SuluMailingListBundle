@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
 use Linderp\SuluMailingListBundle\Entity\MailTranslation;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
-use Linderp\SuluMailingListBundle\Repository\Newsletter\NewsletterRepository;
+use Linderp\SuluMailingListBundle\Repository\NewsletterDoubleOpt\NewsletterDoubleOptRepository;
 
-#[ORM\Entity(repositoryClass: NewsletterRepository::class)]
+#[ORM\Entity(repositoryClass: NewsletterDoubleOptRepository::class)]
 class NewsletterDoubleOpt extends MailTranslatable
 {
     /**
@@ -26,9 +26,6 @@ class NewsletterDoubleOpt extends MailTranslatable
     {
         $this->translations = new ArrayCollection();
     }
-    /**
-     * @return string|null
-     */
     /**
      * @return Newsletter|null
      */

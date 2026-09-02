@@ -127,7 +127,7 @@ class MailFontImageRenderer
                 $image = new \Imagick($filePath);
                 $width = (int) ceil($image->getImageWidth() / self::RENDER_SCALE);
                 $image->clear();
-            } catch (\Throwable) {
+            } catch (\ImagickException) {
                 return null;
             }
         }
@@ -212,7 +212,7 @@ class MailFontImageRenderer
             }
 
             return (int) ceil($width / $scale);
-        } catch (\Throwable) {
+        } catch (\ImagickException|\ImagickDrawException) {
             @unlink($filePath);
             return null;
         } finally {
@@ -240,14 +240,14 @@ class MailFontImageRenderer
             $lines[] = $current;
         }
 
-        return $lines === [] ? [''] : $lines;
+        return $lines;
     }
 
     private function getTextWidth(\Imagick $canvas, \ImagickDraw $draw, string $text): int
     {
         $metrics = $canvas->queryFontMetrics($draw, $text);
 
-        return (int) ceil($metrics['textWidth'] ?? 0);
+        return (int) ceil($metrics['textWidth']);
     }
 
     private function getFontFilePath(MailFontConfiguration $font): ?string
@@ -268,13 +268,18 @@ class MailFontImageRenderer
         }
 
         preg_match_all('/url\(\s*[\'\"]?([^\'\")]+)[\'\"]?\s*\)/i', $css, $matches);
-        foreach ($matches[1] ?? [] as $candidateUrl) {
+        foreach ($matches[1] as $candidateUrl) {
             if (str_starts_with($candidateUrl, 'data:')) {
                 continue;
             }
 
             $fontUrl = $this->resolveFontUrl($cssUrl, $candidateUrl);
-            $extension = strtolower(pathinfo(parse_url($fontUrl, PHP_URL_PATH) ?? '', PATHINFO_EXTENSION));
+            $fontUrlPath = parse_url($fontUrl, PHP_URL_PATH);
+            if (!is_string($fontUrlPath)) {
+                continue;
+            }
+
+            $extension = strtolower(pathinfo($fontUrlPath, PATHINFO_EXTENSION));
             if (!in_array($extension, ['woff2', 'woff', 'ttf', 'otf'], true)) {
                 continue;
             }

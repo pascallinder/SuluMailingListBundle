@@ -31,6 +31,7 @@ readonly class MailMetadataLoader implements FormMetadataLoaderInterface, CacheW
     private array $sortedMailWrapperTypes;
     /** @var MailContextTypeInterface[] $sortedContextTypes */
     private array $sortedContextTypes;
+    /** @param list<string> $locales */
     public function __construct(
         MailFieldTypesPool   $mailFieldTypesPool,
         MailWrapperTypesPool $mailWrapperTypesPool,

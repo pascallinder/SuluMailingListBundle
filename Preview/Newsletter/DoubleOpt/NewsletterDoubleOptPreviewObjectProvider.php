@@ -20,7 +20,7 @@ readonly class NewsletterDoubleOptPreviewObjectProvider extends MailTranslationP
     ) {
         parent::__construct($contextTypesPool);
     }
-    public function getObject($id, $locale): ?Newsletter
+    public function getObject(int|string $id, string $locale): ?Newsletter
     {
         $newsletter = $this->newsletterRepository->findById((int) $id, $locale);
         if (!$newsletter instanceof Newsletter) {
@@ -36,19 +36,13 @@ readonly class NewsletterDoubleOptPreviewObjectProvider extends MailTranslationP
         return $newsletter;
     }
 
-    /**
-     * @param Newsletter $object
-     * @param string $locale
-     */
-    /**
-     * @param array<string, mixed> $data
-     */
-    /**
-     * @param Newsletter $object
-     * @param array<string, mixed> $data
-     */
-    public function setValues($object, $locale, array $data): void
+    /** @param array<string, mixed> $data */
+    public function setValues(object $object, string $locale, array $data): void
     {
+        if (!$object instanceof Newsletter) {
+            throw new \InvalidArgumentException('Expected a newsletter preview object.');
+        }
+
         $this->setMailTranslatableValues($object->getNewsletterDoubleOpt(), $data);
     }
 

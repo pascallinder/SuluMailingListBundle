@@ -20,7 +20,7 @@ readonly class NewsletterMailPreviewObjectProvider extends MailTranslationPrevie
     ) {
         parent::__construct($contextTypesPool);
     }
-    public function getObject($id, $locale): NewsletterMail
+    public function getObject(int|string $id, string $locale): NewsletterMail
     {
         $newsletterMail = $this->newsletterMailRepository->findById((int) $id, $locale);
         if (!$newsletterMail instanceof NewsletterMail) {
@@ -36,19 +36,13 @@ readonly class NewsletterMailPreviewObjectProvider extends MailTranslationPrevie
         return $newsletterMail;
     }
 
-    /**
-     * @param NewsletterMail $object
-     * @param string $locale
-     */
-    /**
-     * @param array<string, mixed> $data
-     */
-    /**
-     * @param NewsletterMail $object
-     * @param array<string, mixed> $data
-     */
-    public function setValues($object, $locale, array $data): void
+    /** @param array<string, mixed> $data */
+    public function setValues(object $object, string $locale, array $data): void
     {
+        if (!$object instanceof NewsletterMail) {
+            throw new \InvalidArgumentException('Expected a newsletter mail preview object.');
+        }
+
         $this->setMailTranslatableValues($object, $data);
     }
 

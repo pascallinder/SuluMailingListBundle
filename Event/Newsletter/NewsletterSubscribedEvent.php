@@ -35,8 +35,8 @@ class NewsletterSubscribedEvent extends DomainEvent
 
         return trim(sprintf(
             '%s %s (%s) - %s',
-            $contact->getFirstName() ?? '',
-            $contact->getLastName() ?? '',
+            $contact->getFirstName(),
+            $contact->getLastName(),
             $contact->getMainEmail(),
             $newsletterTitle ?? ''
         ));

@@ -17,12 +17,14 @@ class FilteredContactsController extends AbstractController
     #[Route(path: '/admin/api/filtered-contacts', name: 'app.get_filtered_contacts', methods: ['GET'])]
     public function getAction(Request $request): JsonResponse
     {
-        $page  = max(1, (int) $request->query->get('page', 1));
-        $limit = max(1, (int) $request->query->get('limit', 10));
+        $page = max(1, $request->query->getInt('page', 1));
+        $limit = max(1, $request->query->getInt('limit', 10));
         $offset = ($page - 1) * $limit;
 
-        $newsletterIds = $request->query->get('newsletterIds') ? explode(',', $request->query->get('newsletterIds')) : [];
-        $contactIds = $request->query->get('ids') ? explode(',', $request->query->get('ids')) : [];
+        $newsletterIdsValue = $request->query->getString('newsletterIds');
+        $contactIdsValue = $request->query->getString('ids');
+        $newsletterIds = '' === $newsletterIdsValue ? [] : explode(',', $newsletterIdsValue);
+        $contactIds = '' === $contactIdsValue ? [] : explode(',', $contactIdsValue);
         if (!$newsletterIds) {
             return $this->json(new PaginatedRepresentation([], 'filtered_contacts', $page, $limit, 0));
         }
@@ -43,7 +45,7 @@ class FilteredContactsController extends AbstractController
                 ->setParameter('contactIds', $contactIds);
         }
         // Optional search support (selection overlay sends "search")
-        $search = trim((string) $request->query->get('search', ''));
+        $search = trim($request->query->getString('search'));
         if ($search !== '') {
             $qb->andWhere('c.firstName LIKE :q OR c.lastName LIKE :q OR c.mainEmail LIKE :q')
                 ->setParameter('q', '%' . $search . '%');

@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Linderp\SuluBaseBundle\Entity\IdTrait;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Repository\NewsletterSubscription\NewsletterSubscriptionRepository;
-use Random\RandomException;
 use Sulu\Bundle\ContactBundle\Entity\Contact;
 use Sulu\Bundle\ContactBundle\Entity\ContactInterface;
 
@@ -42,12 +41,8 @@ class NewsletterSubscription
     public function setSubscribed(): void
     {
         $this->subscribedAt = new \DateTimeImmutable();
-        try {
-            $this->confirmationToken = bin2hex(random_bytes(32));
-            $this->unsubscribeToken = bin2hex(random_bytes(32));
-        } catch (RandomException $e) {
-
-        }
+        $this->confirmationToken = bin2hex(random_bytes(32));
+        $this->unsubscribeToken = bin2hex(random_bytes(32));
         $this->isConfirmed = false;
         $this->confirmedAt = null;
         $this->unsubscribedAt = null;

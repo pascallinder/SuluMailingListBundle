@@ -4,13 +4,9 @@ namespace Linderp\SuluMailingListBundle\Mail\Field\Types;
 
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeConfiguration;
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypeInterface;
-use Linderp\SuluMailingListBundle\Service\Mail\MailFontImageRenderer;
 
-readonly class TextMailFieldType implements MailFieldTypeInterface
+final class TextMailFieldType implements MailFieldTypeInterface
 {
-    public function __construct(
-        private MailFontImageRenderer $mailFontImageRenderer,
-    ) {}
     public function getConfiguration(): MailFieldTypeConfiguration
     {
         return (new MailFieldTypeConfiguration(

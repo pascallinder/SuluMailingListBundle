@@ -32,6 +32,7 @@ class MailWrapperTypeConfiguration extends MailMetadataXmlConfiguration
         return $this;
     }
 
+    /** @return list<string> */
     public function getAcceptedContexts(): array
     {
         return $this->acceptedContexts;

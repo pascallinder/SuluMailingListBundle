@@ -28,7 +28,9 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewD
             }
             try {
                 $propertyAccess->setValue($object, $property, $value);
-            } catch (\InvalidArgumentException $e) {
+            } catch (\InvalidArgumentException) {
+                // @ignoreException
+                // Invalid transient preview values must not prevent the remaining fields from rendering.
             }
         }
         $object->setContent($data['content_' . $object->getContext()]);
@@ -68,10 +70,11 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewD
         return null;
     }
 
-    abstract public function getObject($id, $locale): mixed;
+    abstract public function getObject(int|string $id, string $locale): mixed;
 
     abstract public function getPreviewController(): string;
 
-    abstract public function setValues($object, $locale, array $data): void;
+    /** @param array<string, mixed> $data */
+    abstract public function setValues(object $object, string $locale, array $data): void;
 
 }

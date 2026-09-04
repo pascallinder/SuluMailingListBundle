@@ -12,7 +12,7 @@
         "sulu-admin-bundle": "file:../../../vendor/sulu/sulu/src/Sulu/Bundle/AdminBundle/Resources/js"
     },
     "main": "index.js",
-    "version": "0.1",
+    "version": "0.1.0",
     "files": [
       "src"
     ]

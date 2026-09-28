@@ -8,13 +8,16 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
+use Linderp\SuluMailingListBundle\Entity\MailTemplateAwareInterface;
+use Linderp\SuluMailingListBundle\Entity\MailTemplateFooter\MailTemplateFooter;
+use Linderp\SuluMailingListBundle\Entity\MailTemplateHeader\MailTemplateHeader;
 use Linderp\SuluMailingListBundle\Entity\MailTranslation;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Repository\NewsletterMail\NewsletterMailRepository;
 use Sulu\Bundle\ContactBundle\Entity\Contact;
 
 #[ORM\Entity(repositoryClass: NewsletterMailRepository::class)]
-class NewsletterMail extends MailTranslatable
+class NewsletterMail extends MailTranslatable implements MailTemplateAwareInterface
 {
     final public const RESOURCE_KEY = 'newsletters_mails';
 
@@ -37,6 +40,14 @@ class NewsletterMail extends MailTranslatable
     #[ORM\ManyToMany(targetEntity: Contact::class, cascade: ['persist'])]
     #[JoinTable(name: 'newsletter_mail_contact_mapping')]
     private Collection $contacts;
+
+    #[ORM\ManyToOne(targetEntity: MailTemplateHeader::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?MailTemplateHeader $header = null;
+
+    #[ORM\ManyToOne(targetEntity: MailTemplateFooter::class)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'RESTRICT')]
+    private MailTemplateFooter $footer;
 
     /**
      * @var Collection<string, MailTranslation>
@@ -131,12 +142,38 @@ class NewsletterMail extends MailTranslatable
     {
         $this->contacts = $contacts;
     }
+
+    public function getHeader(): ?MailTemplateHeader
+    {
+        return $this->header;
+    }
+
+    public function setHeader(?MailTemplateHeader $header): void
+    {
+        $this->header = $header;
+    }
+
+    public function getFooter(): ?MailTemplateFooter
+    {
+        return $this->footer ?? null;
+    }
+
+    public function setFooter(?MailTemplateFooter $footer): void
+    {
+        if (!$footer instanceof MailTemplateFooter) {
+            throw new \InvalidArgumentException('A mail footer is required.');
+        }
+        $this->footer = $footer;
+    }
+
     public function copy(): self
     {
         $dest = new self();
         $dest->applyFrom($this);
         $dest->setNewsletters($this->getNewsletters());
         $dest->setContacts($this->getContacts());
+        $dest->setHeader($this->getHeader());
+        $dest->setFooter($this->getFooter());
         return $dest;
     }
 

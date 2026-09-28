@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Linderp\SuluMailingListBundle\DependencyInjection;
 
+use Linderp\SuluMailingListBundle\Entity\MailTemplateFooter\MailTemplateFooter;
+use Linderp\SuluMailingListBundle\Entity\MailTemplateHeader\MailTemplateHeader;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -95,6 +97,18 @@ class SuluMailingListExtension extends Extension implements PrependExtensionInte
                                 'detail' => 'app.get_newsletter_mail',
                             ],
                         ],
+                        MailTemplateHeader::RESOURCE_KEY => [
+                            'routes' => [
+                                'list' => 'app.get_mail_template_header_list',
+                                'detail' => 'app.get_mail_template_header',
+                            ],
+                        ],
+                        MailTemplateFooter::RESOURCE_KEY => [
+                            'routes' => [
+                                'list' => 'app.get_mail_template_footer_list',
+                                'detail' => 'app.get_mail_template_footer',
+                            ],
+                        ],
                     ],
                     'field_type_options' => [
                         'selection' => [
@@ -131,6 +145,36 @@ class SuluMailingListExtension extends Extension implements PrependExtensionInte
                                     'auto_complete' => [
                                         'display_property' => 'firstName',
                                         'search_properties' => ['firstName'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'single_selection' => [
+                            'mail_template_header_selection' => [
+                                'default_type' => 'list_overlay',
+                                'resource_key' => MailTemplateHeader::RESOURCE_KEY,
+                                'types' => [
+                                    'list_overlay' => [
+                                        'adapter' => 'table',
+                                        'list_key' => 'mail_template_headers',
+                                        'display_properties' => ['subject'],
+                                        'icon' => 'su-arrow-up',
+                                        'empty_text' => 'mailTemplateHeader.empty',
+                                        'overlay_title' => 'mailTemplateHeader.list.title',
+                                    ],
+                                ],
+                            ],
+                            'mail_template_footer_selection' => [
+                                'default_type' => 'list_overlay',
+                                'resource_key' => MailTemplateFooter::RESOURCE_KEY,
+                                'types' => [
+                                    'list_overlay' => [
+                                        'adapter' => 'table',
+                                        'list_key' => 'mail_template_footers',
+                                        'display_properties' => ['subject'],
+                                        'icon' => 'su-arrow-down',
+                                        'empty_text' => 'mailTemplateFooter.empty',
+                                        'overlay_title' => 'mailTemplateFooter.list.title',
                                     ],
                                 ],
                             ],

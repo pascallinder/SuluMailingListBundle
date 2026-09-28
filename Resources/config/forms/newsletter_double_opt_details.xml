@@ -17,5 +17,15 @@
                 <title>mailingListMail.props.subject</title>
             </meta>
         </property>
+        <property name="header" type="mail_template_header_selection" mandatory="false" colspan="6">
+            <meta>
+                <title>mailingListMail.props.header</title>
+            </meta>
+        </property>
+        <property name="footer" type="mail_template_footer_selection" mandatory="true" colspan="6">
+            <meta>
+                <title>mailingListMail.props.footer</title>
+            </meta>
+        </property>
     </properties>
 </form>

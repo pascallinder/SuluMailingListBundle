@@ -20,6 +20,9 @@
                 .mjml-text-container *{
                     text-align: inherit;
                 }
+                .mjml-text-container a {
+                    color: inherit !important;
+                }
                 .mjml-text-container *:first-child{
                     margin-top: 0;
                 }
@@ -62,6 +65,14 @@
             </mj-column>
         </mj-section>
         {% block header %}
+            {% if headerTemplate is defined and headerTemplate.content is defined and headerTemplate.content is not null %}
+                {% for wrapper in headerTemplate.content %}
+                    {% include '@SuluMailingList/mails/wrappers/' ~ wrapper.type ~ '.mjml.twig' with {
+                        wrapper: wrapper,
+                        backgroundColor: headerTemplate.backgroundColor|default(backgroundColor|default(null))
+                    } %}
+                {% endfor %}
+            {% endif %}
         {% endblock %}
         {% block content %}
             {% if content is defined and content is not null %}
@@ -73,6 +84,14 @@
             {% endif %}
         {% endblock %}
         {% block footer %}
+            {% if footerTemplate is defined and footerTemplate.content is defined and footerTemplate.content is not null %}
+                {% for wrapper in footerTemplate.content %}
+                    {% include '@SuluMailingList/mails/wrappers/' ~ wrapper.type ~ '.mjml.twig' with {
+                        wrapper: wrapper,
+                        backgroundColor: footerTemplate.backgroundColor|default(backgroundColor|default(null))
+                    } %}
+                {% endfor %}
+            {% endif %}
         {% endblock %}
     </mj-body>
 </mjml>

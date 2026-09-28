@@ -2,13 +2,18 @@
 
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluBaseBundle\Controller\Admin\LocaleController;
 use Linderp\SuluBaseBundle\Repository\LocaleRepositoryUtil;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
+use Linderp\SuluMailingListBundle\Entity\MailTemplateAwareInterface;
+use Linderp\SuluMailingListBundle\Entity\MailTemplateFooter\MailTemplateFooter;
+use Linderp\SuluMailingListBundle\Entity\MailTemplateHeader\MailTemplateHeader;
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
 use Linderp\SuluMailingListBundle\Service\Mail\MailContentProvider;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @template T of object
@@ -23,6 +28,7 @@ abstract class MailTranslatableController extends LocaleController
         protected readonly MailContextTypesPool $mailContextTypes,
         protected readonly string $noReplyEmail,
         protected readonly MailContentProvider $mailContentProvider,
+        private readonly ManagerRegistry $managerRegistry,
         LocaleRepositoryUtil $localeRepositoryUtil
     ) {
         parent::__construct($localeRepositoryUtil);
@@ -44,6 +50,10 @@ abstract class MailTranslatableController extends LocaleController
         foreach ($mailTranslatable->getContextVars() ?? [] as $key => $value) {
             $data[$key] = $value;
         }
+        if ($mailTranslatable instanceof MailTemplateAwareInterface) {
+            $data['header'] = $mailTranslatable->getHeader()?->getId();
+            $data['footer'] = $mailTranslatable->getFooter()?->getId();
+        }
         return $data;
     }
 
@@ -52,16 +62,43 @@ abstract class MailTranslatableController extends LocaleController
      */
     protected function mapDataToMailTranslatable(MailTranslatable $mailTranslatable, array $data): void
     {
-        $mailTranslatable->setSenderMail($data['senderMail'] ?? $this->noReplyEmail);
-        $mailTranslatable->setContext($data['context']);
-        $mailTranslatable->setContent($data['content_' . $data['context']]);
-        $contextType = $this->mailContextTypes->get($mailTranslatable->getContext());
+        $senderMail = $data['senderMail'] ?? null;
+        $mailTranslatable->setSenderMail(is_string($senderMail) ? $senderMail : $this->noReplyEmail);
+        $context = $data['context'] ?? null;
+        if (!is_string($context)) {
+            throw new BadRequestHttpException('A valid mail context is required.');
+        }
+        $mailTranslatable->setContext($context);
+        $content = $data['content_' . $context] ?? null;
+        $mailTranslatable->setContent(is_array($content) ? $content : null);
+        $contextType = $this->mailContextTypes->get($context);
         $contextVars = array_reduce(
             $contextType->getConfiguration()->getContextVarsKeys(),
             fn(array $carry, string $key): array => [...$carry, $key => $data[$key] ?? null],
             []
         );
         $mailTranslatable->setContextVars($contextVars);
+
+        if (!$mailTranslatable instanceof MailTemplateAwareInterface) {
+            return;
+        }
+
+        $headerId = $data['header'] ?? null;
+        $header = null;
+        if (is_int($headerId)) {
+            $candidate = $this->managerRegistry->getRepository(MailTemplateHeader::class)->find($headerId);
+            $header = $candidate instanceof MailTemplateHeader ? $candidate : null;
+        }
+        $mailTranslatable->setHeader($header);
+
+        $footerId = $data['footer'] ?? null;
+        $footer = is_int($footerId)
+            ? $this->managerRegistry->getRepository(MailTemplateFooter::class)->find($footerId)
+            : null;
+        if (!$footer instanceof MailTemplateFooter) {
+            throw new BadRequestHttpException('A valid mail footer is required.');
+        }
+        $mailTranslatable->setFooter($footer);
     }
 
     /**

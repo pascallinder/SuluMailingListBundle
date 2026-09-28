@@ -33,7 +33,8 @@
                     <td style="vertical-align:middle; color: {{ item.color|default }}">
                         <div class="mjml-text-container"
                              style="line-height: {{ item.fontLineHeight|default }};
-                                     text-align: {{ item.align|default }}
+                                     text-align: {{ item.align|default }};
+                                     color: {{ item.color|default }}
                                      ">
                         {{ item.value | raw }}
                         </div>

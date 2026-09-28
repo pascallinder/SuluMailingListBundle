@@ -3,6 +3,7 @@
 namespace Linderp\SuluMailingListBundle\Service\Mail;
 
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
+use Linderp\SuluMailingListBundle\Entity\MailTemplateAwareInterface;
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
 use Linderp\SuluMailingListBundle\Mail\Field\MailFieldTypesPool;
 use Linderp\SuluMailingListBundle\Mail\Font\MailFontInterface;
@@ -39,8 +40,14 @@ class MailContentProvider
      */
     public function getMailTranslatableMailContent(MailTranslatable $mailTranslatable, string $locale, array $data): string
     {
+        $mailData = $this->getMailTranslateData($mailTranslatable, $locale);
+        if ($mailTranslatable instanceof MailTemplateAwareInterface) {
+            $mailData['headerTemplate'] = $this->getTranslatedData($mailTranslatable->getHeader(), $locale);
+            $mailData['footerTemplate'] = $this->getTranslatedData($mailTranslatable->getFooter(), $locale);
+        }
+
         return $this->getCachingMailContent('@SuluMailingList/mails/email', $locale, [
-            ...$this->getMailTranslateData($mailTranslatable, $locale),
+            ...$mailData,
             ...$data,
         ], $mailTranslatable);
     }
@@ -54,7 +61,7 @@ class MailContentProvider
     {
         $replaceableContent = [];
         foreach ($data as $key => $value) {
-            if ($key === 'content') {
+            if (is_array($value)) {
                 continue;
             }
             $contextVars = $mailTranslatable?->getContextVars() ?? [];
@@ -69,7 +76,9 @@ class MailContentProvider
             $contextVars = $mailTranslatable?->getContextVars() ?? [];
             $mjmlContent = $this->twig->render($mailTemplate . '.'
                 . self::$EXTENSIONS, [...$replaceableContent,
-                    "content" => $data['content'],
+                    'content' => $data['content'],
+                    'headerTemplate' => $data['headerTemplate'] ?? ['content' => []],
+                    'footerTemplate' => $data['footerTemplate'] ?? ['content' => []],
                     "fonts" => $fonts,
                     "iconsPath" => $this->iconsPath,
                     'locale' => $locale,
@@ -80,7 +89,11 @@ class MailContentProvider
         };
         if ($this->cachingEnabled) {
             $templateCacheKey = 'mail_translatable_' . hash('sha256', $mailTemplate . $locale
-                    . json_encode($data['content']) . json_encode($fonts)
+                    . json_encode([
+                        $data['content'],
+                        $data['headerTemplate'] ?? [],
+                        $data['footerTemplate'] ?? [],
+                    ]) . json_encode($fonts)
                     . array_reduce(
                         array_keys($mailTranslatable?->getContextVars() ?? []),
                         fn(string $carry, string $key): string => $carry . json_encode($data[$key] ?? null),
@@ -90,7 +103,7 @@ class MailContentProvider
         } else {
             $html = $contentGenerator();
         }
-        unset($data['content']);
+        unset($data['content'], $data['headerTemplate'], $data['footerTemplate']);
         if ($mailTranslatable) {
             foreach ($mailTranslatable->getContextVars() ?? [] as $key => $value) {
                 unset($data[$key]);
@@ -106,13 +119,16 @@ class MailContentProvider
      */
     private function getMailTranslateData(MailTranslatable $mailTranslatable, string $locale): array
     {
-        $content = $mailTranslatable->getContent();
+        $content = $mailTranslatable->getContent($locale);
 
         if ($content === null) {
             return ['content' => []];
         }
 
-        $translatedContent = array_map(function (array $wrapper) use ($locale): array {
+        $translatedContent = array_map(function (mixed $wrapper) use ($locale): array {
+            if (!is_array($wrapper)) {
+                return [];
+            }
             $wrapperType = $this->mailWrapperTypesPool->get($wrapper['type']);
             $wrapperConfig = $wrapperType->getConfiguration();
 
@@ -147,5 +163,15 @@ class MailContentProvider
         }
 
         return $data;
+    }
+
+    /** @return array<string, mixed> */
+    private function getTranslatedData(?MailTranslatable $mailTranslatable, string $locale): array
+    {
+        if (!$mailTranslatable instanceof MailTranslatable) {
+            return [];
+        }
+
+        return $this->getMailTranslateData($mailTranslatable, $locale);
     }
 }

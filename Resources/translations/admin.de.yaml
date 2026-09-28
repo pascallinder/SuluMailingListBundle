@@ -40,6 +40,8 @@ mailingListMail:
         senderMail: Sender E-Mail
         senderMailInfo: Standardmässig wird es auf die no-reply E-Mail gesetzt
         subject: Betreff
+        header: Header
+        footer: Footer
         sent: Gesendet
         sentAt: Gesendet am
         mailingLists: Betroffene Verteiler
@@ -145,6 +147,10 @@ mailingListMail:
                 label: Subscription Bestätigungsknopf
                 buttonLabel: Knopftext
                 backgroundColor: Hintergrundfarbe des Buttons
+            unsubscribeLink:
+                label: Abmeldelink
+                linkText: Linktext
+                backgroundColor: Hintergrundfarbe des Links
             social:
                 label: Soziale Elemente
                 iconSize: Icon Grösse
@@ -188,6 +194,22 @@ mailingListMail:
                     medium: Medium
                     soundcloud: SoundCloud
                     dribbble: Dribbble
+
+mailTemplate:
+    props:
+        title: Titel
+mailTemplateHeader:
+    nav:
+        title: Mail-Header
+    list:
+        title: Mail-Header
+    empty: Kein Header ausgewählt
+mailTemplateFooter:
+    nav:
+        title: Mail-Footer
+    list:
+        title: Mail-Footer
+    empty: Kein Footer ausgewählt
 
 sulu_activity:
     resource:

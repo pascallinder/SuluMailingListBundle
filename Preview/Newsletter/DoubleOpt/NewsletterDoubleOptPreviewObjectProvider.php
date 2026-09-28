@@ -3,6 +3,7 @@
 namespace Linderp\SuluMailingListBundle\Preview\Newsletter\DoubleOpt;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluMailingListBundle\Controller\Admin\NewsletterController;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Entity\NewsletterDoubleOpt\NewsletterDoubleOptTranslation;
@@ -15,10 +16,11 @@ readonly class NewsletterDoubleOptPreviewObjectProvider extends MailTranslationP
 {
     public function __construct(
         MailContextTypesPool $contextTypesPool,
+        ManagerRegistry $managerRegistry,
         private NewsletterRepository                     $newsletterRepository,
         private NewsletterDoubleOptTranslationRepository $newsletterDoubleOptTranslationRepository
     ) {
-        parent::__construct($contextTypesPool);
+        parent::__construct($contextTypesPool, $managerRegistry);
     }
     public function getObject(int|string $id, string $locale): ?Newsletter
     {

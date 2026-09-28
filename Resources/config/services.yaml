@@ -34,6 +34,20 @@ services:
     tags:
       - { name: 'sulu_route.route_defaults_provider', resource_key: 'newsletters_mails' }
 
+  Linderp\SuluMailingListBundle\Preview\MailTemplateHeader\MailTemplateHeaderPreviewObjectProvider:
+    tags:
+      - { name: 'sulu_preview.object_provider', provider-key: 'mail_template_headers' }
+  Linderp\SuluMailingListBundle\Preview\MailTemplateHeader\MailTemplateHeaderRouteDefaultsProvider:
+    tags:
+      - { name: 'sulu_route.route_defaults_provider', resource_key: 'mail_template_headers' }
+
+  Linderp\SuluMailingListBundle\Preview\MailTemplateFooter\MailTemplateFooterPreviewObjectProvider:
+    tags:
+      - { name: 'sulu_preview.object_provider', provider-key: 'mail_template_footers' }
+  Linderp\SuluMailingListBundle\Preview\MailTemplateFooter\MailTemplateFooterRouteDefaultsProvider:
+    tags:
+      - { name: 'sulu_route.route_defaults_provider', resource_key: 'mail_template_footers' }
+
   Linderp\SuluMailingListBundle\Preview\Newsletter\DoubleOpt\NewsletterDoubleOptPreviewObjectProvider:
     tags:
       - { name: 'sulu_preview.object_provider', provider-key: 'newsletters' }

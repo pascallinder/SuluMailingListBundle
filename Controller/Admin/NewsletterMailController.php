@@ -3,6 +3,7 @@
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluBaseBundle\Common\DoctrineListRepresentationFactory;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail;
@@ -41,6 +42,7 @@ class NewsletterMailController extends MailTranslatableController
         protected readonly WebspaceManagerInterface        $webspaceManager,
         MailContentProvider  $mailContentProvider,
         MailContextTypesPool $mailContextTypes,
+        ManagerRegistry $managerRegistry,
         #[Autowire('%sulu_mailing_list.no_reply_email%')]
         string $noReplyEmail,
     ) {
@@ -48,6 +50,7 @@ class NewsletterMailController extends MailTranslatableController
             $mailContextTypes,
             $noReplyEmail,
             $mailContentProvider,
+            $managerRegistry,
             $this->newsletterMailRepository
         );
     }

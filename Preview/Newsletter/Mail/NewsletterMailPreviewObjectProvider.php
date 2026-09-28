@@ -3,6 +3,7 @@
 namespace Linderp\SuluMailingListBundle\Preview\Newsletter\Mail;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluMailingListBundle\Controller\Admin\NewsletterMailController;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMail;
 use Linderp\SuluMailingListBundle\Entity\NewsletterMail\NewsletterMailTranslation;
@@ -15,10 +16,11 @@ readonly class NewsletterMailPreviewObjectProvider extends MailTranslationPrevie
 {
     public function __construct(
         MailContextTypesPool                        $contextTypesPool,
+        ManagerRegistry                             $managerRegistry,
         private NewsletterMailRepository            $newsletterMailRepository,
         private NewsletterMailTranslationRepository $newsletterMailTranslationRepository
     ) {
-        parent::__construct($contextTypesPool);
+        parent::__construct($contextTypesPool, $managerRegistry);
     }
     public function getObject(int|string $id, string $locale): NewsletterMail
     {

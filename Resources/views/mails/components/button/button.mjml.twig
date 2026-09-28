@@ -21,7 +21,7 @@
                         }%}
                     </td>
                 {% endif %}
-                <td style="vertical-align: middle">
+                <td style="vertical-align: middle{% if item.underline|default(false) %}; text-decoration: underline{% endif %}">
                     {{ item.label }}
                 </td>
             </tr>

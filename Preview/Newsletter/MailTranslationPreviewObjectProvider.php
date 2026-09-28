@@ -2,7 +2,11 @@
 
 namespace Linderp\SuluMailingListBundle\Preview\Newsletter;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluMailingListBundle\Entity\MailTranslatable;
+use Linderp\SuluMailingListBundle\Entity\MailTemplateAwareInterface;
+use Linderp\SuluMailingListBundle\Entity\MailTemplateFooter\MailTemplateFooter;
+use Linderp\SuluMailingListBundle\Entity\MailTemplateHeader\MailTemplateHeader;
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
 use Sulu\Bundle\PreviewBundle\Preview\PreviewContext;
 use Sulu\Bundle\PreviewBundle\Preview\Provider\PreviewDefaultsProviderInterface;
@@ -12,18 +16,25 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewD
 {
     public function __construct(
         private MailContextTypesPool $contextTypesPool,
+        private ManagerRegistry $managerRegistry,
     ) {}
     /**
      * @param array<string, mixed> $data
      */
     public function setMailTranslatableValues(MailTranslatable $object, array $data): void
     {
+        $context = $data['context'] ?? null;
+        if (!is_string($context)) {
+            throw new \InvalidArgumentException('Expected a valid mail context for preview.');
+        }
+
         $propertyAccess = PropertyAccess::createPropertyAccessorBuilder()
             ->enableMagicCall()
             ->getPropertyAccessor();
 
         foreach ($data as $property => $value) {
-            if ($property === 'id' || !$propertyAccess->isWritable($object, $property)) {
+            if (in_array($property, ['id', 'header', 'footer'], true)
+                || !$propertyAccess->isWritable($object, $property)) {
                 continue;
             }
             try {
@@ -33,14 +44,37 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewD
                 // Invalid transient preview values must not prevent the remaining fields from rendering.
             }
         }
-        $object->setContent($data['content_' . $object->getContext()]);
-        $keys = $this->contextTypesPool->get($data['context'])->getConfiguration()->getContextVarsKeys();
-        $object->setContextVars(array_reduce($keys, fn($carry, $key) => [...$carry, $key => $data[$key]], []));
+        $content = $data['content_' . $context] ?? null;
+        $object->setContent(is_array($content) ? $content : null);
+        $keys = $this->contextTypesPool->get($context)->getConfiguration()->getContextVarsKeys();
+        $object->setContextVars(array_reduce($keys, fn($carry, $key) => [...$carry, $key => $data[$key] ?? null], []));
+
+        if ($object instanceof MailTemplateAwareInterface) {
+            $headerId = $data['header'] ?? null;
+            $header = is_int($headerId)
+                ? $this->managerRegistry->getRepository(MailTemplateHeader::class)->find($headerId)
+                : null;
+            $object->setHeader($header instanceof MailTemplateHeader ? $header : null);
+
+            $footerId = $data['footer'] ?? null;
+            $footer = is_int($footerId)
+                ? $this->managerRegistry->getRepository(MailTemplateFooter::class)->find($footerId)
+                : null;
+            if ($footer instanceof MailTemplateFooter) {
+                $object->setFooter($footer);
+            }
+        }
     }
 
     public function getDefaults(PreviewContext $previewContext): array
     {
-        $object = $this->getObject($previewContext->getId(), $previewContext->getLocale());
+        $id = $previewContext->getId();
+        $locale = $previewContext->getLocale();
+        if ((!is_int($id) && !is_string($id)) || !is_string($locale)) {
+            return [];
+        }
+
+        $object = $this->getObject($id, $locale);
         if (!\is_object($object)) {
             return [];
         }
@@ -53,8 +87,9 @@ abstract readonly class MailTranslationPreviewObjectProvider implements PreviewD
 
     public function updateValues(PreviewContext $previewContext, array $defaults, array $data): array
     {
-        if (isset($defaults['object']) && \is_object($defaults['object'])) {
-            $this->setValues($defaults['object'], $previewContext->getLocale(), $data);
+        $locale = $previewContext->getLocale();
+        if (isset($defaults['object']) && \is_object($defaults['object']) && is_string($locale)) {
+            $this->setValues($defaults['object'], $locale, $data);
         }
 
         return $defaults;

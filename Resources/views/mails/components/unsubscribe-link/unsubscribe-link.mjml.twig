@@ -1,0 +1,5 @@
+{% block unsubscribe_link %}
+    {% include '@SuluMailingList/mails/components/button/button.mjml.twig' with {
+        item: {...item, url: unsubscribeUrl, underline: true}
+    } %}
+{% endblock %}

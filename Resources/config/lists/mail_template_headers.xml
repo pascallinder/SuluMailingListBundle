@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<list xmlns="http://schemas.sulu.io/list-builder/list">
+    <key>mail_template_headers</key>
+    <joins name="translation">
+        <join>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\MailTemplateHeader\MailTemplateHeaderTranslation</entity-name>
+            <field-name>Linderp\SuluMailingListBundle\Entity\MailTemplateHeader\MailTemplateHeader.translations</field-name>
+            <condition>Linderp\SuluMailingListBundle\Entity\MailTemplateHeader\MailTemplateHeaderTranslation.locale = :locale</condition>
+        </join>
+    </joins>
+    <properties>
+        <property name="id" visibility="no" translation="sulu_admin.id">
+            <field-name>id</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\MailTemplateHeader\MailTemplateHeader</entity-name>
+        </property>
+        <property name="subject" visibility="yes" translation="mailTemplate.props.title">
+            <field-name>subject</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\MailTemplateHeader\MailTemplateHeaderTranslation</entity-name>
+            <joins ref="translation"/>
+        </property>
+        <property name="changed" visibility="yes" translation="sulu_admin.changed" type="datetime">
+            <field-name>changed</field-name>
+            <entity-name>Linderp\SuluMailingListBundle\Entity\MailTemplateHeader\MailTemplateHeaderTranslation</entity-name>
+            <joins ref="translation"/>
+        </property>
+    </properties>
+</list>

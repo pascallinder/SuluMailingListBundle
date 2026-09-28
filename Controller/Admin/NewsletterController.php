@@ -2,6 +2,7 @@
 
 namespace Linderp\SuluMailingListBundle\Controller\Admin;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Linderp\SuluBaseBundle\Common\DoctrineListRepresentationFactory;
 use Linderp\SuluMailingListBundle\Entity\Newsletter\Newsletter;
 use Linderp\SuluMailingListBundle\Mail\Context\MailContextTypesPool;
@@ -31,10 +32,11 @@ class NewsletterController extends MailTranslatableController
         private readonly DoctrineListRepresentationFactory $doctrineListRepresentationFactory,
         MailContextTypesPool $mailContextTypes,
         MailContentProvider $mailContentProvider,
+        ManagerRegistry $managerRegistry,
         #[Autowire('%sulu_mailing_list.no_reply_email%')]
         string $noReplyEmail,
     ) {
-        parent::__construct($mailContextTypes, $noReplyEmail, $mailContentProvider, $this->newsletterRepository);
+        parent::__construct($mailContextTypes, $noReplyEmail, $mailContentProvider, $managerRegistry, $this->newsletterRepository);
     }
     #[Route(path: '/admin/api/newsletters/{id}', name: 'app.get_newsletter', methods: ['GET'])]
     public function getAction(int $id, Request $request): Response
